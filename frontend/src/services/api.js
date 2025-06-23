@@ -5,6 +5,96 @@ import config from '../config';
  * Centralized API communication layer with error handling and retry logic
  */
 
+// Check if backend is available
+const isBackendAvailable = () => {
+  return config.api.baseURL && config.api.baseURL !== 'null';
+};
+
+// Default data for when backend is not available
+const getDefaultData = (endpoint) => {
+  const defaults = {
+    '/api/hero': {
+      title: "I Am Rahul Raj",
+      subtitle: "AVP Product",
+      description: "Software Alchemist crafting digital experiences that users love & businesses value",
+      badge: "Welcome to My Universe",
+      badge_emoji: "✨",
+      cta_text: "View My Work"
+    },
+    '/api/about': [
+      {
+        id: 1,
+        title: "Who I Am",
+        subtitle: "Passionate Product Manager",
+        description: "A dedicated professional with a passion for creating innovative solutions that drive business growth and user satisfaction."
+      },
+      {
+        id: 2,
+        title: "What I Do",
+        subtitle: "Product Strategy & Development",
+        description: "I lead product development initiatives, from concept to launch, ensuring exceptional user experiences and measurable business outcomes."
+      },
+      {
+        id: 3,
+        title: "What Interests Me",
+        subtitle: "Technology & Innovation",
+        description: "I'm fascinated by emerging technologies, user behavior patterns, and the intersection of business strategy with technical innovation."
+      }
+    ],
+    '/api/experiences': [
+      {
+        id: 1,
+        title: "AVP Product",
+        company: "Leading Tech Company",
+        duration: "2022 - Present",
+        description: "Leading product strategy and development for enterprise solutions."
+      }
+    ],
+    '/api/projects': [
+      {
+        id: 1,
+        title: "Portfolio Website",
+        description: "A modern, responsive portfolio built with React and Node.js",
+        technologies: ["React", "Node.js", "Tailwind CSS"],
+        image_url: null,
+        live_url: "#",
+        github_url: "#"
+      }
+    ],
+    '/api/stats': [
+      { id: 1, label: "Years Experience", value: "5+", icon: "💼" },
+      { id: 2, label: "Projects Completed", value: "50+", icon: "🚀" },
+      { id: 3, label: "Happy Clients", value: "30+", icon: "😊" }
+    ],
+    '/api/testimonials': [
+      {
+        id: 1,
+        name: "John Doe",
+        role: "CEO",
+        company: "Tech Corp",
+        content: "Rahul is an exceptional product manager who consistently delivers outstanding results.",
+        avatar_url: null
+      }
+    ],
+    '/api/contact': [
+      {
+        id: 1,
+        type: "email",
+        value: "rahul@example.com",
+        icon: "📧"
+      },
+      {
+        id: 2,
+        type: "phone",
+        value: "+1 (555) 123-4567",
+        icon: "📱"
+      }
+    ]
+  };
+  
+  return defaults[endpoint] || null;
+};
+
 // WebSocket connection for real-time updates
 let websocket = null;
 let reconnectAttempts = 0;
@@ -14,21 +104,12 @@ const reconnectDelay = 1000; // 1 second
 // WebSocket event listeners
 const websocketListeners = new Set();
 
-// Helper function to check if we should use mock data
-const shouldUseMockData = () => {
-  // Temporarily force mock data mode to avoid API errors
-  return true;
-  // return config.development.mockData || !config.api.baseURL || config.api.baseURL === 'http://localhost:8000';
-};
-
-// Helper function to get mock data with delay simulation
-const getMockData = (data, delay = 500) => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(data), delay);
-  });
-};
-
 export const connectWebSocket = () => {
+  if (!isBackendAvailable()) {
+    console.log('⚠️ WebSocket disabled - no backend available');
+    return;
+  }
+
   if (websocket && websocket.readyState === WebSocket.OPEN) {
     return; // Already connected
   }
@@ -258,25 +339,22 @@ export const submitContactForm = async (formData) => {
  * About section API functions
  */
 export const getAboutContent = async () => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.about);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default about data');
+    return getDefaultData('/api/about');
   }
   
   try {
     const response = await apiFetch('/api/about');
     return response;
   } catch (error) {
-    console.error('Error fetching about content:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.about);
+    console.error('Error fetching about:', error);
+    // Return default data on error
+    return getDefaultData('/api/about');
   }
 };
 
 export const updateAboutContent = async (id, aboutData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...aboutData, id });
-  }
-  
   try {
     const response = await apiFetch(`/api/about/${id}`, {
       method: 'PUT',
@@ -290,10 +368,6 @@ export const updateAboutContent = async (id, aboutData) => {
 };
 
 export const updateAboutOrder = async (orderData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ success: true });
-  }
-  
   try {
     const response = await apiFetch('/api/about/order', {
       method: 'PUT',
@@ -310,8 +384,9 @@ export const updateAboutOrder = async (orderData) => {
  * Experience section API functions
  */
 export const getExperiences = async () => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.experiences);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default experiences data');
+    return getDefaultData('/api/experiences');
   }
   
   try {
@@ -319,16 +394,12 @@ export const getExperiences = async () => {
     return response;
   } catch (error) {
     console.error('Error fetching experiences:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.experiences);
+    // Return default data on error
+    return getDefaultData('/api/experiences');
   }
 };
 
 export const updateExperience = async (id, experienceData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...experienceData, id });
-  }
-  
   try {
     const response = await apiFetch(`/api/experiences/${id}`, {
       method: 'PUT',
@@ -345,8 +416,9 @@ export const updateExperience = async (id, experienceData) => {
  * Stats section API functions
  */
 export const getStats = async () => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.stats);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default stats data');
+    return getDefaultData('/api/stats');
   }
   
   try {
@@ -354,16 +426,12 @@ export const getStats = async () => {
     return response;
   } catch (error) {
     console.error('Error fetching stats:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.stats);
+    // Return default data on error
+    return getDefaultData('/api/stats');
   }
 };
 
 export const updateStat = async (id, statData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...statData, id });
-  }
-  
   try {
     const response = await apiFetch(`/api/stats/${id}`, {
       method: 'PUT',
@@ -380,8 +448,9 @@ export const updateStat = async (id, statData) => {
  * Testimonials section API functions
  */
 export const getTestimonials = async () => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.testimonials);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default testimonials data');
+    return getDefaultData('/api/testimonials');
   }
   
   try {
@@ -389,16 +458,12 @@ export const getTestimonials = async () => {
     return response;
   } catch (error) {
     console.error('Error fetching testimonials:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.testimonials);
+    // Return default data on error
+    return getDefaultData('/api/testimonials');
   }
 };
 
 export const updateTestimonial = async (id, testimonialData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...testimonialData, id });
-  }
-  
   try {
     const response = await apiFetch(`/api/testimonials/${id}`, {
       method: 'PUT',
@@ -415,28 +480,23 @@ export const updateTestimonial = async (id, testimonialData) => {
  * Projects section API functions
  */
 export const getProjects = async (category = null) => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.projects);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default projects data');
+    return getDefaultData('/api/projects');
   }
   
   try {
-    const url = category 
-      ? `/api/projects/${category}`
-      : '/api/projects';
+    const url = category ? `/api/projects?category=${category}` : '/api/projects';
     const response = await apiFetch(url);
     return response;
   } catch (error) {
     console.error('Error fetching projects:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.projects);
+    // Return default data on error
+    return getDefaultData('/api/projects');
   }
 };
 
 export const updateProject = async (id, projectData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...projectData, id });
-  }
-  
   try {
     const response = await apiFetch(`/api/projects/${id}`, {
       method: 'PUT',
@@ -696,9 +756,23 @@ export const logout = () => {
 /**
  * Contact info operations
  */
+export const submitContact = async (formData) => {
+  try {
+    const response = await apiFetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error submitting contact:', error);
+    throw error;
+  }
+};
+
 export const getContactInfo = async () => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.contact);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default contact data');
+    return getDefaultData('/api/contact');
   }
   
   try {
@@ -706,8 +780,8 @@ export const getContactInfo = async () => {
     return response;
   } catch (error) {
     console.error('Error fetching contact info:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.contact);
+    // Return default data on error
+    return getDefaultData('/api/contact');
   }
 };
 
@@ -766,8 +840,9 @@ export const deleteContactInfo = async (id) => {
  * Hero section operations
  */
 export const getHero = async () => {
-  if (shouldUseMockData()) {
-    return getMockData(config.mockData.hero);
+  if (!isBackendAvailable()) {
+    console.log('⚠️ Backend not available, returning default hero data');
+    return getDefaultData('/api/hero');
   }
   
   try {
@@ -775,14 +850,14 @@ export const getHero = async () => {
     return response;
   } catch (error) {
     console.error('Error fetching hero:', error);
-    // Fallback to mock data on error
-    return getMockData(config.mockData.hero);
+    // Return default data on error
+    return getDefaultData('/api/hero');
   }
 };
 
 export const updateHero = async (id, heroData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...heroData, id });
+  if (!isBackendAvailable()) {
+    throw new Error('Backend not available - cannot update data');
   }
   
   try {
@@ -798,8 +873,8 @@ export const updateHero = async (id, heroData) => {
 };
 
 export const createHero = async (heroData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ ...heroData, id: Date.now() });
+  if (!isBackendAvailable()) {
+    throw new Error('Backend not available - cannot create data');
   }
   
   try {
@@ -815,6 +890,10 @@ export const createHero = async (heroData) => {
 };
 
 export const getAdminHero = async () => {
+  if (!isBackendAvailable()) {
+    throw new Error('Backend not available - admin features disabled');
+  }
+  
   try {
     const response = await apiFetch('/api/admin/hero');
     return response;
@@ -1166,23 +1245,6 @@ export const updateSectionConfig = async (configData) => {
     return { message: 'Section config updated successfully', updated_sections: updates };
   } catch (error) {
     console.error('❌ updateSectionConfig error:', error);
-    throw error;
-  }
-};
-
-export const submitContact = async (formData) => {
-  if (shouldUseMockData()) {
-    return getMockData({ success: true, message: 'Message sent successfully!' });
-  }
-  
-  try {
-    const response = await apiFetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-    });
-    return response;
-  } catch (error) {
-    console.error('Error submitting contact:', error);
     throw error;
   }
 }; 
