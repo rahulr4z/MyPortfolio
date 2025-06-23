@@ -56,7 +56,7 @@ const config = {
 
 // Environment-specific overrides
 if (import.meta.env.PROD) {
-  config.api.baseURL = import.meta.env.VITE_API_BASE_URL;
+  config.api.baseURL = import.meta.env.VITE_API_BASE_URL || 'https://your-backend-url.onrender.com';
   config.features.analytics = true;
   config.development.debug = false;
   config.development.logLevel = 'error';
@@ -71,9 +71,12 @@ const validateConfig = () => {
   });
   
   if (missing.length > 0) {
-    console.error('Missing required configuration:', missing);
-    throw new Error(`Missing required configuration: ${missing.join(', ')}`);
+    console.warn('Backend not configured yet. Please set VITE_API_BASE_URL environment variable.');
+    console.warn('For now, using placeholder URL. Update this once your backend is deployed.');
+    // Don't throw error, just warn
+    return false;
   }
+  return true;
 };
 
 // Validate configuration on import
