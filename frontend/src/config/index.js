@@ -6,7 +6,7 @@
 const config = {
   // API Configuration
   api: {
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'https://myportfoliobe.onrender.com',
     timeout: 30000, // 30 seconds
     retries: 3,
     retryDelay: 1000, // 1 second
@@ -56,7 +56,7 @@ const config = {
 
 // Environment-specific overrides
 if (import.meta.env.PROD) {
-  config.api.baseURL = import.meta.env.VITE_API_BASE_URL || 'https://your-backend-url.onrender.com';
+  config.api.baseURL = import.meta.env.VITE_API_BASE_URL || 'https://myportfoliobe.onrender.com';
   config.features.analytics = true;
   config.development.debug = false;
   config.development.logLevel = 'error';
