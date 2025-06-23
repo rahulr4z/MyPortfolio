@@ -129,7 +129,7 @@ def seed_database_endpoint():
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (title, subtitle, description, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Experience data
+        # Insert Experience data (table: experiences)
         experience_data = [
             ("TechCorp Solutions", "AVP Product Manager", "2022 - Present", "Leading product strategy for enterprise SaaS solutions. Managed cross-functional teams of 15+ members and delivered 3 major product launches that increased revenue by 40%.", "Product Strategy, Agile, JIRA, SQL, Python, React, User Research", "Increased user engagement by 40%, Launched 3 major features, Led team of 15 developers, Improved conversion rates by 25%", 0),
             ("InnovationLab", "Senior Product Manager", "2020 - 2022", "Built and scaled mobile applications from concept to market. Collaborated with design and engineering teams to create user-centered solutions.", "Mobile Development, User Experience, Market Research, A/B Testing, Analytics", "Launched 2 successful apps, Grew user base to 100K+, Improved retention by 30%, Reduced churn by 20%", 1),
@@ -138,11 +138,11 @@ def seed_database_endpoint():
         
         for company, position, duration, description, technologies, achievements, order_index in experience_data:
             cursor.execute("""
-                INSERT INTO experience (company, position, duration, description, technologies, achievements, order_index, is_active, created_at, updated_at)
+                INSERT INTO experiences (company, position, duration, description, technologies, achievements, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (company, position, duration, description, technologies, achievements, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Stats data
+        # Insert Stats data (table: stats)
         stats_data = [
             ("Projects Completed", "50", "+", "🚀", 0),
             ("Happy Clients", "25", "+", "😊", 1),
@@ -152,7 +152,7 @@ def seed_database_endpoint():
         
         for label, value, suffix, icon, order_index in stats_data:
             cursor.execute("""
-                INSERT INTO stat (label, value, suffix, icon, order_index, is_active, created_at, updated_at)
+                INSERT INTO stats (label, value, suffix, icon, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (label, value, suffix, icon, order_index, True, datetime.now(), datetime.now()))
         
@@ -171,7 +171,7 @@ def seed_database_endpoint():
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (type_val, value, label, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Skills data
+        # Insert Skills data (table: skills)
         skills_data = [
             ("Product Management", "Product Strategy, User Research, Data Analysis, Agile, Scrum, A/B Testing, Roadmapping", "from-blue-400 to-cyan-400", 0),
             ("Technical Skills", "Python, JavaScript, React, Node.js, SQL, AWS, Docker, Git", "from-green-400 to-emerald-400", 1),
@@ -181,11 +181,11 @@ def seed_database_endpoint():
         
         for category, skills, color, order_index in skills_data:
             cursor.execute("""
-                INSERT INTO skill (category, skills, color, order_index, is_active, created_at, updated_at)
+                INSERT INTO skills (category, skills, color, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (category, skills, color, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Testimonials data
+        # Insert Testimonials data (table: testimonials)
         testimonials_data = [
             ("Sarah Johnson", "CEO", "TechCorp Solutions", "Former Manager", "Rahul is an exceptional product manager who consistently delivers outstanding results. His strategic thinking and ability to lead cross-functional teams make him invaluable to any organization.", 5, 0),
             ("Michael Chen", "CTO", "InnovationLab", "Peer", "Working with Rahul was a game-changer for our product development process. His attention to detail and user-centric approach resulted in products that our customers love.", 5, 1),
@@ -194,11 +194,11 @@ def seed_database_endpoint():
         
         for name, position, company, relation, message, rating, order_index in testimonials_data:
             cursor.execute("""
-                INSERT INTO testimonial (name, position, company, relation, message, rating, order_index, is_active, created_at, updated_at)
+                INSERT INTO testimonials (name, position, company, relation, message, rating, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (name, position, company, relation, message, rating, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Projects data
+        # Insert Projects data (table: projects)
         projects_data = [
             ("E-Commerce Platform", "A modern, scalable e-commerce solution with advanced features including AI-powered recommendations, real-time inventory management, and seamless payment processing.", "Modern E-commerce Solution", "🛍️", "https://example-ecommerce.com", "https://github.com/rahul/ecommerce-platform", "React, Node.js, MongoDB, Stripe, AWS", "web", True, 0),
             ("AI Voice Assistant", "A witty conversational AI assistant powered by advanced NLP and machine learning. Features voice-to-voice interaction with natural language processing.", "Voice-to-Voice AI Chatbot", "🤖", "https://example-ai-assistant.com", "https://github.com/rahul/ai-voice-assistant", "Python, TensorFlow, React, WebRTC, OpenAI", "ai", True, 1),
@@ -208,11 +208,11 @@ def seed_database_endpoint():
         
         for title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index in projects_data:
             cursor.execute("""
-                INSERT INTO project (title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index, is_active, created_at, updated_at)
+                INSERT INTO projects (title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Awards data
+        # Insert Awards data (table: awards)
         awards_data = [
             ("Best Product Manager 2023", "Tech Awards Association", "2023", "🏆", 0),
             ("Innovation Excellence Award", "Product Management Institute", "2022", "🌟", 1),
@@ -221,11 +221,11 @@ def seed_database_endpoint():
         
         for title, organization, year, icon, order_index in awards_data:
             cursor.execute("""
-                INSERT INTO award (title, organization, year, icon, order_index, is_active, created_at, updated_at)
+                INSERT INTO awards (title, organization, year, icon, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (title, organization, year, icon, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Education data
+        # Insert Education data (table: education)
         education_data = [
             ("Master of Business Administration", "Stanford University", "2020", "🎓", 0),
             ("Bachelor of Computer Science", "MIT", "2018", "💻", 1),
@@ -238,7 +238,7 @@ def seed_database_endpoint():
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (degree, institution, year, icon, order_index, True, datetime.now(), datetime.now()))
         
-        # Insert Certifications data
+        # Insert Certifications data (table: certifications)
         certifications_data = [
             ("Certified Scrum Master (CSM)", "Scrum Alliance", "2022", "📜", 0),
             ("AWS Solutions Architect", "Amazon Web Services", "2021", "☁️", 1),
@@ -247,7 +247,7 @@ def seed_database_endpoint():
         
         for name, issuer, year, icon, order_index in certifications_data:
             cursor.execute("""
-                INSERT INTO certification (name, issuer, year, icon, order_index, is_active, created_at, updated_at)
+                INSERT INTO certifications (name, issuer, year, icon, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (name, issuer, year, icon, order_index, True, datetime.now(), datetime.now()))
         
