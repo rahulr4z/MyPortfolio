@@ -114,16 +114,16 @@ def seed_production_database():
         
         # Insert Testimonials data
         testimonials_data = [
-            ("Sarah Johnson", "CEO", "TechCorp Solutions", "Former Manager", "Rahul is an exceptional product manager who consistently delivers outstanding results. His strategic thinking and ability to lead cross-functional teams make him invaluable to any organization.", 5, 0),
-            ("Michael Chen", "CTO", "InnovationLab", "Peer", "Working with Rahul was a game-changer for our product development process. His attention to detail and user-centric approach resulted in products that our customers love.", 5, 1),
-            ("Emily Rodriguez", "Product Director", "StartupXYZ", "Client", "Rahul's ability to understand complex business requirements and translate them into successful products is remarkable. He's a true professional who delivers on his promises.", 5, 2)
+            ("Sarah Johnson", "CEO", "TechCorp Solutions", "Former Manager", "Rahul is an exceptional product manager who consistently delivers outstanding results. His strategic thinking and ability to lead cross-functional teams make him invaluable to any organization.", 0),
+            ("Michael Chen", "CTO", "InnovationLab", "Peer", "Working with Rahul was a game-changer for our product development process. His attention to detail and user-centric approach resulted in products that our customers love.", 1),
+            ("Emily Rodriguez", "Product Director", "StartupXYZ", "Client", "Rahul's ability to understand complex business requirements and translate them into successful products is remarkable. He's a true professional who delivers on his promises.", 2)
         ]
         
-        for name, position, company, relation, message, rating, order_index in testimonials_data:
+        for name, position, company, relation, message, order_index in testimonials_data:
             cursor.execute("""
-                INSERT INTO testimonials (name, position, company, relation, message, rating, order_index, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (name, position, company, relation, message, rating, order_index, True, datetime.now(), datetime.now()))
+                INSERT INTO testimonials (name, position, company, relation, message, order_index, is_active, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (name, position, company, relation, message, order_index, True, datetime.now(), datetime.now()))
         
         # Insert Projects data
         projects_data = [
