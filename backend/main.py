@@ -41,6 +41,7 @@ app = FastAPI(
 app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads")
 
 # Add CORS middleware - Updated for production deployment
+print(f"DEBUG: Allowed origins: {settings.allowed_origins}")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
