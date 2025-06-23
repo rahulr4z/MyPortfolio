@@ -56,14 +56,7 @@ const config = {
 
 // Environment-specific overrides
 if (import.meta.env.PROD) {
-  // In production, if no API URL is provided, disable API calls
-  if (!import.meta.env.VITE_API_BASE_URL) {
-    config.api.baseURL = null;
-    config.features.autoRefresh = false;
-    config.features.optimisticUpdates = false;
-  } else {
-    config.api.baseURL = import.meta.env.VITE_API_BASE_URL;
-  }
+  config.api.baseURL = import.meta.env.VITE_API_BASE_URL;
   config.features.analytics = true;
   config.development.debug = false;
   config.development.logLevel = 'error';
@@ -71,18 +64,15 @@ if (import.meta.env.PROD) {
 
 // Validation
 const validateConfig = () => {
-  // Only validate API URL if it's provided
-  if (config.api.baseURL) {
-    const required = ['api.baseURL'];
-    const missing = required.filter(key => {
-      const value = key.split('.').reduce((obj, k) => obj?.[k], config);
-      return value === undefined || value === null || value === '';
-    });
-    
-    if (missing.length > 0) {
-      console.error('Missing required configuration:', missing);
-      throw new Error(`Missing required configuration: ${missing.join(', ')}`);
-    }
+  const required = ['api.baseURL'];
+  const missing = required.filter(key => {
+    const value = key.split('.').reduce((obj, k) => obj?.[k], config);
+    return value === undefined || value === null || value === '';
+  });
+  
+  if (missing.length > 0) {
+    console.error('Missing required configuration:', missing);
+    throw new Error(`Missing required configuration: ${missing.join(', ')}`);
   }
 };
 

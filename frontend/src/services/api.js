@@ -5,96 +5,6 @@ import config from '../config';
  * Centralized API communication layer with error handling and retry logic
  */
 
-// Check if backend is available
-const isBackendAvailable = () => {
-  return config.api.baseURL && config.api.baseURL !== 'null';
-};
-
-// Default data for when backend is not available
-const getDefaultData = (endpoint) => {
-  const defaults = {
-    '/api/hero': {
-      title: "I Am Rahul Raj",
-      subtitle: "AVP Product",
-      description: "Software Alchemist crafting digital experiences that users love & businesses value",
-      badge: "Welcome to My Universe",
-      badge_emoji: "✨",
-      cta_text: "View My Work"
-    },
-    '/api/about': [
-      {
-        id: 1,
-        title: "Who I Am",
-        subtitle: "Passionate Product Manager",
-        description: "A dedicated professional with a passion for creating innovative solutions that drive business growth and user satisfaction."
-      },
-      {
-        id: 2,
-        title: "What I Do",
-        subtitle: "Product Strategy & Development",
-        description: "I lead product development initiatives, from concept to launch, ensuring exceptional user experiences and measurable business outcomes."
-      },
-      {
-        id: 3,
-        title: "What Interests Me",
-        subtitle: "Technology & Innovation",
-        description: "I'm fascinated by emerging technologies, user behavior patterns, and the intersection of business strategy with technical innovation."
-      }
-    ],
-    '/api/experiences': [
-      {
-        id: 1,
-        title: "AVP Product",
-        company: "Leading Tech Company",
-        duration: "2022 - Present",
-        description: "Leading product strategy and development for enterprise solutions."
-      }
-    ],
-    '/api/projects': [
-      {
-        id: 1,
-        title: "Portfolio Website",
-        description: "A modern, responsive portfolio built with React and Node.js",
-        technologies: ["React", "Node.js", "Tailwind CSS"],
-        image_url: null,
-        live_url: "#",
-        github_url: "#"
-      }
-    ],
-    '/api/stats': [
-      { id: 1, label: "Years Experience", value: "5+", icon: "💼" },
-      { id: 2, label: "Projects Completed", value: "50+", icon: "🚀" },
-      { id: 3, label: "Happy Clients", value: "30+", icon: "😊" }
-    ],
-    '/api/testimonials': [
-      {
-        id: 1,
-        name: "John Doe",
-        role: "CEO",
-        company: "Tech Corp",
-        content: "Rahul is an exceptional product manager who consistently delivers outstanding results.",
-        avatar_url: null
-      }
-    ],
-    '/api/contact': [
-      {
-        id: 1,
-        type: "email",
-        value: "rahul@example.com",
-        icon: "📧"
-      },
-      {
-        id: 2,
-        type: "phone",
-        value: "+1 (555) 123-4567",
-        icon: "📱"
-      }
-    ]
-  };
-  
-  return defaults[endpoint] || null;
-};
-
 // WebSocket connection for real-time updates
 let websocket = null;
 let reconnectAttempts = 0;
@@ -105,11 +15,6 @@ const reconnectDelay = 1000; // 1 second
 const websocketListeners = new Set();
 
 export const connectWebSocket = () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ WebSocket disabled - no backend available');
-    return;
-  }
-
   if (websocket && websocket.readyState === WebSocket.OPEN) {
     return; // Already connected
   }
@@ -339,18 +244,12 @@ export const submitContactForm = async (formData) => {
  * About section API functions
  */
 export const getAboutContent = async () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default about data');
-    return getDefaultData('/api/about');
-  }
-  
   try {
     const response = await apiFetch('/api/about');
     return response;
   } catch (error) {
-    console.error('Error fetching about:', error);
-    // Return default data on error
-    return getDefaultData('/api/about');
+    console.error('Error fetching about content:', error);
+    throw error;
   }
 };
 
@@ -384,18 +283,12 @@ export const updateAboutOrder = async (orderData) => {
  * Experience section API functions
  */
 export const getExperiences = async () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default experiences data');
-    return getDefaultData('/api/experiences');
-  }
-  
   try {
     const response = await apiFetch('/api/experiences');
     return response;
   } catch (error) {
     console.error('Error fetching experiences:', error);
-    // Return default data on error
-    return getDefaultData('/api/experiences');
+    throw error;
   }
 };
 
@@ -416,18 +309,12 @@ export const updateExperience = async (id, experienceData) => {
  * Stats section API functions
  */
 export const getStats = async () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default stats data');
-    return getDefaultData('/api/stats');
-  }
-  
   try {
     const response = await apiFetch('/api/stats');
     return response;
   } catch (error) {
     console.error('Error fetching stats:', error);
-    // Return default data on error
-    return getDefaultData('/api/stats');
+    throw error;
   }
 };
 
@@ -448,18 +335,12 @@ export const updateStat = async (id, statData) => {
  * Testimonials section API functions
  */
 export const getTestimonials = async () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default testimonials data');
-    return getDefaultData('/api/testimonials');
-  }
-  
   try {
     const response = await apiFetch('/api/testimonials');
     return response;
   } catch (error) {
     console.error('Error fetching testimonials:', error);
-    // Return default data on error
-    return getDefaultData('/api/testimonials');
+    throw error;
   }
 };
 
@@ -480,19 +361,15 @@ export const updateTestimonial = async (id, testimonialData) => {
  * Projects section API functions
  */
 export const getProjects = async (category = null) => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default projects data');
-    return getDefaultData('/api/projects');
-  }
-  
   try {
-    const url = category ? `/api/projects?category=${category}` : '/api/projects';
+    const url = category 
+      ? `/api/projects/${category}`
+      : '/api/projects';
     const response = await apiFetch(url);
     return response;
   } catch (error) {
     console.error('Error fetching projects:', error);
-    // Return default data on error
-    return getDefaultData('/api/projects');
+    throw error;
   }
 };
 
@@ -770,18 +647,12 @@ export const submitContact = async (formData) => {
 };
 
 export const getContactInfo = async () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default contact data');
-    return getDefaultData('/api/contact');
-  }
-  
   try {
     const response = await apiFetch('/api/contact-info');
     return response;
   } catch (error) {
     console.error('Error fetching contact info:', error);
-    // Return default data on error
-    return getDefaultData('/api/contact');
+    throw error;
   }
 };
 
@@ -840,26 +711,16 @@ export const deleteContactInfo = async (id) => {
  * Hero section operations
  */
 export const getHero = async () => {
-  if (!isBackendAvailable()) {
-    console.log('⚠️ Backend not available, returning default hero data');
-    return getDefaultData('/api/hero');
-  }
-  
   try {
     const response = await apiFetch('/api/hero');
     return response;
   } catch (error) {
     console.error('Error fetching hero:', error);
-    // Return default data on error
-    return getDefaultData('/api/hero');
+    throw error;
   }
 };
 
 export const updateHero = async (id, heroData) => {
-  if (!isBackendAvailable()) {
-    throw new Error('Backend not available - cannot update data');
-  }
-  
   try {
     const response = await apiFetch(`/api/hero/${id}`, {
       method: 'PUT',
@@ -873,10 +734,6 @@ export const updateHero = async (id, heroData) => {
 };
 
 export const createHero = async (heroData) => {
-  if (!isBackendAvailable()) {
-    throw new Error('Backend not available - cannot create data');
-  }
-  
   try {
     const response = await apiFetch('/api/hero', {
       method: 'POST',
@@ -890,10 +747,6 @@ export const createHero = async (heroData) => {
 };
 
 export const getAdminHero = async () => {
-  if (!isBackendAvailable()) {
-    throw new Error('Backend not available - admin features disabled');
-  }
-  
   try {
     const response = await apiFetch('/api/admin/hero');
     return response;
