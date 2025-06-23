@@ -95,7 +95,7 @@ def seed_database_endpoint():
         cursor = conn.cursor()
         
         # Clear existing data
-        tables = ['hero', 'about', 'experience', 'stat', 'testimonial', 'project', 'contact_info', 'award', 'education', 'certification', 'skill']
+        tables = ['hero', 'about', 'experiences', 'stats', 'testimonials', 'projects', 'contact_info', 'awards', 'education', 'certifications', 'skills']
         for table in tables:
             cursor.execute(f"DELETE FROM {table}")
         
