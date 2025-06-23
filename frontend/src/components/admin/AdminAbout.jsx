@@ -1,6 +1,23 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Save, X, User, Brain, Rocket, Lightbulb, Loader2, CheckCircle2, GripVertical, RefreshCw } from 'lucide-react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { getAdminAbout, createAbout, updateAboutContent, deleteAbout, updateAboutOrder } from '../../services/api';
 import { useApiData, useApiMutation } from '../../hooks/useApiData';
 
@@ -38,11 +55,84 @@ const validate = (form) => {
   return errors;
 };
 
+// Sortable Item Component
+const SortableItem = ({ item, index, onEdit, onDelete, getCardIcon, getCardColor }) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id.toString() });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`relative group ${isDragging ? 'z-10' : ''}`}
+    >
+      <div
+        className={`h-full p-6 rounded-2xl bg-gradient-to-br ${getCardColor(index)} text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
+      >
+        {/* Drag Handle */}
+        <div
+          {...attributes}
+          {...listeners}
+          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
+        >
+          <GripVertical className="w-4 h-4 text-white/70" />
+        </div>
+
+        {/* Icon */}
+        <div className="mb-4">
+          {getCardIcon(index)}
+        </div>
+
+        {/* Content */}
+        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+        {item.subtitle && (
+          <p className="text-white/80 text-sm mb-3">{item.subtitle}</p>
+        )}
+        <p className="text-white/90 text-sm leading-relaxed">{item.description}</p>
+
+        {/* Actions */}
+        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+          <button
+            onClick={() => onEdit(item)}
+            className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+          >
+            <Edit2 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => onDelete(item.id)}
+            className="p-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AdminAbout = () => {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState(initialForm);
   const [formOpen, setFormOpen] = useState(false);
   const [errors, setErrors] = useState({});
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   // Use custom hooks for data management
   const { 
@@ -135,29 +225,30 @@ const AdminAbout = () => {
     }
   };
 
-  const onDragEnd = async (result) => {
-    if (!result.destination) {
-      return;
-    }
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
 
-    const items = Array.from(aboutItems);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
+    if (active.id !== over.id) {
+      const oldIndex = aboutItems.findIndex(item => item.id.toString() === active.id);
+      const newIndex = aboutItems.findIndex(item => item.id.toString() === over.id);
 
-    const updatedOrder = items.map((item, index) => ({
-      id: item.id,
-      order_index: index,
-    }));
+      const newItems = arrayMove(aboutItems, oldIndex, newIndex);
 
-    // Optimistic update
-    optimisticUpdate(() => items);
+      const updatedOrder = newItems.map((item, index) => ({
+        id: item.id,
+        order_index: index,
+      }));
 
-    try {
-      await orderMutation.execute(updatedOrder);
-    } catch (err) {
-      console.error("Failed to update order", err);
-      // Revert on error
-      refresh();
+      // Optimistic update
+      optimisticUpdate(() => newItems);
+
+      try {
+        await orderMutation.execute(updatedOrder);
+      } catch (err) {
+        console.error("Failed to update order", err);
+        // Revert on error
+        refresh();
+      }
     }
   };
 
@@ -243,70 +334,30 @@ const AdminAbout = () => {
       </div>
 
       {/* About Items List */}
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="about-items">
-          {(provided) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            >
-              {aboutItems.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      className={`relative group ${snapshot.isDragging ? 'z-10' : ''}`}
-                    >
-                      <div
-                        className={`h-full p-6 rounded-2xl bg-gradient-to-br ${getCardColor(index)} text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105`}
-                      >
-                        {/* Drag Handle */}
-                        <div
-                          {...provided.dragHandleProps}
-                          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing"
-                        >
-                          <GripVertical className="w-4 h-4 text-white/70" />
-                        </div>
-
-                        {/* Icon */}
-                        <div className="mb-4">
-                          {getCardIcon(index)}
-                        </div>
-
-                        {/* Content */}
-                        <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                        {item.subtitle && (
-                          <p className="text-white/80 text-sm mb-3">{item.subtitle}</p>
-                        )}
-                        <p className="text-white/90 text-sm leading-relaxed">{item.description}</p>
-
-                        {/* Actions */}
-                        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                          <button
-                            onClick={() => openForm(item)}
-                            className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className="p-2 bg-red-500/20 hover:bg-red-500/30 rounded-lg transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={aboutItems.map(item => item.id.toString())}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {aboutItems.map((item, index) => (
+              <SortableItem
+                key={item.id}
+                item={item}
+                index={index}
+                onEdit={openForm}
+                onDelete={handleDelete}
+                getCardIcon={getCardIcon}
+                getCardColor={getCardColor}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       {/* Form Modal */}
       {formOpen && (
