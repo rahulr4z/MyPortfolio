@@ -259,6 +259,25 @@ def seed_database_endpoint():
     except Exception as e:
         return {"error": f"Failed to seed database: {str(e)}"}
 
+# Temporary endpoint to initialize database (remove in production)
+@app.post("/api/init-database")
+def init_database_endpoint():
+    """Temporary endpoint to initialize the database schema."""
+    try:
+        # Import models - this will trigger Base.metadata.create_all(bind=engine)
+        from models.database import Base, engine
+        
+        # Force table creation
+        Base.metadata.create_all(bind=engine)
+        
+        return {
+            "message": "Database initialized successfully!",
+            "tables_created": list(Base.metadata.tables.keys())
+        }
+        
+    except Exception as e:
+        return {"error": f"Failed to initialize database: {str(e)}"}
+
 # Authentication endpoints
 @app.post("/api/auth/login")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
