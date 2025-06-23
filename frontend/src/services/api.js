@@ -16,7 +16,9 @@ const websocketListeners = new Set();
 
 // Helper function to check if we should use mock data
 const shouldUseMockData = () => {
-  return config.development.mockData || !config.api.baseURL || config.api.baseURL === 'http://localhost:8000';
+  // Temporarily force mock data mode to avoid API errors
+  return true;
+  // return config.development.mockData || !config.api.baseURL || config.api.baseURL === 'http://localhost:8000';
 };
 
 // Helper function to get mock data with delay simulation

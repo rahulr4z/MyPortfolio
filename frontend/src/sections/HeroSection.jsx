@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Lottie from "lottie-react";
-import wolfAnimation from "../lottie/wolf.json";
 import { getHero } from "../services/api";
-
-const CloudSVG = ({ className }) => (
-  <svg width="100" height="60" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <ellipse cx="30" cy="40" rx="30" ry="20" fill="#fff" fillOpacity="0.7"/>
-    <ellipse cx="60" cy="30" rx="20" ry="15" fill="#fff" fillOpacity="0.7"/>
-    <ellipse cx="80" cy="45" rx="15" ry="10" fill="#fff" fillOpacity="0.7"/>
-  </svg>
-);
 
 const HeroSection = () => {
   const [heroData, setHeroData] = useState(null);
@@ -23,6 +13,7 @@ const HeroSection = () => {
         const data = await getHero();
         setHeroData(data);
       } catch (err) {
+        console.error('Hero section error:', err);
         setError('Failed to load hero section data');
       } finally {
         setLoading(false);
@@ -54,18 +45,16 @@ const HeroSection = () => {
   }
 
   // Use heroData for all fields, fallback to defaults if missing
-  const displayTitle = heroData?.title || "I Am Rahul Raj";
-  const displaySubtitle = heroData?.subtitle || "AVP Product";
-  const displayDescription = heroData?.description || "Software Alchemist crafting digital experiences that users love & businesses value";
-  const displayBadge = heroData?.badge || "Welcome to My Universe";
-  const displayBadgeEmoji = heroData?.badge_emoji || "✨";
-  const ctaText = heroData?.cta_text || "View My Work";
+  const displayTitle = heroData?.title || "Hi, I'm Rahul";
+  const displaySubtitle = heroData?.subtitle || "Product Manager & Developer";
+  const displayDescription = heroData?.description || "Passionate about creating innovative solutions that make a difference. I combine strategic thinking with technical expertise to build products that users love.";
+  const ctaText = heroData?.cta_text || "Get In Touch";
 
   return (
     <section className="flex flex-col md:flex-row items-center justify-between min-h-screen w-full px-8 md:px-24 relative bg-gradient-to-br from-blue-50 via-indigo-50 to-teal-50 overflow-hidden">
       {/* Fun Background Elements */}
       <div className="absolute inset-0">
-        {/* Floating hearts */}
+        {/* Floating elements */}
         <motion.div
           animate={{ 
             y: [0, -30, 0],
@@ -123,19 +112,19 @@ const HeroSection = () => {
           whileHover={{ scale: 1.05, boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)' }}
           className="inline-block px-8 py-4 bg-gradient-to-r from-blue-400 via-indigo-500 to-teal-500 text-white text-lg font-bold rounded-full shadow-xl border-2 border-blue-300 cursor-pointer"
         >
-          {displayBadgeEmoji} {displayBadge} {displayBadgeEmoji}
+          ✨ Welcome to My Portfolio ✨
         </motion.span>
       </motion.div>
 
-      {/* Mobile: Wolf Animation Second, Desktop: Wolf Animation Right */}
+      {/* Mobile: Simple Animation Second, Desktop: Simple Animation Right */}
       <div className="flex-1 flex items-center justify-center relative order-1 md:order-2 mt-4 md:mt-0">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="w-[400px] h-[400px] md:w-[960px] md:h-[960px]"
+          className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] flex items-center justify-center"
         >
-          <Lottie animationData={wolfAnimation} loop={true} autoplay={true} style={{ width: '100%', height: '100%' }} />
+          <div className="text-8xl md:text-9xl">🚀</div>
         </motion.div>
       </div>
 
@@ -152,7 +141,7 @@ const HeroSection = () => {
             whileHover={{ scale: 1.05, boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)' }}
             className="inline-block px-8 py-4 bg-gradient-to-r from-blue-400 via-indigo-500 to-teal-500 text-white text-lg font-bold rounded-full shadow-xl border-2 border-blue-300 cursor-pointer"
           >
-            {displayBadgeEmoji} {displayBadge} {displayBadgeEmoji}
+            ✨ Welcome to My Portfolio ✨
           </motion.span>
         </motion.div>
         
@@ -192,7 +181,7 @@ const HeroSection = () => {
           className="flex justify-center md:justify-start"
         >
           <motion.a
-            href="#projects"
+            href="#contact"
             whileHover={{ scale: 1.05, backgroundColor: 'rgba(79, 70, 229, 0.1)', color: 'rgb(79, 70, 229)' }}
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 bg-transparent border-2 border-indigo-500 text-indigo-500 hover:bg-indigo-50"
