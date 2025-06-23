@@ -22,7 +22,7 @@ def seed_production_database():
     
     try:
         # Clear existing data
-        tables = ['hero', 'about', 'experience', 'stat', 'testimonial', 'project', 'contact_info', 'award', 'education', 'certification', 'skill']
+        tables = ['hero', 'about', 'experiences', 'stats', 'testimonials', 'projects', 'contact_info', 'awards', 'education', 'certifications', 'skills']
         for table in tables:
             cursor.execute(f"DELETE FROM {table}")
         
@@ -65,7 +65,7 @@ def seed_production_database():
         
         for company, position, duration, description, technologies, achievements, order_index in experience_data:
             cursor.execute("""
-                INSERT INTO experience (company, position, duration, description, technologies, achievements, order_index, is_active, created_at, updated_at)
+                INSERT INTO experiences (company, position, duration, description, technologies, achievements, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (company, position, duration, description, technologies, achievements, order_index, True, datetime.now(), datetime.now()))
         
@@ -79,7 +79,7 @@ def seed_production_database():
         
         for label, value, suffix, icon, order_index in stats_data:
             cursor.execute("""
-                INSERT INTO stat (label, value, suffix, icon, order_index, is_active, created_at, updated_at)
+                INSERT INTO stats (label, value, suffix, icon, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (label, value, suffix, icon, order_index, True, datetime.now(), datetime.now()))
         
@@ -108,7 +108,7 @@ def seed_production_database():
         
         for category, skills, color, order_index in skills_data:
             cursor.execute("""
-                INSERT INTO skill (category, skills, color, order_index, is_active, created_at, updated_at)
+                INSERT INTO skills (category, skills, color, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (category, skills, color, order_index, True, datetime.now(), datetime.now()))
         
@@ -121,7 +121,7 @@ def seed_production_database():
         
         for name, position, company, relation, message, rating, order_index in testimonials_data:
             cursor.execute("""
-                INSERT INTO testimonial (name, position, company, relation, message, rating, order_index, is_active, created_at, updated_at)
+                INSERT INTO testimonials (name, position, company, relation, message, rating, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (name, position, company, relation, message, rating, order_index, True, datetime.now(), datetime.now()))
         
@@ -135,7 +135,7 @@ def seed_production_database():
         
         for title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index in projects_data:
             cursor.execute("""
-                INSERT INTO project (title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index, is_active, created_at, updated_at)
+                INSERT INTO projects (title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, order_index, True, datetime.now(), datetime.now()))
         
@@ -148,7 +148,7 @@ def seed_production_database():
         
         for title, organization, year, icon, order_index in awards_data:
             cursor.execute("""
-                INSERT INTO award (title, organization, year, icon, order_index, is_active, created_at, updated_at)
+                INSERT INTO awards (title, organization, year, icon, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (title, organization, year, icon, order_index, True, datetime.now(), datetime.now()))
         
@@ -174,7 +174,7 @@ def seed_production_database():
         
         for name, issuer, year, icon, order_index in certifications_data:
             cursor.execute("""
-                INSERT INTO certification (name, issuer, year, icon, order_index, is_active, created_at, updated_at)
+                INSERT INTO certifications (name, issuer, year, icon, order_index, is_active, created_at, updated_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, (name, issuer, year, icon, order_index, True, datetime.now(), datetime.now()))
         
