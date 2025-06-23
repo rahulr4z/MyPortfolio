@@ -1,0 +1,250 @@
+# API Documentation
+
+This file documents all backend API endpoints and their purposes.
+
+---
+
+## Example Format
+
+### Endpoint: /api/contact
+- **Method:** POST
+- **Description:** Receives contact form submissions from the frontend and sends an email or stores the message.
+- **Request Body:**
+  - name: string
+  - email: string
+  - message: string
+- **Response:**
+  - success: boolean
+  - message: string
+
+---
+
+(Add more endpoints as you build your backend)
+
+PORTFOLIO BACKEND API DOCUMENTATION
+====================================
+
+BASE URL: http://localhost:8000
+
+AUTHENTICATION
+==============
+Default Admin Credentials:
+- Username: admin
+- Password: admin123
+
+POST /api/auth/login
+- Description: Authenticate and get JWT token
+- Body: Form data with username and password
+- Response: {"access_token": "jwt_token", "token_type": "bearer"}
+
+HEALTH CHECK
+============
+GET /
+- Description: Check if backend is running
+- Response: {"message": "Backend is running!"}
+
+IMAGE UPLOAD ENDPOINTS (Protected)
+==================================
+POST /api/upload/image
+- Description: Upload single image
+- Headers: Authorization: Bearer <token>
+- Body: Form data with file
+- Response: {"url": "/uploads/filename.jpg", "filename": "original_name.jpg"}
+
+POST /api/upload/images
+- Description: Upload multiple images
+- Headers: Authorization: Bearer <token>
+- Body: Form data with multiple files
+- Response: {"urls": ["/uploads/file1.jpg", "/uploads/file2.jpg"], "count": 2}
+
+DELETE /api/upload/image
+- Description: Delete uploaded image
+- Headers: Authorization: Bearer <token>
+- Query: image_url (string)
+- Response: {"message": "Image deleted successfully"}
+
+GET /api/upload/image/info
+- Description: Get image information
+- Headers: Authorization: Bearer <token>
+- Query: image_url (string)
+- Response: {"filename": "file.jpg", "url": "/uploads/file.jpg", "size": 12345, "width": 1920, "height": 1080, "created": 1234567890}
+
+CONTACT FORM ENDPOINTS
+======================
+POST /api/contact
+- Description: Submit a contact form
+- Body: {"name": "string", "email": "string", "message": "string"}
+- Response: Contact object with id, name, email, message, created_at
+
+GET /api/contacts
+- Description: Get all contact submissions
+- Response: Array of contact objects
+
+ABOUT SECTION ENDPOINTS
+=======================
+GET /api/about
+- Description: Get all active about content items
+- Response: Array of about objects with title, subtitle, description, image_url, is_active, order_index
+
+POST /api/about (Protected)
+- Description: Create new about content item
+- Headers: Authorization: Bearer <token>
+- Body: {"title": "string", "subtitle": "string", "description": "string", "image_url": "string", "is_active": true, "order_index": 1}
+- Response: Created about object
+
+PUT /api/about/{id} (Protected)
+- Description: Update about content item
+- Headers: Authorization: Bearer <token>
+- Body: Partial about object
+- Response: Updated about object
+
+DELETE /api/about/{id} (Protected)
+- Description: Delete about content item
+- Headers: Authorization: Bearer <token>
+- Response: {"message": "About item deleted"}
+
+EXPERIENCE SECTION ENDPOINTS
+============================
+GET /api/experiences
+- Description: Get all active experience entries
+- Response: Array of experience objects with company, position, duration, description, technologies, is_active, order_index
+
+POST /api/experiences (Protected)
+- Description: Create new experience entry
+- Headers: Authorization: Bearer <token>
+- Body: {"company": "string", "position": "string", "duration": "string", "description": "string", "technologies": "string", "is_active": true, "order_index": 1}
+- Response: Created experience object
+
+PUT /api/experiences/{id} (Protected)
+- Description: Update experience entry
+- Headers: Authorization: Bearer <token>
+- Body: Partial experience object
+- Response: Updated experience object
+
+DELETE /api/experiences/{id} (Protected)
+- Description: Delete experience entry
+- Headers: Authorization: Bearer <token>
+- Response: {"message": "Experience deleted"}
+
+STATS SECTION ENDPOINTS
+=======================
+GET /api/stats
+- Description: Get all active statistics
+- Response: Array of stat objects with label, value, suffix, icon, is_active, order_index
+
+POST /api/stats (Protected)
+- Description: Create new statistic
+- Headers: Authorization: Bearer <token>
+- Body: {"label": "string", "value": "string", "suffix": "string", "icon": "string", "is_active": true, "order_index": 1}
+- Response: Created stat object
+
+PUT /api/stats/{id} (Protected)
+- Description: Update statistic
+- Headers: Authorization: Bearer <token>
+- Body: Partial stat object
+- Response: Updated stat object
+
+DELETE /api/stats/{id} (Protected)
+- Description: Delete statistic
+- Headers: Authorization: Bearer <token>
+- Response: {"message": "Stat deleted"}
+
+TESTIMONIALS SECTION ENDPOINTS
+==============================
+GET /api/testimonials
+- Description: Get all active testimonials
+- Response: Array of testimonial objects with name, position, company, message, avatar_url, rating, is_active, order_index
+
+POST /api/testimonials (Protected)
+- Description: Create new testimonial
+- Headers: Authorization: Bearer <token>
+- Body: {"name": "string", "position": "string", "company": "string", "message": "string", "avatar_url": "string", "rating": 5, "is_active": true, "order_index": 1}
+- Response: Created testimonial object
+
+PUT /api/testimonials/{id} (Protected)
+- Description: Update testimonial
+- Headers: Authorization: Bearer <token>
+- Body: Partial testimonial object
+- Response: Updated testimonial object
+
+DELETE /api/testimonials/{id} (Protected)
+- Description: Delete testimonial
+- Headers: Authorization: Bearer <token>
+- Response: {"message": "Testimonial deleted"}
+
+PROJECTS SECTION ENDPOINTS
+==========================
+GET /api/projects
+- Description: Get all active projects
+- Response: Array of project objects with title, description, short_description, image_url, live_url, github_url, technologies, category, is_featured, is_active, order_index
+
+GET /api/projects/{category}
+- Description: Get projects by category (e.g., "software", "data")
+- Response: Array of project objects filtered by category
+
+POST /api/projects (Protected)
+- Description: Create new project
+- Headers: Authorization: Bearer <token>
+- Body: {"title": "string", "description": "string", "short_description": "string", "image_url": "string", "live_url": "string", "github_url": "string", "technologies": "string", "category": "string", "is_featured": true, "is_active": true, "order_index": 1}
+- Response: Created project object
+
+PUT /api/projects/{id} (Protected)
+- Description: Update project
+- Headers: Authorization: Bearer <token>
+- Body: Partial project object
+- Response: Updated project object
+
+DELETE /api/projects/{id} (Protected)
+- Description: Delete project
+- Headers: Authorization: Bearer <token>
+- Response: {"message": "Project deleted"}
+
+ADMIN ENDPOINTS (Protected)
+===========================
+GET /api/admin/contacts
+- Description: Get all contact submissions with metadata
+- Headers: Authorization: Bearer <token>
+- Response: {"total_contacts": 10, "contacts": [contact objects with id, name, email, message, created_at]}
+
+FRONTEND INTEGRATION
+===================
+The frontend components now fetch data from these endpoints:
+- AboutSection: GET /api/about
+- ExperienceSection: GET /api/experiences
+- StatsCounterSection: GET /api/stats
+- WhatOthersSaySection: GET /api/testimonials
+- ProjectsSection: GET /api/projects
+
+ADMIN INTERFACE
+===============
+Access the admin interface at: http://localhost:5173/admin
+- Login with admin credentials
+- Manage all content sections
+- Upload and manage images
+- View contact submissions
+
+API DOCUMENTATION
+=================
+Interactive API documentation available at: http://localhost:8000/docs
+- Test all endpoints directly
+- View request/response schemas
+- Authenticate and test protected endpoints
+
+SECURITY FEATURES
+=================
+- JWT token-based authentication
+- Password hashing with bcrypt
+- Token expiration (30 minutes)
+- Protected admin endpoints
+- File type validation for uploads
+- File size limits (5MB max)
+- Secure filename generation
+
+CORS CONFIGURATION
+==================
+Allowed origins:
+- http://localhost:5173
+- http://localhost:5174
+- http://localhost:5175
+
+Last updated: December 2024

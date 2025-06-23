@@ -1,0 +1,333 @@
+PORTFOLIO DEPLOYMENT GUIDE
+==========================
+
+PREPARATION
+===========
+1. Environment Setup
+   - Python 3.9+ installed
+   - Node.js 16+ installed
+   - Git repository ready
+   - Domain name (optional)
+
+2. Production Requirements
+   - VPS or cloud server (AWS, DigitalOcean, Vercel, etc.)
+   - SSL certificate
+   - Database (PostgreSQL recommended for production)
+   - File storage (AWS S3, Cloudinary, etc.)
+
+BACKEND DEPLOYMENT
+==================
+
+1. Server Setup
+   ```bash
+   # Update system
+   sudo apt update && sudo apt upgrade -y
+   
+   # Install Python and dependencies
+   sudo apt install python3 python3-pip python3-venv nginx
+   
+   # Install Node.js
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt-get install -y nodejs
+   ```
+
+2. Application Setup
+   ```bash
+   # Clone repository
+   git clone <your-repo-url>
+   cd portfolio-backend
+   
+   # Create virtual environment
+   python3 -m venv venv
+   source venv/bin/activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   pip install gunicorn
+   
+   # Set environment variables
+   export SECRET_KEY="your-super-secret-key-here"
+   export DATABASE_URL="postgresql://user:password@localhost/portfolio"
+   export ALLOWED_ORIGINS="https://yourdomain.com"
+   ```
+
+3. Database Setup (PostgreSQL)
+   ```bash
+   # Install PostgreSQL
+   sudo apt install postgresql postgresql-contrib
+   
+   # Create database and user
+   sudo -u postgres psql
+   CREATE DATABASE portfolio;
+   CREATE USER portfolio_user WITH PASSWORD 'your_password';
+   GRANT ALL PRIVILEGES ON DATABASE portfolio TO portfolio_user;
+   \q
+   
+   # Update database URL
+   export DATABASE_URL="postgresql://portfolio_user:your_password@localhost/portfolio"
+   ```
+
+4. Gunicorn Configuration
+   Create `/etc/systemd/system/portfolio-backend.service`:
+   ```ini
+   [Unit]
+   Description=Portfolio Backend
+   After=network.target
+   
+   [Service]
+   User=www-data
+   Group=www-data
+   WorkingDirectory=/path/to/your/portfolio/backend
+   Environment="PATH=/path/to/your/portfolio/backend/venv/bin"
+   Environment="SECRET_KEY=your-super-secret-key-here"
+   Environment="DATABASE_URL=postgresql://portfolio_user:your_password@localhost/portfolio"
+   Environment="ALLOWED_ORIGINS=https://yourdomain.com"
+   ExecStart=/path/to/your/portfolio/backend/venv/bin/gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
+   Restart=always
+   
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+5. Nginx Configuration
+   Create `/etc/nginx/sites-available/portfolio`:
+   ```nginx
+   server {
+       listen 80;
+       server_name yourdomain.com www.yourdomain.com;
+       
+       # Redirect HTTP to HTTPS
+       return 301 https://$server_name$request_uri;
+   }
+   
+   server {
+       listen 443 ssl http2;
+       server_name yourdomain.com www.yourdomain.com;
+       
+       # SSL Configuration
+       ssl_certificate /path/to/your/certificate.crt;
+       ssl_certificate_key /path/to/your/private.key;
+       
+       # Security headers
+       add_header X-Frame-Options "SAMEORIGIN" always;
+       add_header X-XSS-Protection "1; mode=block" always;
+       add_header X-Content-Type-Options "nosniff" always;
+       add_header Referrer-Policy "no-referrer-when-downgrade" always;
+       add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
+       
+       # API endpoints
+       location /api/ {
+           proxy_pass http://127.0.0.1:8000;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+       }
+       
+       # Uploaded files
+       location /uploads/ {
+           alias /path/to/your/portfolio/backend/uploads/;
+           expires 1y;
+           add_header Cache-Control "public, immutable";
+       }
+       
+       # Frontend (if serving from same server)
+       location / {
+           root /path/to/your/portfolio/frontend/dist;
+           try_files $uri $uri/ /index.html;
+           expires 1y;
+           add_header Cache-Control "public, immutable";
+       }
+   }
+   ```
+
+6. Start Services
+   ```bash
+   # Enable and start backend service
+   sudo systemctl enable portfolio-backend
+   sudo systemctl start portfolio-backend
+   
+   # Enable and start nginx
+   sudo systemctl enable nginx
+   sudo systemctl start nginx
+   
+   # Check status
+   sudo systemctl status portfolio-backend
+   sudo systemctl status nginx
+   ```
+
+FRONTEND DEPLOYMENT
+===================
+
+1. Build for Production
+   ```bash
+   cd frontend
+   npm install
+   npm run build
+   ```
+
+2. Deploy to Vercel (Recommended)
+   ```bash
+   # Install Vercel CLI
+   npm install -g vercel
+   
+   # Deploy
+   vercel
+   
+   # Set environment variables
+   vercel env add VITE_API_URL https://yourdomain.com
+   ```
+
+3. Deploy to Netlify
+   ```bash
+   # Install Netlify CLI
+   npm install -g netlify-cli
+   
+   # Deploy
+   netlify deploy --prod --dir=dist
+   
+   # Set environment variables in Netlify dashboard
+   VITE_API_URL=https://yourdomain.com
+   ```
+
+4. Deploy to AWS S3 + CloudFront
+   ```bash
+   # Install AWS CLI
+   pip install awscli
+   
+   # Configure AWS
+   aws configure
+   
+   # Create S3 bucket
+   aws s3 mb s3://your-portfolio-bucket
+   
+   # Upload files
+   aws s3 sync dist/ s3://your-portfolio-bucket --delete
+   
+   # Set bucket policy for public read
+   aws s3 website s3://your-portfolio-bucket --index-document index.html --error-document index.html
+   ```
+
+ENVIRONMENT VARIABLES
+====================
+
+Backend (.env file):
+```env
+SECRET_KEY=your-super-secret-key-here
+DATABASE_URL=postgresql://user:password@localhost/portfolio
+ALLOWED_ORIGINS=https://yourdomain.com
+UPLOAD_DIR=/path/to/uploads
+MAX_FILE_SIZE=5242880
+```
+
+Frontend (.env file):
+```env
+VITE_API_URL=https://yourdomain.com
+VITE_ADMIN_URL=https://yourdomain.com/admin
+```
+
+SECURITY CONSIDERATIONS
+=======================
+
+1. Change Default Credentials
+   ```python
+   # In backend/auth.py
+   DEFAULT_ADMIN = User(
+       username="your_admin_username",
+       hashed_password=pwd_context.hash("your_secure_password")
+   )
+   ```
+
+2. Update Secret Key
+   ```python
+   # Generate secure secret key
+   import secrets
+   print(secrets.token_urlsafe(32))
+   ```
+
+3. Database Security
+   - Use strong passwords
+   - Limit database access
+   - Regular backups
+   - Enable SSL connections
+
+4. File Upload Security
+   - Validate file types
+   - Set size limits
+   - Scan for malware
+   - Use CDN for images
+
+5. SSL/TLS Configuration
+   - Use Let's Encrypt for free certificates
+   - Enable HTTP/2
+   - Set security headers
+   - Regular certificate renewal
+
+MONITORING AND MAINTENANCE
+==========================
+
+1. Logging
+   ```bash
+   # View backend logs
+   sudo journalctl -u portfolio-backend -f
+   
+   # View nginx logs
+   sudo tail -f /var/log/nginx/access.log
+   sudo tail -f /var/log/nginx/error.log
+   ```
+
+2. Database Backups
+   ```bash
+   # Create backup script
+   #!/bin/bash
+   pg_dump portfolio > backup_$(date +%Y%m%d_%H%M%S).sql
+   
+   # Add to crontab
+   0 2 * * * /path/to/backup_script.sh
+   ```
+
+3. Performance Monitoring
+   - Use tools like New Relic, DataDog
+   - Monitor server resources
+   - Set up alerts for downtime
+   - Track API response times
+
+4. Updates and Maintenance
+   ```bash
+   # Update dependencies
+   pip install --upgrade -r requirements.txt
+   npm update
+   
+   # Restart services
+   sudo systemctl restart portfolio-backend
+   sudo systemctl restart nginx
+   ```
+
+TROUBLESHOOTING
+===============
+
+1. Common Issues
+   - Port conflicts: Check if ports 80, 443, 8000 are free
+   - Permission issues: Ensure proper file permissions
+   - Database connection: Verify DATABASE_URL
+   - CORS errors: Check ALLOWED_ORIGINS
+
+2. Debug Commands
+   ```bash
+   # Check service status
+   sudo systemctl status portfolio-backend
+   
+   # Check nginx configuration
+   sudo nginx -t
+   
+   # Check logs
+   sudo journalctl -u portfolio-backend --no-pager
+   ```
+
+3. Performance Optimization
+   - Enable gzip compression
+   - Use CDN for static assets
+   - Implement caching
+   - Optimize database queries
+
+Last updated: December 2024 
