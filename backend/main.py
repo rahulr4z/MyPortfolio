@@ -173,17 +173,17 @@ def seed_database_endpoint():
         
         # Insert Skills data (table: skills)
         skills_data = [
-            ("Product Management", "Product Strategy, User Research, Data Analysis, Agile, Scrum, A/B Testing, Roadmapping", "from-blue-400 to-cyan-400", 0),
-            ("Technical Skills", "Python, JavaScript, React, Node.js, SQL, AWS, Docker, Git", "from-green-400 to-emerald-400", 1),
-            ("Design & UX", "Figma, User Experience Design, Wireframing, Prototyping, Design Systems", "from-purple-400 to-pink-400", 2),
-            ("Analytics & Tools", "Google Analytics, Mixpanel, JIRA, Confluence, Notion, Slack", "from-orange-400 to-red-400", 3)
+            ("Product Management", "Product Strategy, User Research, Data Analysis, Agile, Scrum, A/B Testing, Roadmapping", 0),
+            ("Technical Skills", "Python, JavaScript, React, Node.js, SQL, AWS, Docker, Git", 1),
+            ("Design & UX", "Figma, User Experience Design, Wireframing, Prototyping, Design Systems", 2),
+            ("Analytics & Tools", "Google Analytics, Mixpanel, JIRA, Confluence, Notion, Slack", 3)
         ]
         
-        for category, skills, color, order_index in skills_data:
+        for category, skills, order_index in skills_data:
             cursor.execute("""
-                INSERT INTO skills (category, skills, color, order_index, is_active, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (category, skills, color, order_index, True, datetime.now(), datetime.now()))
+                INSERT INTO skills (category, skills, order_index, is_active, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (category, skills, order_index, True, datetime.now(), datetime.now()))
         
         # Insert Testimonials data (table: testimonials)
         testimonials_data = [
