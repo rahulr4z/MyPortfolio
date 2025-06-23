@@ -14,6 +14,18 @@ const reconnectDelay = 1000; // 1 second
 // WebSocket event listeners
 const websocketListeners = new Set();
 
+// Helper function to check if we should use mock data
+const shouldUseMockData = () => {
+  return config.development.mockData || !config.api.baseURL || config.api.baseURL === 'http://localhost:8000';
+};
+
+// Helper function to get mock data with delay simulation
+const getMockData = (data, delay = 500) => {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(data), delay);
+  });
+};
+
 export const connectWebSocket = () => {
   if (websocket && websocket.readyState === WebSocket.OPEN) {
     return; // Already connected
@@ -244,16 +256,25 @@ export const submitContactForm = async (formData) => {
  * About section API functions
  */
 export const getAboutContent = async () => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.about);
+  }
+  
   try {
     const response = await apiFetch('/api/about');
     return response;
   } catch (error) {
     console.error('Error fetching about content:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.about);
   }
 };
 
 export const updateAboutContent = async (id, aboutData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...aboutData, id });
+  }
+  
   try {
     const response = await apiFetch(`/api/about/${id}`, {
       method: 'PUT',
@@ -267,6 +288,10 @@ export const updateAboutContent = async (id, aboutData) => {
 };
 
 export const updateAboutOrder = async (orderData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ success: true });
+  }
+  
   try {
     const response = await apiFetch('/api/about/order', {
       method: 'PUT',
@@ -283,16 +308,25 @@ export const updateAboutOrder = async (orderData) => {
  * Experience section API functions
  */
 export const getExperiences = async () => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.experiences);
+  }
+  
   try {
     const response = await apiFetch('/api/experiences');
     return response;
   } catch (error) {
     console.error('Error fetching experiences:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.experiences);
   }
 };
 
 export const updateExperience = async (id, experienceData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...experienceData, id });
+  }
+  
   try {
     const response = await apiFetch(`/api/experiences/${id}`, {
       method: 'PUT',
@@ -309,16 +343,25 @@ export const updateExperience = async (id, experienceData) => {
  * Stats section API functions
  */
 export const getStats = async () => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.stats);
+  }
+  
   try {
     const response = await apiFetch('/api/stats');
     return response;
   } catch (error) {
     console.error('Error fetching stats:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.stats);
   }
 };
 
 export const updateStat = async (id, statData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...statData, id });
+  }
+  
   try {
     const response = await apiFetch(`/api/stats/${id}`, {
       method: 'PUT',
@@ -335,16 +378,25 @@ export const updateStat = async (id, statData) => {
  * Testimonials section API functions
  */
 export const getTestimonials = async () => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.testimonials);
+  }
+  
   try {
     const response = await apiFetch('/api/testimonials');
     return response;
   } catch (error) {
     console.error('Error fetching testimonials:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.testimonials);
   }
 };
 
 export const updateTestimonial = async (id, testimonialData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...testimonialData, id });
+  }
+  
   try {
     const response = await apiFetch(`/api/testimonials/${id}`, {
       method: 'PUT',
@@ -361,6 +413,10 @@ export const updateTestimonial = async (id, testimonialData) => {
  * Projects section API functions
  */
 export const getProjects = async (category = null) => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.projects);
+  }
+  
   try {
     const url = category 
       ? `/api/projects/${category}`
@@ -369,11 +425,16 @@ export const getProjects = async (category = null) => {
     return response;
   } catch (error) {
     console.error('Error fetching projects:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.projects);
   }
 };
 
 export const updateProject = async (id, projectData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...projectData, id });
+  }
+  
   try {
     const response = await apiFetch(`/api/projects/${id}`, {
       method: 'PUT',
@@ -633,26 +694,18 @@ export const logout = () => {
 /**
  * Contact info operations
  */
-export const submitContact = async (formData) => {
-  try {
-    const response = await apiFetch('/api/contact', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-    });
-    return response;
-  } catch (error) {
-    console.error('Error submitting contact:', error);
-    throw error;
-  }
-};
-
 export const getContactInfo = async () => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.contact);
+  }
+  
   try {
     const response = await apiFetch('/api/contact-info');
     return response;
   } catch (error) {
     console.error('Error fetching contact info:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.contact);
   }
 };
 
@@ -711,16 +764,25 @@ export const deleteContactInfo = async (id) => {
  * Hero section operations
  */
 export const getHero = async () => {
+  if (shouldUseMockData()) {
+    return getMockData(config.mockData.hero);
+  }
+  
   try {
     const response = await apiFetch('/api/hero');
     return response;
   } catch (error) {
     console.error('Error fetching hero:', error);
-    throw error;
+    // Fallback to mock data on error
+    return getMockData(config.mockData.hero);
   }
 };
 
 export const updateHero = async (id, heroData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...heroData, id });
+  }
+  
   try {
     const response = await apiFetch(`/api/hero/${id}`, {
       method: 'PUT',
@@ -734,6 +796,10 @@ export const updateHero = async (id, heroData) => {
 };
 
 export const createHero = async (heroData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ ...heroData, id: Date.now() });
+  }
+  
   try {
     const response = await apiFetch('/api/hero', {
       method: 'POST',
@@ -1098,6 +1164,23 @@ export const updateSectionConfig = async (configData) => {
     return { message: 'Section config updated successfully', updated_sections: updates };
   } catch (error) {
     console.error('❌ updateSectionConfig error:', error);
+    throw error;
+  }
+};
+
+export const submitContact = async (formData) => {
+  if (shouldUseMockData()) {
+    return getMockData({ success: true, message: 'Message sent successfully!' });
+  }
+  
+  try {
+    const response = await apiFetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error submitting contact:', error);
     throw error;
   }
 }; 
