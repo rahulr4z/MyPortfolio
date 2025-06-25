@@ -16,6 +16,7 @@ const AdminSectionConfig = () => {
     },
     about: {
       title: "Get to Know Me",
+      mainTitle: "Get to Know Me",
       description: "A glimpse into my world of innovation and creativity",
       whoIAm: {
         title: "Who I Am",
@@ -253,7 +254,8 @@ const AdminSectionConfig = () => {
       icon: '💭',
       color: 'from-blue-500 to-cyan-500',
       fields: [
-        { key: 'title', label: 'Section Title', placeholder: 'Get to Know Me' },
+        { key: 'title', label: 'Badge Text', placeholder: 'Get to Know Me' },
+        { key: 'mainTitle', label: 'Main Title', placeholder: 'Get to Know Me' },
         { key: 'description', label: 'Section Description', placeholder: 'A glimpse into my world...' }
       ]
     },
