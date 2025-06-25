@@ -99,6 +99,22 @@ const TestimonialsSection = () => {
     description: "Hear what amazing people have to say about working with me! 💬"
   };
 
+  // Color themes for testimonials
+  const colorThemes = [
+    { border: 'border-emerald-200', quote: 'text-emerald-500', bg: 'from-emerald-400 to-teal-400' },
+    { border: 'border-blue-200', quote: 'text-blue-500', bg: 'from-blue-400 to-cyan-400' },
+    { border: 'border-purple-200', quote: 'text-purple-500', bg: 'from-purple-400 to-pink-400' },
+    { border: 'border-orange-200', quote: 'text-orange-500', bg: 'from-orange-400 to-red-400' },
+    { border: 'border-teal-200', quote: 'text-teal-500', bg: 'from-teal-400 to-emerald-400' },
+    { border: 'border-indigo-200', quote: 'text-indigo-500', bg: 'from-indigo-400 to-purple-400' },
+    { border: 'border-pink-200', quote: 'text-pink-500', bg: 'from-pink-400 to-rose-400' },
+    { border: 'border-cyan-200', quote: 'text-cyan-500', bg: 'from-cyan-400 to-blue-400' },
+  ];
+
+  const getColorTheme = (index) => {
+    return colorThemes[index % colorThemes.length];
+  };
+
   if (loading) {
     return (
       <section className="py-20 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 relative overflow-hidden flex items-center justify-center min-h-screen">
@@ -221,10 +237,10 @@ const TestimonialsSection = () => {
                 className="group cursor-pointer"
                 onClick={() => openModal(testimonial)}
               >
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-emerald-200 hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                <div className={`bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 ${getColorTheme(index).border} hover:shadow-2xl transition-all duration-300 h-full flex flex-col`}>
                   {/* Quote Icon */}
                   <div className="mb-4">
-                    <Quote className="w-8 h-8 text-emerald-500 opacity-60" />
+                    <Quote className={`w-8 h-8 ${getColorTheme(index).quote} opacity-60`} />
                   </div>
 
                   {/* Preview Text */}
@@ -237,17 +253,12 @@ const TestimonialsSection = () => {
 
                   {/* Author Info */}
                   <div className="mt-auto">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        {testimonial.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                        <p className="text-sm text-gray-600">{testimonial.position}</p>
-                        {testimonial.company && (
-                          <p className="text-xs text-emerald-600">{testimonial.company}</p>
-                        )}
-                      </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
+                      <p className="text-sm text-gray-600">{testimonial.position}</p>
+                      {testimonial.company && (
+                        <p className="text-xs text-emerald-600">{testimonial.company}</p>
+                      )}
                     </div>
                   </div>
 
@@ -316,19 +327,14 @@ const TestimonialsSection = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white p-6">
+              <div className={`bg-gradient-to-r ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).bg} text-white p-6`}>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-white font-bold text-2xl">
-                      {selectedTestimonial.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold">{selectedTestimonial.name}</h3>
-                      <p className="text-emerald-100">{selectedTestimonial.position}</p>
-                      {selectedTestimonial.company && (
-                        <p className="text-emerald-100 text-sm">{selectedTestimonial.company}</p>
-                      )}
-                    </div>
+                  <div>
+                    <h3 className="text-2xl font-bold">{selectedTestimonial.name}</h3>
+                    <p className="text-white/90">{selectedTestimonial.position}</p>
+                    {selectedTestimonial.company && (
+                      <p className="text-white/80 text-sm">{selectedTestimonial.company}</p>
+                    )}
                   </div>
                   <button
                     onClick={closeModal}
@@ -342,7 +348,7 @@ const TestimonialsSection = () => {
               {/* Modal Content */}
               <div className="p-8">
                 <div className="mb-6">
-                  <Quote className="w-12 h-12 text-emerald-500 opacity-60 mb-4" />
+                  <Quote className={`w-12 h-12 ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).quote} opacity-60 mb-4`} />
                   <p className="text-gray-700 text-lg leading-relaxed">
                     {selectedTestimonial.message}
                   </p>
@@ -352,7 +358,7 @@ const TestimonialsSection = () => {
                 <div className="flex items-center justify-between pt-6 border-t border-gray-200">
                   <button
                     onClick={prevTestimonial}
-                    className="flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Previous
@@ -364,7 +370,7 @@ const TestimonialsSection = () => {
                   
                   <button
                     onClick={nextTestimonial}
-                    className="flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     Next
                     <ChevronRight className="w-4 h-4" />
