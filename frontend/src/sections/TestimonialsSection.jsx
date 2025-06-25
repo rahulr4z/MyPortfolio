@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, Quote, Star } from 'lucide-react';
 import { getTestimonials } from '../services/api';
@@ -12,6 +12,7 @@ const TestimonialsSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const { sectionConfig } = useSectionConfig();
+  const lastScreenSize = useRef(null);
 
   // Calculate how many testimonials to show initially
   const getInitialCount = () => {
@@ -23,15 +24,26 @@ const TestimonialsSection = () => {
 
   const [visibleCount, setVisibleCount] = useState(getInitialCount());
 
-  // Update visible count on window resize
+  // Update visible count on window resize only if not expanded and screen size actually changed
   useEffect(() => {
     const handleResize = () => {
-      setVisibleCount(getInitialCount());
+      const currentScreenSize = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+      
+      // Only update if user hasn't expanded the view AND screen size actually changed
+      if (!showAll && lastScreenSize.current !== currentScreenSize) {
+        lastScreenSize.current = currentScreenSize;
+        setVisibleCount(getInitialCount());
+      }
     };
+
+    // Set initial screen size
+    if (typeof window !== 'undefined') {
+      lastScreenSize.current = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [showAll]);
 
   const visibleTestimonials = testimonials.slice(0, visibleCount);
   const hasMore = visibleCount < testimonials.length;
@@ -88,7 +100,8 @@ const TestimonialsSection = () => {
   };
 
   const showLess = () => {
-    setVisibleCount(getInitialCount());
+    const initialCount = getInitialCount();
+    setVisibleCount(initialCount);
     setShowAll(false);
   };
 
