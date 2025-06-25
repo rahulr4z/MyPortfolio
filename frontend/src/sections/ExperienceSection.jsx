@@ -4,7 +4,7 @@ import { getExperiences } from '../services/api';
 import { useSectionConfig } from '../contexts/SectionConfigContext';
 
 const ExperienceSection = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
