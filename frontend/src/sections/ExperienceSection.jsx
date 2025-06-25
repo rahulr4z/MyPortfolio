@@ -379,127 +379,92 @@ const ExperienceSection = () => {
           </div>
         </div>
 
-        {/* Desktop Layout (Accordion + Timeline Hybrid Design) */}
+        {/* Desktop Layout (Vertical Timeline with Cards) */}
         <div className="hidden lg:block">
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="relative">
               {/* Timeline Path */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-full h-full">
-                {/* Main Timeline Line */}
+              <div className="absolute left-8 top-0 bottom-0 w-1">
+                {/* Animated Timeline Line */}
                 <motion.div 
-                  initial={{ pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  transition={{ duration: 3, ease: "easeInOut" }}
-                  className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 via-purple-400 to-teal-400 rounded-full"
+                  initial={{ scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  transition={{ duration: 2, ease: "easeInOut" }}
+                  className="w-full h-full bg-gradient-to-b from-blue-400 via-purple-400 to-teal-400 rounded-full origin-top"
                 />
                 
-                {/* Winding Path with Curves */}
-                <svg className="absolute left-1/2 transform -translate-x-1/2 w-full h-full" viewBox="0 0 800 800">
-                  <motion.path
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    transition={{ duration: 4, ease: "easeInOut" }}
-                    d="M 400 750 Q 300 650 400 550 Q 500 450 400 350 Q 300 250 400 150 Q 500 50 400 50"
-                    stroke="url(#journeyGradient)"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient id="journeyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor="#3B82F6" />
-                      <stop offset="33%" stopColor="#8B5CF6" />
-                      <stop offset="66%" stopColor="#14B8A6" />
-                      <stop offset="100%" stopColor="#EC4899" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-                
-                {/* Timeline Milestones */}
-                {experiences.map((_, index) => (
-                  <motion.div
-                    key={`milestone-${index}`}
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    animate={{ 
-                      scale: [1, 1.1, 1],
-                      y: [0, -5, 0, 5, 0]
-                    }}
-                    transition={{ 
-                      scale: { duration: 0.5, delay: index * 0.3 },
-                      y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
-                    }}
-                    className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border-4 border-white shadow-lg z-10"
-                    style={{ 
-                      bottom: `${50 + (index * 120)}px`,
-                      left: `calc(50% + ${Math.sin(index * 0.8) * 60}px)`
-                    }}
-                  />
-                ))}
-                
-                {/* Floating Journey Elements */}
+                {/* Floating Timeline Elements */}
                 <motion.div
                   animate={{ 
-                    x: [0, 20, 0],
-                    y: [0, -15, 0],
-                    rotate: [0, 10, 0]
+                    y: [0, -10, 0],
+                    scale: [1, 1.1, 1]
                   }}
                   transition={{ 
-                    duration: 6, 
+                    duration: 3, 
                     repeat: Infinity, 
-                    ease: "easeInOut"
+                    ease: "easeInOut" 
                   }}
-                  className="absolute left-1/2 transform -translate-x-1/2 text-blue-400 text-lg"
-                  style={{ bottom: '150px' }}
+                  className="absolute top-4 left-1/2 transform -translate-x-1/2 text-blue-400 text-xl"
                 >
                   🚀
                 </motion.div>
                 <motion.div
                   animate={{ 
-                    x: [0, -15, 0],
-                    y: [0, -10, 0],
-                    rotate: [0, -5, 0]
+                    y: [0, -8, 0],
+                    scale: [1, 1.2, 1]
                   }}
                   transition={{ 
-                    duration: 5, 
+                    duration: 4, 
                     repeat: Infinity, 
                     ease: "easeInOut",
                     delay: 1
                   }}
-                  className="absolute left-1/2 transform -translate-x-1/2 text-purple-400 text-lg"
-                  style={{ bottom: '270px' }}
+                  className="absolute top-1/3 left-1/2 transform -translate-x-1/2 text-purple-400 text-lg"
+                >
+                  ⭐
+                </motion.div>
+                <motion.div
+                  animate={{ 
+                    y: [0, -12, 0],
+                    scale: [1, 0.9, 1]
+                  }}
+                  transition={{ 
+                    duration: 3.5, 
+                    repeat: Infinity, 
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                  className="absolute top-2/3 left-1/2 transform -translate-x-1/2 text-teal-400 text-xl"
                 >
                   🎯
                 </motion.div>
                 <motion.div
                   animate={{ 
-                    x: [0, 15, 0],
-                    y: [0, -12, 0],
-                    rotate: [0, 8, 0]
+                    y: [0, -6, 0],
+                    scale: [1, 1.3, 1]
                   }}
                   transition={{ 
-                    duration: 7, 
+                    duration: 2.5, 
                     repeat: Infinity, 
                     ease: "easeInOut",
-                    delay: 2
+                    delay: 3
                   }}
-                  className="absolute left-1/2 transform -translate-x-1/2 text-teal-400 text-lg"
-                  style={{ bottom: '390px' }}
+                  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-pink-400 text-lg"
                 >
-                  ⭐
+                  🏆
                 </motion.div>
               </div>
               
-              {/* Experience Cards as Timeline Accordions */}
-              <div className="space-y-16 pt-8">
+              {/* Experience Cards */}
+              <div className="ml-16 space-y-8">
                 {experiences.map((experience, index) => {
                   // Different colors for each experience card
                   const colorVariants = [
-                    { border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-800', hover: 'hover:bg-blue-50', icon: 'text-blue-700', badge: 'bg-blue-100 text-blue-700 border-blue-200' },
-                    { border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-800', hover: 'hover:bg-purple-50', icon: 'text-purple-700', badge: 'bg-purple-100 text-purple-700 border-purple-200' },
-                    { border: 'border-teal-500', bg: 'bg-teal-50', text: 'text-teal-800', hover: 'hover:bg-teal-50', icon: 'text-teal-700', badge: 'bg-teal-100 text-teal-700 border-teal-200' },
-                    { border: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-800', hover: 'hover:bg-indigo-50', icon: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-700 border-indigo-200' },
-                    { border: 'border-pink-500', bg: 'bg-pink-50', text: 'text-pink-800', hover: 'hover:bg-pink-50', icon: 'text-pink-700', badge: 'bg-pink-100 text-pink-700 border-pink-200' }
+                    { border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-800', hover: 'hover:bg-blue-50', icon: 'text-blue-700', badge: 'bg-blue-100 text-blue-700 border-blue-200', timeline: 'bg-blue-500' },
+                    { border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-800', hover: 'hover:bg-purple-50', icon: 'text-purple-700', badge: 'bg-purple-100 text-purple-700 border-purple-200', timeline: 'bg-purple-500' },
+                    { border: 'border-teal-500', bg: 'bg-teal-50', text: 'text-teal-800', hover: 'hover:bg-teal-50', icon: 'text-teal-700', badge: 'bg-teal-100 text-teal-700 border-teal-200', timeline: 'bg-teal-500' },
+                    { border: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-800', hover: 'hover:bg-indigo-50', icon: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-700 border-indigo-200', timeline: 'bg-indigo-500' },
+                    { border: 'border-pink-500', bg: 'bg-pink-50', text: 'text-pink-800', hover: 'hover:bg-pink-50', icon: 'text-pink-700', badge: 'bg-pink-100 text-pink-700 border-pink-200', timeline: 'bg-pink-500' }
                   ];
                   
                   const colors = colorVariants[index % colorVariants.length];
@@ -507,46 +472,27 @@ const ExperienceSection = () => {
                   return (
                     <motion.div
                       key={experience.id}
-                      initial={{ opacity: 0, y: 50 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8, delay: index * 0.3 }}
-                      className={`relative flex items-center ${
-                        index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'
-                      }`}
+                      initial={{ opacity: 0, x: -50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: index * 0.2 }}
+                      className="relative"
                     >
-                      {/* Timeline Stop Marker */}
+                      {/* Timeline Dot */}
                       <motion.div 
                         initial={{ scale: 0, opacity: 0 }}
                         whileInView={{ scale: 1, opacity: 1 }}
                         transition={{ 
                           duration: 0.6, 
-                          delay: index * 0.3 + 0.2,
-                          scale: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
-                          y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                          delay: index * 0.2 + 0.3,
+                          scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
                         }}
                         animate={{ 
-                          scale: [1, 1.15, 1],
-                          y: [0, -8, 0, 8, 0]
+                          scale: [1, 1.2, 1],
+                          y: [0, -3, 0]
                         }}
-                        className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border-4 border-white shadow-xl z-10 flex items-center justify-center"
+                        className={`absolute -left-12 top-8 w-6 h-6 ${colors.timeline} rounded-full border-4 border-white shadow-lg z-10 flex items-center justify-center`}
                       >
-                        {/* Timeline Stop Icon */}
-                        <motion.div
-                          animate={{ 
-                            rotate: [0, 15, -15, 0],
-                            scale: [1, 1.3, 1]
-                          }}
-                          transition={{ 
-                            duration: 4, 
-                            repeat: Infinity,
-                            delay: index * 0.4
-                          }}
-                          className="text-white text-xl"
-                        >
-                          {index === 0 ? '🚀' : index === experiences.length - 1 ? '🏆' : '📍'}
-                        </motion.div>
-                        
-                        {/* Timeline Glow Effect */}
+                        {/* Timeline Dot Glow */}
                         <motion.div
                           animate={{ 
                             scale: [1, 1.8, 1],
@@ -557,181 +503,176 @@ const ExperienceSection = () => {
                             repeat: Infinity,
                             delay: index * 0.3
                           }}
-                          className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"
+                          className={`absolute inset-0 ${colors.timeline} rounded-full`}
                         />
                       </motion.div>
                       
-                      {/* Experience Accordion Card */}
-                      <div className={`w-5/12 ${index % 2 === 0 ? 'pr-12' : 'pl-12'}`}>
-                        <motion.div
-                          initial={{ opacity: 0, x: index % 2 === 0 ? -60 : 60 }}
-                          whileInView={{ opacity: 1, x: 0 }}
-                          transition={{ duration: 0.8, delay: index * 0.3 + 0.4 }}
-                          whileHover={{ scale: 1.02, y: -5 }}
-                          className={`bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border-2 ${colors.border} relative overflow-hidden group`}
-                        >
-                          {/* Card Background Pattern */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/50 to-teal-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                          
-                          <div className="relative z-10">
-                            {/* Accordion Header */}
-                            <motion.button
-                              onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
-                              className={`w-full p-8 text-left flex justify-between items-center ${colors.hover} transition-colors rounded-t-3xl`}
-                              whileHover={{ scale: 1.01 }}
-                              whileTap={{ scale: 0.99 }}
-                            >
-                              <div className="flex-1">
-                                {/* Period Badge */}
-                                <motion.div
-                                  initial={{ opacity: 0, y: 20 }}
-                                  whileInView={{ opacity: 1, y: 0 }}
-                                  transition={{ duration: 0.6, delay: index * 0.3 + 0.7 }}
-                                  className={`inline-block px-4 py-2 ${colors.badge} rounded-full text-sm font-medium mb-4`}
-                                >
-                                  {experience.period}
-                                </motion.div>
-                                
-                                {/* Title and Company */}
-                                <motion.h3
-                                  initial={{ opacity: 0, y: 20 }}
-                                  whileInView={{ opacity: 1, y: 0 }}
-                                  transition={{ duration: 0.6, delay: index * 0.3 + 0.8 }}
-                                  className={`text-2xl font-bold ${colors.text} mb-2`}
-                                >
-                                  {experience.title}
-                                </motion.h3>
-                                <motion.div
-                                  initial={{ opacity: 0, y: 20 }}
-                                  whileInView={{ opacity: 1, y: 0 }}
-                                  transition={{ duration: 0.6, delay: index * 0.3 + 0.9 }}
-                                  className={`text-xl ${colors.text.replace('800', '600')} font-semibold`}
-                                >
-                                  {experience.company}
-                                </motion.div>
-                              </div>
-                              
-                              {/* Chevron Icon */}
-                              <motion.div 
-                                animate={{ rotate: selectedIndex === index ? 180 : 0 }}
-                                transition={{ duration: 0.3 }}
+                      {/* Experience Card */}
+                      <motion.div
+                        whileHover={{ scale: 1.02, y: -5 }}
+                        className={`bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border-2 ${colors.border} relative overflow-hidden group`}
+                      >
+                        {/* Card Background Pattern */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/50 to-teal-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <div className="relative z-10">
+                          {/* Accordion Header */}
+                          <motion.button
+                            onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
+                            className={`w-full p-8 text-left flex justify-between items-center ${colors.hover} transition-colors rounded-t-3xl`}
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
+                          >
+                            <div className="flex-1">
+                              {/* Period Badge */}
+                              <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
+                                className={`inline-block px-4 py-2 ${colors.badge} rounded-full text-sm font-medium mb-4`}
                               >
-                                <svg className={`w-8 h-8 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
+                                {experience.period}
                               </motion.div>
-                            </motion.button>
+                              
+                              {/* Title and Company */}
+                              <motion.h3
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.2 + 0.5 }}
+                                className={`text-2xl font-bold ${colors.text} mb-2`}
+                              >
+                                {experience.title}
+                              </motion.h3>
+                              <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.2 + 0.6 }}
+                                className={`text-xl ${colors.text.replace('800', '600')} font-semibold`}
+                              >
+                                {experience.company}
+                              </motion.div>
+                            </div>
+                            
+                            {/* Chevron Icon */}
+                            <motion.div 
+                              animate={{ rotate: selectedIndex === index ? 180 : 0 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <svg className={`w-8 h-8 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </motion.div>
+                          </motion.button>
 
-                            {/* Accordion Content */}
-                            <AnimatePresence>
-                              {selectedIndex === index && (
+                          {/* Accordion Content */}
+                          <AnimatePresence>
+                            {selectedIndex === index && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ 
+                                  height: { duration: 0.4, ease: "easeInOut" },
+                                  opacity: { duration: 0.3, ease: "easeInOut" }
+                                }}
+                                className="px-8 pb-8 space-y-6"
+                              >
+                                {/* Description */}
                                 <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: 'auto', opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{ 
-                                    height: { duration: 0.4, ease: "easeInOut" },
-                                    opacity: { duration: 0.3, ease: "easeInOut" }
-                                  }}
-                                  className="px-8 pb-8 space-y-6"
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.4, delay: 0.1 }}
                                 >
-                                  {/* Description */}
+                                  <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
+                                    <span className="text-2xl">💼</span>
+                                    Role Description
+                                  </h4>
+                                  <p className={`text-sm ${colors.text.replace('800', '700')} leading-relaxed`}>
+                                    {experience.description}
+                                  </p>
+                                </motion.div>
+
+                                {/* Technologies */}
+                                {experience.technologies && experience.technologies.length > 0 && (
                                   <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.4, delay: 0.1 }}
+                                    transition={{ duration: 0.4, delay: 0.2 }}
                                   >
                                     <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
-                                      <span className="text-2xl">💼</span>
-                                      Role Description
+                                      <span className="text-2xl">🛠️</span>
+                                      Technologies & Skills
                                     </h4>
-                                    <p className={`text-sm ${colors.text.replace('800', '700')} leading-relaxed`}>
-                                      {experience.description}
-                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                      {experience.technologies.map((tech, techIndex) => (
+                                        <motion.span
+                                          key={techIndex}
+                                          initial={{ opacity: 0, scale: 0.8 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          transition={{ 
+                                            duration: 0.3, 
+                                            delay: 0.3 + techIndex * 0.05 
+                                          }}
+                                          whileHover={{ scale: 1.05 }}
+                                          className={`px-3 py-1 ${colors.badge} rounded-full text-sm font-medium border`}
+                                        >
+                                          {tech}
+                                        </motion.span>
+                                      ))}
+                                    </div>
                                   </motion.div>
+                                )}
 
-                                  {/* Technologies */}
-                                  {experience.technologies && experience.technologies.length > 0 && (
-                                    <motion.div
-                                      initial={{ opacity: 0, y: 10 }}
-                                      animate={{ opacity: 1, y: 0 }}
-                                      transition={{ duration: 0.4, delay: 0.2 }}
-                                    >
-                                      <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
-                                        <span className="text-2xl">🛠️</span>
-                                        Technologies & Skills
-                                      </h4>
-                                      <div className="flex flex-wrap gap-2">
-                                        {experience.technologies.map((tech, techIndex) => (
-                                          <motion.span
-                                            key={techIndex}
-                                            initial={{ opacity: 0, scale: 0.8 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            transition={{ 
-                                              duration: 0.3, 
-                                              delay: 0.3 + techIndex * 0.05 
+                                {/* Achievements */}
+                                {experience.achievements && experience.achievements.length > 0 && (
+                                  <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.4, delay: 0.3 }}
+                                  >
+                                    <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
+                                      <span className="text-2xl">🏆</span>
+                                      Key Achievements
+                                    </h4>
+                                    <ul className="space-y-2">
+                                      {experience.achievements.map((achievement, achievementIndex) => (
+                                        <motion.li
+                                          key={achievementIndex}
+                                          initial={{ opacity: 0, x: -10 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{ 
+                                            duration: 0.4, 
+                                            delay: 0.4 + achievementIndex * 0.1 
+                                          }}
+                                          className="flex items-start gap-3"
+                                        >
+                                          <motion.span 
+                                            animate={{ 
+                                              rotate: [0, 15, -15, 0],
+                                              scale: [1, 1.2, 1]
                                             }}
-                                            whileHover={{ scale: 1.05 }}
-                                            className={`px-3 py-1 ${colors.badge} rounded-full text-sm font-medium border`}
+                                            transition={{ 
+                                              duration: 2, 
+                                              repeat: Infinity,
+                                              delay: achievementIndex * 0.2
+                                            }}
+                                            className={`${colors.icon} text-lg mt-0.5 flex-shrink-0`}
                                           >
-                                            {tech}
+                                            ✨
                                           </motion.span>
-                                        ))}
-                                      </div>
-                                    </motion.div>
-                                  )}
-
-                                  {/* Achievements */}
-                                  {experience.achievements && experience.achievements.length > 0 && (
-                                    <motion.div
-                                      initial={{ opacity: 0, y: 10 }}
-                                      animate={{ opacity: 1, y: 0 }}
-                                      transition={{ duration: 0.4, delay: 0.3 }}
-                                    >
-                                      <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
-                                        <span className="text-2xl">🏆</span>
-                                        Key Achievements
-                                      </h4>
-                                      <ul className="space-y-2">
-                                        {experience.achievements.map((achievement, achievementIndex) => (
-                                          <motion.li
-                                            key={achievementIndex}
-                                            initial={{ opacity: 0, x: -10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ 
-                                              duration: 0.4, 
-                                              delay: 0.4 + achievementIndex * 0.1 
-                                            }}
-                                            className="flex items-start gap-3"
-                                          >
-                                            <motion.span 
-                                              animate={{ 
-                                                rotate: [0, 15, -15, 0],
-                                                scale: [1, 1.2, 1]
-                                              }}
-                                              transition={{ 
-                                                duration: 2, 
-                                                repeat: Infinity,
-                                                delay: achievementIndex * 0.2
-                                              }}
-                                              className={`${colors.icon} text-lg mt-0.5 flex-shrink-0`}
-                                            >
-                                              ✨
-                                            </motion.span>
-                                            <span className={`text-sm leading-relaxed ${colors.text.replace('800', '700')}`}>
-                                              {achievement}
-                                            </span>
-                                          </motion.li>
-                                        ))}
-                                      </ul>
-                                    </motion.div>
-                                  )}
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        </motion.div>
-                      </div>
+                                          <span className={`text-sm leading-relaxed ${colors.text.replace('800', '700')}`}>
+                                            {achievement}
+                                          </span>
+                                        </motion.li>
+                                      ))}
+                                    </ul>
+                                  </motion.div>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </motion.div>
                     </motion.div>
                   );
                 })}
