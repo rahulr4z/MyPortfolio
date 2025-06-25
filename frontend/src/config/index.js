@@ -6,7 +6,7 @@
 const config = {
   // API Configuration
   api: {
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'https://myportfoliobe.onrender.com',
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'https://rahul-portfolio-backend.fly.dev',
     timeout: 30000, // 30 seconds
     retries: 3,
     retryDelay: 1000, // 1 second
@@ -56,7 +56,7 @@ const config = {
 
 // Environment-specific overrides
 if (import.meta.env.PROD) {
-  config.api.baseURL = import.meta.env.VITE_API_BASE_URL || 'https://myportfoliobe.onrender.com';
+  config.api.baseURL = import.meta.env.VITE_API_BASE_URL || 'https://rahul-portfolio-backend.fly.dev';
   config.features.analytics = true;
   config.development.debug = false;
   config.development.logLevel = 'error';
