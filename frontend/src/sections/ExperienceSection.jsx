@@ -228,7 +228,6 @@ const ExperienceSection = () => {
                         <div className="text-xl text-blue-600 font-semibold mb-2">
                           {experience.company}
                         </div>
-                        <div className="text-sm opacity-80">{experience.period}</div>
                         <div className="mt-2">
                           <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200">
                             {experience.period}
@@ -561,8 +560,8 @@ const ExperienceSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.3 + 0.7 }}
                             className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-700 rounded-full text-sm font-medium mb-4">
-                              {experience.title}
-                            </motion.div>
+                            {experience.period}
+                          </motion.div>
                           
                           {/* Title and Company */}
                           <motion.h3
