@@ -851,7 +851,7 @@ def get_section_config(db: Session = Depends(get_db)):
     """Get section configuration."""
     config = db.query(SectionConfig).first()
     if not config:
-        # Return comprehensive default configuration that matches frontend expectations
+        # Default configuration if no data exists
         default_config = {
             "hero": {
                 "title": "I Am Rahul Raj",
@@ -862,6 +862,7 @@ def get_section_config(db: Session = Depends(get_db)):
             },
             "about": {
                 "title": "Get to Know Me",
+                "mainTitle": "Get to Know Me",
                 "description": "A glimpse into my world of innovation and creativity",
                 "whoIAm": {
                     "title": "Who I Am",
@@ -906,22 +907,6 @@ def get_section_config(db: Session = Depends(get_db)):
                 "mainTitle": "Thanks for Reaching Out!",
                 "description": "I'll get back to you as soon as possible. In the meantime, feel free to explore more of my work!",
                 "emoji": "🎉"
-            },
-            "awards": {
-                "title": "Awards",
-                "description": "My awards and recognition"
-            },
-            "education": {
-                "title": "Education",
-                "description": "My educational background"
-            },
-            "certifications": {
-                "title": "Certifications",
-                "description": "My certifications"
-            },
-            "skills": {
-                "title": "Skills",
-                "description": "My technical skills"
             }
         }
         return SectionConfigResponse(
