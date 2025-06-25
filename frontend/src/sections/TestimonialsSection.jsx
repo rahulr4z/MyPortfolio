@@ -198,144 +198,279 @@ const TestimonialsSection = () => {
           </motion.p>
         </div>
 
-        {/* Testimonials Container */}
-        <div 
-          className="relative"
-          ref={carouselRef}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Desktop Layout - Horizontal Carousel */}
+        {/* Smart Testimonials Display */}
+        <div className="relative">
+          {/* Desktop: Floating Cards Layout */}
           {!isMobile && (
-            <div className="relative overflow-hidden">
-              {/* Desktop Navigation Chevrons */}
-              <button
-                onClick={handlePrevious}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border-2 border-emerald-200 hover:bg-emerald-50 transition-all duration-300 hover:scale-110"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft className="w-6 h-6 text-emerald-600" />
-              </button>
-              <button
-                onClick={handleNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border-2 border-emerald-200 hover:bg-emerald-50 transition-all duration-300 hover:scale-110"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight className="w-6 h-6 text-emerald-600" />
-              </button>
+            <div className="relative min-h-[800px]">
+              {/* Background Grid Pattern */}
+              <div className="absolute inset-0 opacity-5">
+                <div className="grid grid-cols-6 gap-8 h-full">
+                  {Array.from({ length: 24 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{ 
+                        opacity: [0.3, 0.8, 0.3],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ 
+                        duration: 4, 
+                        repeat: Infinity, 
+                        delay: i * 0.2,
+                        ease: "easeInOut" 
+                      }}
+                      className="bg-emerald-400 rounded-full"
+                    />
+                  ))}
+                </div>
+              </div>
 
-              {/* Desktop Carousel */}
-              <motion.div
-                animate={{ x: -currentIndex * 552 }} // 504px card + 8px gap
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="flex gap-8"
-                style={{ width: `${testimonials.length * 552}px` }}
-              >
-                {testimonials.map((testimonial, index) => (
+              {/* Floating Testimonial Cards */}
+              {testimonials.map((testimonial, index) => {
+                const isActive = index === currentIndex;
+                const isNext = index === (currentIndex + 1) % testimonials.length;
+                const isPrev = index === (currentIndex - 1 + testimonials.length) % testimonials.length;
+                
+                return (
                   <motion.div
-                    key={`testimonial-desktop-${index}`}
-                    whileHover={{ scale: 1.05, y: -8 }}
-                    className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-2 border-emerald-200 min-w-[504px] max-w-[504px] relative group h-[750px] flex flex-col"
+                    key={`testimonial-${index}`}
+                    initial={{ opacity: 0, scale: 0.8, y: 100 }}
+                    animate={{
+                      opacity: isActive ? 1 : (isNext || isPrev ? 0.6 : 0.3),
+                      scale: isActive ? 1 : (isNext || isPrev ? 0.9 : 0.7),
+                      y: isActive ? 0 : (isNext ? -50 : isPrev ? 50 : 100),
+                      x: isActive ? 0 : (isNext ? 100 : isPrev ? -100 : 0),
+                      rotateY: isActive ? 0 : (isNext ? 15 : isPrev ? -15 : 0),
+                    }}
+                    transition={{ 
+                      duration: 0.8, 
+                      ease: "easeInOut",
+                      delay: index * 0.1 
+                    }}
+                    className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
+                      isActive ? 'z-20' : isNext || isPrev ? 'z-10' : 'z-0'
+                    }`}
+                    style={{
+                      width: isActive ? '500px' : isNext || isPrev ? '400px' : '300px',
+                    }}
                   >
-                    {/* Quote Icon */}
-                    <div className="absolute top-6 left-6 text-4xl text-emerald-400 opacity-60">
-                      "
-                    </div>
-                    
-                    {/* Testimonial Content */}
-                    <div className="pt-12 flex-1 flex flex-col">
-                      <p className="text-gray-700 leading-relaxed mb-8 italic text-base line-clamp-6 flex-1">
-                        {testimonial.message || testimonial.content || testimonial.testimonial}
-                      </p>
-                      
-                      {/* Author Info */}
-                      <div className="flex items-center gap-4 mt-auto">
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-xl font-bold text-gray-800 truncate">
+                    <motion.div
+                      whileHover={isActive ? { scale: 1.02, y: -5 } : {}}
+                      className={`bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border-2 transition-all duration-500 ${
+                        isActive 
+                          ? 'border-emerald-300 shadow-emerald-200/50' 
+                          : 'border-emerald-200/50 shadow-emerald-100/30'
+                      }`}
+                    >
+                      {/* Floating Quote Icon */}
+                      <motion.div
+                        animate={isActive ? { 
+                          y: [0, -10, 0],
+                          rotate: [0, 5, -5, 0]
+                        } : {}}
+                        transition={{ 
+                          duration: 3, 
+                          repeat: Infinity,
+                          ease: "easeInOut" 
+                        }}
+                        className={`absolute -top-4 -left-4 text-5xl ${
+                          isActive ? 'text-emerald-400' : 'text-emerald-300/60'
+                        }`}
+                      >
+                        "
+                      </motion.div>
+
+                      {/* Content */}
+                      <div className={`pt-6 ${!isActive ? 'opacity-60' : ''}`}>
+                        <p className={`leading-relaxed italic mb-6 line-clamp-4 ${
+                          isActive ? 'text-base' : 'text-sm'
+                        } text-gray-700`}>
+                          {testimonial.message || testimonial.content || testimonial.testimonial}
+                        </p>
+
+                        {/* Author Info */}
+                        <div className={`border-t pt-4 ${isActive ? 'border-emerald-200' : 'border-emerald-100'}`}>
+                          <h4 className={`font-bold text-gray-800 mb-1 ${
+                            isActive ? 'text-lg' : 'text-base'
+                          }`}>
                             {testimonial.name}
                           </h4>
-                          <p className="text-emerald-600 font-medium text-base truncate">
+                          <p className={`font-medium mb-1 ${
+                            isActive ? 'text-emerald-600 text-base' : 'text-emerald-500/80 text-sm'
+                          }`}>
                             {testimonial.position || testimonial.title}
                           </p>
                           {testimonial.company && (
-                            <p className="text-gray-600 text-sm truncate">
+                            <p className={`${
+                              isActive ? 'text-gray-600 text-sm' : 'text-gray-500/70 text-xs'
+                            }`}>
                               {testimonial.company}
                             </p>
                           )}
                           {testimonial.relation && (
-                            <p className="text-emerald-500 text-sm font-medium bg-emerald-100 rounded-full px-3 py-1 inline-block mt-2">
+                            <p className={`text-xs font-medium rounded-full px-3 py-1 inline-block mt-2 ${
+                              isActive 
+                                ? 'bg-emerald-100 text-emerald-700' 
+                                : 'bg-emerald-50 text-emerald-600/80'
+                            }`}>
                               {testimonial.relation}
                             </p>
                           )}
                         </div>
                       </div>
-                    </div>
+
+                      {/* Interactive Overlay */}
+                      {!isActive && (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setCurrentIndex(index)}
+                          className="absolute inset-0 bg-transparent cursor-pointer rounded-3xl"
+                          aria-label={`View testimonial from ${testimonial.name}`}
+                        />
+                      )}
+                    </motion.div>
                   </motion.div>
-                ))}
-              </motion.div>
+                );
+              })}
+
+              {/* Navigation Controls */}
+              <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+                <div className="flex items-center gap-4 bg-white/90 backdrop-blur-sm rounded-full px-6 py-3 shadow-lg border border-emerald-200">
+                  <button
+                    onClick={handlePrevious}
+                    className="p-2 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors"
+                    aria-label="Previous testimonial"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-700">
+                      {currentIndex + 1} / {testimonials.length}
+                    </span>
+                    <div className="flex space-x-1">
+                      {testimonials.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentIndex(index)}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            index === currentIndex 
+                              ? 'bg-emerald-500 scale-125' 
+                              : 'bg-emerald-200 hover:bg-emerald-300'
+                          }`}
+                          aria-label={`Go to testimonial ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleNext}
+                    className="p-2 bg-emerald-500 text-white rounded-full hover:bg-emerald-600 transition-colors"
+                    aria-label="Next testimonial"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
-          {/* Mobile Layout - Vertical Stack */}
+          {/* Mobile: Stacked Cards with Parallax */}
           {isMobile && (
-            <div className="space-y-6">
-              {/* Current Testimonial Card */}
+            <div className="space-y-8">
+              {/* Current Testimonial */}
               <motion.div
-                key={`testimonial-mobile-${currentIndex}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border-2 border-emerald-200 relative"
+                key={`mobile-testimonial-${currentIndex}`}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="relative"
               >
-                {/* Quote Icon */}
-                <div className="absolute top-4 left-4 text-3xl text-emerald-400 opacity-60">
-                  "
-                </div>
-                
-                {/* Testimonial Content */}
-                <div className="pt-8">
-                  <p className="text-gray-700 leading-relaxed mb-6 italic text-base">
-                    {testimonials[currentIndex]?.message || testimonials[currentIndex]?.content || testimonials[currentIndex]?.testimonial}
-                  </p>
-                  
-                  {/* Author Info */}
-                  <div className="border-t border-emerald-100 pt-4">
-                    <h4 className="text-lg font-bold text-gray-800 mb-1">
-                      {testimonials[currentIndex]?.name}
-                    </h4>
-                    <p className="text-emerald-600 font-medium text-sm mb-1">
-                      {testimonials[currentIndex]?.position || testimonials[currentIndex]?.title}
+                {/* Background Glow */}
+                <motion.div
+                  animate={{ 
+                    opacity: [0.3, 0.6, 0.3],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity,
+                    ease: "easeInOut" 
+                  }}
+                  className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-teal-400/20 rounded-3xl blur-xl"
+                />
+
+                <div className="relative bg-white/95 backdrop-blur-md rounded-3xl p-6 shadow-2xl border-2 border-emerald-200">
+                  {/* Floating Quote */}
+                  <motion.div
+                    animate={{ 
+                      y: [0, -8, 0],
+                      rotate: [0, 3, -3, 0]
+                    }}
+                    transition={{ 
+                      duration: 4, 
+                      repeat: Infinity,
+                      ease: "easeInOut" 
+                    }}
+                    className="absolute -top-3 -left-3 text-4xl text-emerald-400"
+                  >
+                    "
+                  </motion.div>
+
+                  {/* Content */}
+                  <div className="pt-4">
+                    <p className="text-gray-700 leading-relaxed italic text-base mb-6">
+                      {testimonials[currentIndex]?.message || testimonials[currentIndex]?.content || testimonials[currentIndex]?.testimonial}
                     </p>
-                    {testimonials[currentIndex]?.company && (
-                      <p className="text-gray-600 text-sm mb-2">
-                        {testimonials[currentIndex]?.company}
-                      </p>
-                    )}
-                    {testimonials[currentIndex]?.relation && (
-                      <p className="text-emerald-500 text-xs font-medium bg-emerald-100 rounded-full px-3 py-1 inline-block">
-                        {testimonials[currentIndex]?.relation}
-                      </p>
-                    )}
+
+                    {/* Author Section */}
+                    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-4 border border-emerald-100">
+                      <div className="flex items-center gap-3">
+                        {/* Avatar Placeholder */}
+                        <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 to-teal-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                          {testimonials[currentIndex]?.name?.charAt(0) || '?'}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-gray-800">
+                            {testimonials[currentIndex]?.name}
+                          </h4>
+                          <p className="text-emerald-600 font-medium text-sm">
+                            {testimonials[currentIndex]?.position || testimonials[currentIndex]?.title}
+                          </p>
+                          {testimonials[currentIndex]?.company && (
+                            <p className="text-gray-600 text-xs">
+                              {testimonials[currentIndex]?.company}
+                            </p>
+                          )}
+                        </div>
+
+                        {testimonials[currentIndex]?.relation && (
+                          <span className="text-emerald-500 text-xs font-medium bg-emerald-100 rounded-full px-2 py-1">
+                            {testimonials[currentIndex]?.relation}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Mobile Navigation */}
+              {/* Navigation */}
               <div className="flex items-center justify-between">
-                {/* Previous/Next Buttons */}
                 <button
                   onClick={handlePrevious}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors"
+                  className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-sm font-medium hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   Previous
                 </button>
 
-                {/* Progress Indicator */}
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm font-medium text-gray-600">
                     {currentIndex + 1} of {testimonials.length}
                   </span>
                   <div className="flex space-x-1">
@@ -343,9 +478,9 @@ const TestimonialsSection = () => {
                       <button
                         key={index}
                         onClick={() => setCurrentIndex(index)}
-                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                           index === currentIndex 
-                            ? 'bg-emerald-500 scale-125' 
+                            ? 'bg-emerald-500 scale-125 shadow-md' 
                             : 'bg-emerald-200 hover:bg-emerald-300'
                         }`}
                         aria-label={`Go to testimonial ${index + 1}`}
@@ -356,7 +491,7 @@ const TestimonialsSection = () => {
 
                 <button
                   onClick={handleNext}
-                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-full text-sm font-medium hover:bg-emerald-600 transition-colors"
+                  className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-sm font-medium hover:from-emerald-600 hover:to-teal-600 transition-all duration-300 shadow-lg"
                   aria-label="Next testimonial"
                 >
                   Next
@@ -365,12 +500,17 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Swipe Hint */}
-              <div className="text-center">
-                <p className="text-xs text-gray-500 flex items-center justify-center gap-1">
-                  <span>💡</span>
+              <motion.div
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="text-center"
+              >
+                <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
+                  <span className="text-emerald-400">💡</span>
                   Swipe left/right to navigate
+                  <span className="text-emerald-400">💡</span>
                 </p>
-              </div>
+              </motion.div>
             </div>
           )}
         </div>
