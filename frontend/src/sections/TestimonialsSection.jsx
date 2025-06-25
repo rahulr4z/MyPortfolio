@@ -128,6 +128,19 @@ const TestimonialsSection = () => {
     return colorThemes[index % colorThemes.length];
   };
 
+  // Prevent background scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isModalOpen]);
+
   if (loading) {
     return (
       <section className="py-20 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 relative overflow-hidden flex items-center justify-center min-h-screen">
@@ -336,24 +349,24 @@ const TestimonialsSection = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full h-[85vh] md:h-auto md:max-h-[90vh] flex flex-col"
+              className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full h-[85vh] md:h-auto md:max-h-[90vh] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className={`bg-gradient-to-r ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).bg} text-white p-6 flex-shrink-0`}>
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-b border-gray-200 p-4 md:p-6 flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold">{selectedTestimonial.name}</h3>
-                    <p className="text-white/90">{selectedTestimonial.position}</p>
+                    <h3 className="text-lg md:text-xl font-semibold text-gray-800">{selectedTestimonial.name}</h3>
+                    <p className="text-gray-600 text-sm md:text-base">{selectedTestimonial.position}</p>
                     {selectedTestimonial.company && (
-                      <p className="text-white/80 text-sm">{selectedTestimonial.company}</p>
+                      <p className="text-gray-500 text-xs md:text-sm">{selectedTestimonial.company}</p>
                     )}
                   </div>
                   <button
                     onClick={closeModal}
-                    className="p-2 hover:bg-white/20 rounded-full transition-colors"
+                    className="p-2 hover:bg-gray-200 rounded-xl transition-colors"
                   >
-                    <X className="w-6 h-6" />
+                    <X className="w-5 h-5 text-gray-600" />
                   </button>
                 </div>
               </div>
@@ -369,10 +382,10 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Navigation - Fixed at Bottom */}
-              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white">
+              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-gray-50">
                 <button
                   onClick={prevTestimonial}
-                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm md:text-base"
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition-colors text-sm md:text-base border border-gray-200"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span className="hidden sm:inline">Previous</span>
@@ -384,7 +397,7 @@ const TestimonialsSection = () => {
                 
                 <button
                   onClick={nextTestimonial}
-                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm md:text-base"
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition-colors text-sm md:text-base border border-gray-200"
                 >
                   <span className="hidden sm:inline">Next</span>
                   <ChevronRight className="w-4 h-4" />
