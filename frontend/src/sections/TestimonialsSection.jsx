@@ -160,13 +160,13 @@ const TestimonialsSection = () => {
                 ease: "linear"
               }}
               className="flex gap-8"
-              style={{ width: `${duplicatedTestimonials.length * 450}px` }}
+              style={{ width: `${duplicatedTestimonials.length * 540}px` }}
             >
               {duplicatedTestimonials.map((testimonial, index) => (
                 <motion.div
                   key={`testimonial-${index}`}
                   whileHover={{ scale: 1.05, y: -8 }}
-                  className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-2 border-emerald-200 min-w-[420px] max-w-[420px] relative group h-[750px] flex flex-col"
+                  className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-2 border-emerald-200 min-w-[504px] max-w-[504px] relative group h-[750px] flex flex-col"
                 >
                   {/* Quote Icon */}
                   <div className="absolute top-6 left-6 text-4xl text-emerald-400 opacity-60">
