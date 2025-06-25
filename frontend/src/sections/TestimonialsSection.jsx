@@ -363,7 +363,7 @@ const TestimonialsSection = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4 md:p-6 flex-shrink-0">
+              <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4 md:p-6 flex-shrink-0 rounded-t-2xl">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-lg md:text-xl font-semibold text-emerald-700">{selectedTestimonial.name}</h3>
@@ -392,7 +392,7 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Navigation - Fixed at Bottom */}
-              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white/80 backdrop-blur-sm">
+              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white/80 backdrop-blur-sm rounded-b-2xl">
                 <button
                   onClick={prevTestimonial}
                   className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-colors text-sm md:text-base border border-emerald-200"
