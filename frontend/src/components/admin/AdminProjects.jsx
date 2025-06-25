@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Save, X, FolderOpen, Github, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
-import { getAdminProjects, createProject, updateProject } from '../../services/api';
+import { getAdminProjects, createProject, updateProject, deleteProject } from '../../services/api';
 
 const AdminProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -88,10 +88,12 @@ const AdminProjects = () => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     
     try {
-      // For now, just remove from local state since we removed the deleteProject import
-      setProjects(prev => prev.filter(project => project.id !== id));
-    } catch {
-      console.error('Error deleting project');
+      await deleteProject(id);
+      // Refresh the projects list to reflect the deletion
+      await fetchProjects();
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      alert('Failed to delete project. Please try again.');
     }
   };
 
