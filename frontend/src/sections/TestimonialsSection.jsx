@@ -150,8 +150,8 @@ const TestimonialsSection = () => {
 
         {/* Horizontal Carousel Container */}
         <div className="relative overflow-hidden">
-          {/* First Row - Moving Left */}
-          <div className="mb-8">
+          {/* Single Row - Moving Left */}
+          <div>
             <motion.div
               animate={{ x: [0, -50 * duplicatedTestimonials.length] }}
               transition={{
@@ -159,98 +159,42 @@ const TestimonialsSection = () => {
                 repeat: Infinity,
                 ease: "linear"
               }}
-              className="flex gap-6"
-              style={{ width: `${duplicatedTestimonials.length * 400}px` }}
+              className="flex gap-8"
+              style={{ width: `${duplicatedTestimonials.length * 450}px` }}
             >
               {duplicatedTestimonials.map((testimonial, index) => (
                 <motion.div
-                  key={`row1-${index}`}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-emerald-200 min-w-[380px] max-w-[380px] relative group"
+                  key={`testimonial-${index}`}
+                  whileHover={{ scale: 1.05, y: -8 }}
+                  className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl border-2 border-emerald-200 min-w-[420px] max-w-[420px] relative group h-[500px] flex flex-col"
                 >
                   {/* Quote Icon */}
-                  <div className="absolute top-4 left-4 text-3xl text-emerald-400 opacity-60">
+                  <div className="absolute top-6 left-6 text-4xl text-emerald-400 opacity-60">
                     "
                   </div>
                   
                   {/* Testimonial Content */}
-                  <div className="pt-8">
-                    <p className="text-gray-700 leading-relaxed mb-6 italic text-sm line-clamp-4">
+                  <div className="pt-12 flex-1 flex flex-col">
+                    <p className="text-gray-700 leading-relaxed mb-8 italic text-base line-clamp-6 flex-1">
                       {testimonial.message || testimonial.content || testimonial.testimonial}
                     </p>
                     
                     {/* Author Info */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4 mt-auto">
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-lg font-bold text-gray-800 truncate">
+                        <h4 className="text-xl font-bold text-gray-800 truncate">
                           {testimonial.name}
                         </h4>
-                        <p className="text-emerald-600 font-medium text-sm truncate">
+                        <p className="text-emerald-600 font-medium text-base truncate">
                           {testimonial.position || testimonial.title}
                         </p>
                         {testimonial.company && (
-                          <p className="text-gray-600 text-xs truncate">
+                          <p className="text-gray-600 text-sm truncate">
                             {testimonial.company}
                           </p>
                         )}
                         {testimonial.relation && (
-                          <p className="text-emerald-500 text-xs font-medium bg-emerald-100 rounded-full px-2 py-1 inline-block mt-1">
-                            {testimonial.relation}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Second Row - Moving Right */}
-          <div>
-            <motion.div
-              animate={{ x: [-50 * duplicatedTestimonials.length, 0] }}
-              transition={{
-                duration: 50,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-              className="flex gap-6"
-              style={{ width: `${duplicatedTestimonials.length * 400}px` }}
-            >
-              {duplicatedTestimonials.map((testimonial, index) => (
-                <motion.div
-                  key={`row2-${index}`}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="bg-gradient-to-br from-teal-50 to-cyan-50 backdrop-blur-sm rounded-2xl p-6 shadow-xl border-2 border-teal-200 min-w-[380px] max-w-[380px] relative group"
-                >
-                  {/* Quote Icon */}
-                  <div className="absolute top-4 left-4 text-3xl text-teal-400 opacity-60">
-                    "
-                  </div>
-                  
-                  {/* Testimonial Content */}
-                  <div className="pt-8">
-                    <p className="text-gray-700 leading-relaxed mb-6 italic text-sm line-clamp-4">
-                      {testimonial.message || testimonial.content || testimonial.testimonial}
-                    </p>
-                    
-                    {/* Author Info */}
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-lg font-bold text-gray-800 truncate">
-                          {testimonial.name}
-                        </h4>
-                        <p className="text-teal-600 font-medium text-sm truncate">
-                          {testimonial.position || testimonial.title}
-                        </p>
-                        {testimonial.company && (
-                          <p className="text-gray-600 text-xs truncate">
-                            {testimonial.company}
-                          </p>
-                        )}
-                        {testimonial.relation && (
-                          <p className="text-teal-500 text-xs font-medium bg-teal-100 rounded-full px-2 py-1 inline-block mt-1">
+                          <p className="text-emerald-500 text-sm font-medium bg-emerald-100 rounded-full px-3 py-1 inline-block mt-2">
                             {testimonial.relation}
                           </p>
                         )}
