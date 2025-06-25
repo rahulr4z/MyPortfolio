@@ -54,12 +54,12 @@ const HeroSection = () => {
   }
 
   // Use heroData for all fields, fallback to defaults if missing
-  const displayTitle = heroData?.title || "I Am Rahul Raj";
+  const displayTitle = heroData?.title || "I am Rahul Raj";
   const displaySubtitle = heroData?.subtitle || "AVP Product";
-  const displayDescription = heroData?.description || "Software Alchemist crafting digital experiences that users love & businesses value";
-  const displayBadge = heroData?.badge || "Welcome to My Universe";
-  const displayBadgeEmoji = heroData?.badge_emoji || "✨";
-  const ctaText = heroData?.cta_text || "View My Work";
+  const displayDescription = heroData?.description || "A passionate product manager with a designer's heart, engineer's mind, and diplomat's tongue. I craft digital experiences to create value for customers.";
+  const displayBadge = heroData?.badge || "Welcome!";
+  const displayBadgeEmoji = heroData?.badge_emoji || "👋🏻";
+  const ctaText = heroData?.cta_text || "View Projects";
 
   return (
     <section className="flex flex-col md:flex-row items-center justify-between min-h-screen w-full px-8 md:px-24 relative bg-gradient-to-br from-blue-50 via-indigo-50 to-teal-50 overflow-hidden">

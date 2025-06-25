@@ -185,10 +185,10 @@ const StatsCounterSection = () => {
           ) : (
             // Fallback stats if no data
             [
-              { value: "5+", label: "Years Experience", icon: "⭐", description: "Professional journey" },
-              { value: "50+", label: "Projects Delivered", icon: "🚀", description: "Successful launches" },
-              { value: "100", label: "Client Satisfaction", icon: "💯", description: "Happy customers" },
-              { value: "24/7", label: "Problem Solver", icon: "🛠️", description: "Always available" }
+              { value: "7", label: "YOE", icon: "⏰", description: "Years of experience" },
+              { value: "15", label: "Mentees", icon: "👨🏻‍🏫", description: "People mentored" },
+              { value: "10", label: "0 to 1 Projects", icon: "🛠️", description: "Projects delivered" },
+              { value: "25M", label: "People Served", icon: "🤝🏻", description: "Impact created" }
             ].map((stat, index) => (
               <motion.div
                 key={index}

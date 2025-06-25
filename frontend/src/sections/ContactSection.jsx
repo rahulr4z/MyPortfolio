@@ -31,7 +31,7 @@ const ContactSection = () => {
   const contactConfig = sectionConfig?.contact || {
     title: "Get In Touch",
     mainTitle: "Let's Connect",
-    description: "Ready to work together? Let's create something amazing! 🚀"
+    description: "Ready to collaborate? Let's discuss how we can work together"
   };
 
   const handleSubmit = async (e) => {

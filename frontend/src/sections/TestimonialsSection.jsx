@@ -108,8 +108,8 @@ const TestimonialsSection = () => {
   // Get section config data with fallbacks
   const testimonialsConfig = sectionConfig?.testimonials || {
     title: "What People Say",
-    mainTitle: "Lovely Testimonials",
-    description: "Hear what amazing people have to say about working with me! 💬"
+    mainTitle: "Testimonials",
+    description: "Hear what colleagues and mentors have to say about working with me"
   };
 
   // Color themes for testimonials

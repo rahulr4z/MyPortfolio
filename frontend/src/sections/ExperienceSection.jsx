@@ -41,10 +41,10 @@ const ExperienceSection = () => {
   }, []);
 
   // Get section config data with fallbacks
-  const experienceConfig = sectionConfig?.experience || {
+  const expConfig = sectionConfig?.experience || {
     title: "My Journey",
-    mainTitle: "My Adventure So Far",
-    description: "A colorful journey through the world of product management and innovation! 🌈"
+    mainTitle: "Professional Experience",
+    description: "A journey through product management, design, and innovation"
   };
 
   if (loading) {
@@ -179,7 +179,7 @@ const ExperienceSection = () => {
             <span className="inline-block px-8 py-4 bg-gradient-to-r from-blue-400 via-teal-400 to-cyan-400 text-white text-lg font-bold rounded-full shadow-xl border-2 border-blue-300 backdrop-blur-sm relative overflow-hidden group-hover:scale-105 transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
               <span className="mr-3">🗺️</span>
-              {experienceConfig.title}
+              {expConfig.title}
               <span className="ml-3">🗺️</span>
             </span>
           </motion.div>
@@ -190,7 +190,7 @@ const ExperienceSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
           >
-            {experienceConfig.mainTitle}
+            {expConfig.mainTitle}
           </motion.h2>
           
           <motion.p
@@ -199,7 +199,7 @@ const ExperienceSection = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
-            {experienceConfig.description}
+            {expConfig.description}
           </motion.p>
         </div>
 

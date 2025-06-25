@@ -223,8 +223,8 @@ const ProjectsSection = () => {
   // Get section config data with fallbacks
   const projectsConfig = sectionConfig?.projects || {
     title: "My Creations",
-    mainTitle: "Amazing Projects",
-    description: "Check out some of my favorite projects and creations! 🚀"
+    mainTitle: "Featured Projects",
+    description: "A showcase of my work in product management and development"
   };
 
   // Get unique categories from projects, excluding 'all' to prevent duplicates
