@@ -10,7 +10,31 @@ const TestimonialsSection = () => {
   const [error, setError] = useState(null);
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const { sectionConfig } = useSectionConfig();
+
+  // Calculate how many testimonials to show initially
+  const getInitialCount = () => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024 ? 6 : 2; // 6 for desktop (2 rows of 3), 2 for mobile
+    }
+    return 6; // Default for SSR
+  };
+
+  const [visibleCount, setVisibleCount] = useState(getInitialCount());
+
+  // Update visible count on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setVisibleCount(getInitialCount());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const visibleTestimonials = testimonials.slice(0, visibleCount);
+  const hasMore = visibleCount < testimonials.length;
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -56,6 +80,16 @@ const TestimonialsSection = () => {
     const currentIndex = testimonials.findIndex(t => t.id === selectedTestimonial.id);
     const prevIndex = currentIndex === 0 ? testimonials.length - 1 : currentIndex - 1;
     setSelectedTestimonial(testimonials[prevIndex]);
+  };
+
+  const loadMore = () => {
+    setVisibleCount(testimonials.length);
+    setShowAll(true);
+  };
+
+  const showLess = () => {
+    setVisibleCount(getInitialCount());
+    setShowAll(false);
   };
 
   // Get section config data with fallbacks
@@ -177,7 +211,7 @@ const TestimonialsSection = () => {
 
           {/* Testimonials Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {testimonials.map((testimonial, index) => (
+            {visibleTestimonials.map((testimonial, index) => (
               <motion.div
                 key={testimonial.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -227,6 +261,39 @@ const TestimonialsSection = () => {
               </motion.div>
             ))}
           </div>
+
+          {/* View More/Less Button */}
+          {testimonials.length > getInitialCount() && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="text-center mt-12"
+            >
+              {!showAll ? (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={loadMore}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-emerald-400"
+                >
+                  <span>View All Testimonials</span>
+                  <span className="text-sm bg-white/20 px-2 py-1 rounded-full">
+                    +{testimonials.length - visibleCount} more
+                  </span>
+                </motion.button>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={showLess}
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-gray-400"
+                >
+                  <span>Show Less</span>
+                </motion.button>
+              )}
+            </motion.div>
+          )}
         </div>
       </section>
 
