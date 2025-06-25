@@ -1,0 +1,171 @@
+{
+  "stats": [
+    {
+      "id": 1,
+      "label": "YOE",
+      "value": "7",
+      "suffix": "+",
+      "icon": "⏰",
+      "is_active": true,
+      "order_index": 0
+    },
+    {
+      "id": 2,
+      "label": "Mentees",
+      "value": "15",
+      "suffix": "+",
+      "icon": "👨🏻‍🏫",
+      "is_active": true,
+      "order_index": 1
+    },
+    {
+      "id": 3,
+      "label": "0 to 1 Projects",
+      "value": "10",
+      "suffix": "+",
+      "icon": "🛠️",
+      "is_active": true,
+      "order_index": 2
+    },
+    {
+      "id": 4,
+      "label": "People Served",
+      "value": "25M",
+      "suffix": "",
+      "icon": "🤝🏻",
+      "is_active": true,
+      "order_index": 3
+    }
+  ],
+  "about": [
+    {
+      "id": 1,
+      "title": "Who I Am",
+      "subtitle": "Rooted, Curious, Vocal",
+      "description": "I grew up in a small town, shaped by the simplicity of village life and later exposed to the fast pace of cities and global cultures. That contrast taught me to stay grounded, observe closely, and value different ways of living and thinking. I studied computer science and built my career across product design and management — now leading as an AVP of Product. I've always been curious, honest, and transparent, and I care deeply about how people experience technology in everyday life. No matter where work takes me, I carry the values and clarity that come from my roots.",
+      "image_url": null,
+      "is_active": true,
+      "order_index": 0
+    },
+    {
+      "id": 2,
+      "title": "What I Do",
+      "subtitle": "Crafting Consumer Tech for Millions",
+      "description": "I work on consumer tech products that solve for millions — from building a healthtech app for Southeast Asians, to shaping a widely adopted Edtech platform for financial freedom. More recently, I've been building a B2B2C product from the ground up to help small business owners start or grow their businesses. I design delightful experiences across mobile apps and websites, and step in wherever needed  across product, design, research, data, AI agents, marketing, and even Vibe coding. I stay close to users, ask the right questions, and build with clarity and care.",
+      "image_url": null,
+      "is_active": true,
+      "order_index": 1
+    },
+    {
+      "id": 3,
+      "title": "What Interests Me",
+      "subtitle": "People, History, Psychology",
+      "description": "I'm deeply interested in how product, design, and culture come together to shape a product. Beyond work, I'm drawn to stories and storytelling, the psychology behind decisions, and the art of influencing behaviour — whether through design or conversation. I often explore patterns in history and people, especially through topics like ancient civilizations, medieval life, geopolitics, and the evolution of belief systems. On quieter days, you'll find me fascinated by chess, probability, strategy games, and a deck of cards — all ways to understand how people think, plan, and respond.",
+      "image_url": null,
+      "is_active": true,
+      "order_index": 2
+    }
+  ],
+  "experiences": [
+    {
+      "id": 1,
+      "company": "Boss Wallah",
+      "position": "AVP Product Manager",
+      "duration": "02/2025 - Present",
+      "description": "Leading a team of 17 members skilled in product management, product design, product marketing, and product operations ",
+      "technologies": "Product Strategy, Agile, JIRA, SQL, Python, React, User Research",
+      "achievements": "Increased user engagement by 40% | Launched 3 major features | Improved conversion rates by 25% | Led team of 15 developers",
+      "location": "Bengaluru",
+      "is_active": true,
+      "order_index": 0
+    },
+    {
+      "id": 2,
+      "company": "ffreedom App",
+      "position": "AVP Product",
+      "duration": "12/2024 - 02/2025",
+      "description": "Owned online revenue KPIs, worked directly with the chairman of the company. \nReformed the organisation from a telesales-based business model to product-led sales ",
+      "technologies": "Mobile Development, User Experience, Market Research, A/B Testing, Analytics",
+      "achievements": "Launched 2 successful apps | Grew user base to 100K+ | ,Improved retention by 30% | Reduced churn by 20%",
+      "location": "Bengaluru",
+      "is_active": true,
+      "order_index": 1
+    },
+    {
+      "id": 3,
+      "company": "ffreedom App",
+      "position": "Head of Product",
+      "duration": "03/2023 - 11/2024",
+      "description": "Started my product management journey working on web applications and learning the fundamentals of product development.",
+      "technologies": "Web Development, Product Analytics, Customer Feedback, Prototyping, Figma",
+      "achievements": "Contributed to 5 product launches | Increased customer satisfaction by 35% | Improved conversion rates by 15% | Mentored 3 junior PMs",
+      "location": "Bengaluru/",
+      "is_active": true,
+      "order_index": 2
+    },
+    {
+      "id": 4,
+      "company": "Halodoc",
+      "position": "Product Manager",
+      "duration": "05/2020 - 02/2023",
+      "description": "Managed the highest revenue generating B2C service for a mobile app & website, driving adoption to B2B insurance services for corporate employees.",
+      "technologies": "Confluence, Mixpanel, Clevertap",
+      "achievements": "Scaled the teleconsultation platform to 8x capacity during COVID-19, maintaining the same supply of doctors  | Enforced auto-unavailability alerts, improving doctor availability by 16%, reducing ops cost by $10,600/month  | Introduced Lab test recommendations: 28% of consultations led to tests; 67% converted to bookings  | Managed white-label consultation tech, turning vertical EBITDA-positive in 3 months",
+      "location": "Bengaluru/Jakarta",
+      "is_active": true,
+      "order_index": 3
+    },
+    {
+      "id": 5,
+      "company": "Halodoc",
+      "position": "Associate Product Manager",
+      "duration": "05/2019 - 05/202",
+      "description": "Oversaw core products, enterprise tools, and cross-business initiatives ",
+      "technologies": "Confluence, Figma, Metabase, Mixpanel",
+      "achievements": "Optimised family member insurance linking to 4x, by introducing a system for insurance providers to ingest member data.  | Built insurance benefits display system for 6 insurance companies; 64% insurance members booked at network hospitals | Integrated Clevertap for analytics + marketing, reducing tooling costs by 18%. Introduced subscriptions, resulting in 27% revenue contribution",
+      "location": "Bengaluru/Jakarta",
+      "is_active": true,
+      "order_index": 4
+    },
+    {
+      "id": 6,
+      "company": "Halodoc",
+      "position": "Product Designer",
+      "duration": "04/2018 - 04/2019",
+      "description": "Oversaw customer-facing product's UX and design systems ",
+      "technologies": "Sketch, User Interviews, User Research",
+      "achievements": "Owned complete redesign of Halodoc app, improving ratings from 4.1 to 4.8. | Developed internal design system; assisted VP Product in discovery and roadmap tasks.",
+      "location": "Bengaluru",
+      "is_active": true,
+      "order_index": 5
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "Portfolio Website",
+      "description": "A modern, dynamic portfolio website built with React frontend and FastAPI backend, featuring a beautiful design with interactive animations and a comprehensive admin panel for content management.",
+      "short_description": "Modern E-commerce Solution",
+      "image_url": "♟️",
+      "live_url": "https://itsrahulraj.com",
+      "github_url": "https://github.com/rahulr4z/MyPortfolio",
+      "technologies": "React, Vite, Tailwind CSS, Python, Sqlite, Cursor AI, Netlify, fly.io",
+      "category": "Vibe Coding",
+      "is_featured": true,
+      "is_active": true,
+      "order_index": 0
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "name": " Abhilash Ramakrishna",
+      "position": "CTO",
+      "company": "Halodoc",
+      "relation": "Country Head",
+      "message": "I had the privilege of working with Rahul at Halodoc from its early days, and I must say, it has been a delightful experience. Rahul joined the company as a product designer, but with his hunger for knowledge and ambition, it was no surprise that he quickly rose to the position of Product Manager.\n\nAs one of the early employees, Rahul played a vital role in the company's growth. His good product acumen and eye for detail were instrumental in bringing to life many of the products that are now the backbone of Halodoc. He worked tirelessly to ensure that every product was not only well-designed but also user-friendly and met the needs of the customers. \nRahul is a true asset to any organisation. He is a strategic thinker, has a strong work ethic, and is always willing to go above and beyond to get the job done. He combines his technical expertise with his passion for understanding customers to create products that are both innovative and impactful. I highly recommend him for any product management role, and I am confident that he will continue to make a positive impact wherever he goes.",
+      "is_active": true,
+      "order_index": 0
+    }
+  ]
+}
