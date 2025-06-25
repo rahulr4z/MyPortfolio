@@ -15,7 +15,7 @@ const AdminProjects = () => {
     github_url: '',
     live_url: '',
     technologies: '',
-    category: 'web',
+    category: '',
     order_index: 0,
     is_active: true
   });
@@ -105,7 +105,7 @@ const AdminProjects = () => {
       github_url: '',
       live_url: '',
       technologies: '',
-      category: 'web',
+      category: '',
       order_index: 0,
       is_active: true
     });
@@ -171,12 +171,7 @@ const AdminProjects = () => {
                     )}
                     {project.category && (
                       <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-lg font-medium">
-                        {project.category === 'web' ? '🌐 Web' :
-                         project.category === 'mobile' ? '📱 Mobile' :
-                         project.category === 'ai' ? '🤖 AI' :
-                         project.category === 'data' ? '📊 Data' :
-                         project.category === 'design' ? '🎨 Design' :
-                         '✨ Other'}
+                        {project.category}
                       </span>
                     )}
                   </div>
@@ -329,20 +324,14 @@ const AdminProjects = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Project Category <span className="text-red-500">*</span>
                 </label>
-                <select
+                <input
                   name="category"
                   value={form.category}
                   onChange={handleInput}
                   required
-                  className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl bg-gray-50 text-gray-600 focus:outline-none focus:border-indigo-400 focus:bg-white transition-all duration-200"
-                >
-                  <option value="web">🌐 Web Development</option>
-                  <option value="mobile">📱 Mobile Development</option>
-                  <option value="ai">🤖 AI & Machine Learning</option>
-                  <option value="data">📊 Data Science</option>
-                  <option value="design">🎨 Design & UX</option>
-                  <option value="other">✨ Other</option>
-                </select>
+                  className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-indigo-400 focus:bg-white transition-all duration-200"
+                  placeholder="Enter project category"
+                />
               </div>
 
               {/* Image URL Field */}

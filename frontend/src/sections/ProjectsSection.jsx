@@ -457,11 +457,7 @@ const ProjectsSection = () => {
                         ) : (
                           <>
                             <span className="text-lg">
-                              {category === 'web' ? '🌐' : 
-                               category === 'mobile' ? '📱' : 
-                               category === 'ai' ? '🤖' : 
-                               category === 'data' ? '📊' : 
-                               category === 'design' ? '🎨' : '✨'}
+                              ✨
                             </span>
                             {category.charAt(0).toUpperCase() + category.slice(1)}
                             <span className="text-sm bg-white/20 px-2 py-1 rounded-full">
