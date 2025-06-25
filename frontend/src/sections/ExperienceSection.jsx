@@ -23,7 +23,7 @@ const ExperienceSection = () => {
             title: exp.position, // Map position to title
             period: exp.duration, // Map duration to period
             technologies: exp.technologies ? exp.technologies.split(',').map(t => t.trim()) : [],
-            achievements: exp.achievements ? exp.achievements.split(',').map(a => a.trim()) : []
+            achievements: exp.achievements ? exp.achievements.split('|').map(a => a.trim()) : []
           }));
           setExperiences(transformedData);
         } else {

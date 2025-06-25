@@ -76,7 +76,7 @@ export default function AdminExperiences() {
   function startEdit(item) {
     setForm({ 
       ...item,
-      achievements: item.achievements ? item.achievements.split(',').map(a => a.trim()).filter(a => a) : []
+      achievements: item.achievements ? item.achievements.split('|').map(a => a.trim()).filter(a => a) : []
     });
     setEditingId(item.id);
     setShowForm(true);
@@ -87,7 +87,7 @@ export default function AdminExperiences() {
     try {
       const formData = {
         ...form,
-        achievements: form.achievements.join(', ')
+        achievements: form.achievements.join(' | ')
       };
       
       if (editingId) {
@@ -150,7 +150,7 @@ export default function AdminExperiences() {
                 <div className="mt-2">
                   <div className="text-sm font-medium text-gray-600 mb-1">Achievements:</div>
                   <ul className="text-xs text-gray-600 space-y-1">
-                    {exp.achievements.split(',').map((achievement, index) => (
+                    {exp.achievements.split('|').map((achievement, index) => (
                       <li key={index} className="flex items-start gap-1">
                         <span className="text-pink-500">•</span>
                         <span>{achievement.trim()}</span>
