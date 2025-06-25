@@ -187,7 +187,7 @@ const StatsCounterSection = () => {
             [
               { value: "5+", label: "Years Experience", icon: "⭐", description: "Professional journey" },
               { value: "50+", label: "Projects Delivered", icon: "🚀", description: "Successful launches" },
-              { value: "100%", label: "Client Satisfaction", icon: "💯", description: "Happy customers" },
+              { value: "100", label: "Client Satisfaction", icon: "💯", description: "Happy customers" },
               { value: "24/7", label: "Problem Solver", icon: "🛠️", description: "Always available" }
             ].map((stat, index) => (
               <motion.div
