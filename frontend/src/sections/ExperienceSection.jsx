@@ -206,167 +206,176 @@ const ExperienceSection = () => {
         {/* Mobile Layout (Accordion Design) */}
         <div className="lg:hidden">
           <div className="max-w-4xl mx-auto space-y-6">
-            {experiences.map((experience, index) => (
-              <motion.div
-                key={experience.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl shadow-lg border-2 border-blue-500 overflow-hidden"
-              >
-                {/* Accordion Header */}
-                <motion.button
-                  onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
-                  className="w-full p-6 text-left flex justify-between items-center hover:bg-blue-50 transition-colors"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
+            {experiences.map((experience, index) => {
+              // Different colors for each experience card
+              const colorVariants = [
+                { border: 'border-blue-500', bg: 'bg-blue-50', text: 'text-blue-800', hover: 'hover:bg-blue-50', icon: 'text-blue-700', badge: 'bg-blue-100 text-blue-700 border-blue-200' },
+                { border: 'border-purple-500', bg: 'bg-purple-50', text: 'text-purple-800', hover: 'hover:bg-purple-50', icon: 'text-purple-700', badge: 'bg-purple-100 text-purple-700 border-purple-200' },
+                { border: 'border-teal-500', bg: 'bg-teal-50', text: 'text-teal-800', hover: 'hover:bg-teal-50', icon: 'text-teal-700', badge: 'bg-teal-100 text-teal-700 border-teal-200' },
+                { border: 'border-indigo-500', bg: 'bg-indigo-50', text: 'text-indigo-800', hover: 'hover:bg-indigo-50', icon: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-700 border-indigo-200' },
+                { border: 'border-pink-500', bg: 'bg-pink-50', text: 'text-pink-800', hover: 'hover:bg-pink-50', icon: 'text-pink-700', badge: 'bg-pink-100 text-pink-700 border-pink-200' }
+              ];
+              
+              const colors = colorVariants[index % colorVariants.length];
+              
+              return (
+                <motion.div
+                  key={experience.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className={`bg-white rounded-2xl shadow-lg border-2 ${colors.border} overflow-hidden`}
                 >
-                  <div className="flex-1">
-                    {/* Company and Position */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                      <h3 className="text-2xl font-bold text-blue-800">
-                        {experience.company}
-                      </h3>
-                      <motion.span
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium border border-blue-200 self-start sm:self-auto"
-                      >
-                        {experience.period}
-                      </motion.span>
+                  {/* Accordion Header */}
+                  <motion.button
+                    onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
+                    className={`w-full p-6 text-left flex justify-between items-center ${colors.hover} transition-colors`}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                  >
+                    <div className="flex-1">
+                      {/* Company and Position */}
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                        <h3 className={`text-2xl font-bold ${colors.text}`}>
+                          {experience.company}
+                        </h3>
+                        <motion.span
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.4, delay: index * 0.1 }}
+                          className={`inline-block px-3 py-1 ${colors.badge} rounded-full text-sm font-medium border self-start sm:self-auto`}
+                        >
+                          {experience.period}
+                        </motion.span>
+                      </div>
+                      
+                      {/* Position */}
+                      <div className={`text-lg ${colors.text.replace('800', '600')} font-semibold`}>
+                        {experience.title}
+                      </div>
                     </div>
                     
-                    {/* Position */}
-                    <div className="text-lg text-blue-600 font-semibold">
-                      {experience.title}
-                    </div>
-                  </div>
-                  
-                  {/* Chevron Icon */}
-                  <motion.div 
-                    animate={{ rotate: selectedIndex === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <svg className="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </motion.div>
-                </motion.button>
-
-                {/* Accordion Content */}
-                <AnimatePresence>
-                  {selectedIndex === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ 
-                        height: { duration: 0.4, ease: "easeInOut" },
-                        opacity: { duration: 0.3, ease: "easeInOut" }
-                      }}
-                      className="px-6 pb-6"
+                    {/* Chevron Icon */}
+                    <motion.div 
+                      animate={{ rotate: selectedIndex === index ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      {/* Description */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.1 }}
-                        className="mb-6"
-                      >
-                        <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-lg">
-                          <span className="text-3xl">💼</span>
-                          <div>
-                            <p className="font-bold text-blue-900">Role Description</p>
-                            <p className="text-sm text-blue-700 leading-relaxed">{experience.description}</p>
-                          </div>
-                        </div>
-                      </motion.div>
-
-                      {/* Technologies */}
-                      {experience.technologies && experience.technologies.length > 0 && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.2 }}
-                          className="mb-6"
-                        >
-                          <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-lg">
-                            <span className="text-3xl">🛠️</span>
-                            <div>
-                              <p className="font-bold text-blue-900">Technologies & Skills</p>
-                              <div className="flex flex-wrap gap-2 mt-2">
-                                {experience.technologies.map((tech, techIndex) => (
-                                  <motion.span
-                                    key={techIndex}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ 
-                                      duration: 0.3, 
-                                      delay: 0.3 + techIndex * 0.05 
-                                    }}
-                                    whileHover={{ scale: 1.05 }}
-                                    className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200"
-                                  >
-                                    {tech}
-                                  </motion.span>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-
-                      {/* Achievements */}
-                      {experience.achievements && experience.achievements.length > 0 && (
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.3 }}
-                        >
-                          <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-lg">
-                            <span className="text-3xl">🏆</span>
-                            <div>
-                              <p className="font-bold text-blue-900">Key Achievements</p>
-                              <ul className="space-y-2 mt-2">
-                                {experience.achievements.map((achievement, achievementIndex) => (
-                                  <motion.li
-                                    key={achievementIndex}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ 
-                                      duration: 0.4, 
-                                      delay: 0.4 + achievementIndex * 0.1 
-                                    }}
-                                    className="flex items-start gap-3 text-blue-700"
-                                  >
-                                    <motion.span 
-                                      animate={{ 
-                                        rotate: [0, 15, -15, 0],
-                                        scale: [1, 1.2, 1]
-                                      }}
-                                      transition={{ 
-                                        duration: 2, 
-                                        repeat: Infinity,
-                                        delay: achievementIndex * 0.2
-                                      }}
-                                      className="text-blue-500 text-lg mt-0.5 flex-shrink-0"
-                                    >
-                                      ✨
-                                    </motion.span>
-                                    <span className="text-sm leading-relaxed">{achievement}</span>
-                                  </motion.li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
+                      <svg className={`w-6 h-6 ${colors.icon}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
+                  </motion.button>
+
+                  {/* Accordion Content */}
+                  <AnimatePresence>
+                    {selectedIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ 
+                          height: { duration: 0.4, ease: "easeInOut" },
+                          opacity: { duration: 0.3, ease: "easeInOut" }
+                        }}
+                        className="px-6 pb-6 space-y-6"
+                      >
+                        {/* Description */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.1 }}
+                        >
+                          <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
+                            <span className="text-2xl">💼</span>
+                            Role Description
+                          </h4>
+                          <p className={`text-sm ${colors.text.replace('800', '700')} leading-relaxed`}>
+                            {experience.description}
+                          </p>
+                        </motion.div>
+
+                        {/* Technologies */}
+                        {experience.technologies && experience.technologies.length > 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.2 }}
+                          >
+                            <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
+                              <span className="text-2xl">🛠️</span>
+                              Technologies & Skills
+                            </h4>
+                            <div className="flex flex-wrap gap-2">
+                              {experience.technologies.map((tech, techIndex) => (
+                                <motion.span
+                                  key={techIndex}
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ 
+                                    duration: 0.3, 
+                                    delay: 0.3 + techIndex * 0.05 
+                                  }}
+                                  whileHover={{ scale: 1.05 }}
+                                  className={`px-3 py-1 ${colors.badge} rounded-full text-sm font-medium border`}
+                                >
+                                  {tech}
+                                </motion.span>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {/* Achievements */}
+                        {experience.achievements && experience.achievements.length > 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: 0.3 }}
+                          >
+                            <h4 className={`text-lg font-semibold ${colors.text} mb-3 flex items-center gap-2`}>
+                              <span className="text-2xl">🏆</span>
+                              Key Achievements
+                            </h4>
+                            <ul className="space-y-2">
+                              {experience.achievements.map((achievement, achievementIndex) => (
+                                <motion.li
+                                  key={achievementIndex}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ 
+                                    duration: 0.4, 
+                                    delay: 0.4 + achievementIndex * 0.1 
+                                  }}
+                                  className="flex items-start gap-3"
+                                >
+                                  <motion.span 
+                                    animate={{ 
+                                      rotate: [0, 15, -15, 0],
+                                      scale: [1, 1.2, 1]
+                                    }}
+                                    transition={{ 
+                                      duration: 2, 
+                                      repeat: Infinity,
+                                      delay: achievementIndex * 0.2
+                                    }}
+                                    className={`${colors.icon} text-lg mt-0.5 flex-shrink-0`}
+                                  >
+                                    ✨
+                                  </motion.span>
+                                  <span className={`text-sm leading-relaxed ${colors.text.replace('800', '700')}`}>
+                                    {achievement}
+                                  </span>
+                                </motion.li>
+                              ))}
+                            </ul>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
