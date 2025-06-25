@@ -173,6 +173,7 @@ const ExperienceSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="relative inline-block mb-6 group"
           >
@@ -187,6 +188,7 @@ const ExperienceSection = () => {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
           >
@@ -196,6 +198,7 @@ const ExperienceSection = () => {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
@@ -212,6 +215,7 @@ const ExperienceSection = () => {
               <motion.div 
                 initial={{ scaleY: 0 }}
                 whileInView={{ scaleY: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 3, ease: "easeInOut" }}
                 className="w-full h-full bg-gradient-to-b from-blue-400 via-purple-400 to-teal-400 rounded-full origin-top"
               />
@@ -221,6 +225,7 @@ const ExperienceSection = () => {
                 <motion.path
                   initial={{ pathLength: 0 }}
                   whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
                   transition={{ duration: 4, ease: "easeInOut" }}
                   d="M 2 800 Q 1 600 2 400 Q 3 200 2 0"
                   stroke="url(#timelineGradientMobile)"
@@ -309,6 +314,7 @@ const ExperienceSection = () => {
                   key={`timeline-point-mobile-${index}`}
                   initial={{ scale: 0, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true }}
                   transition={{ 
                     duration: 0.8, 
                     delay: index * 0.3 + 1,
@@ -359,6 +365,7 @@ const ExperienceSection = () => {
                     key={experience.id}
                     initial={{ opacity: 0, y: 50, scale: 0.9 }}
                     whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
                     transition={{ 
                       duration: 1, 
                       delay: index * 0.2,
@@ -409,6 +416,7 @@ const ExperienceSection = () => {
                               <motion.span
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
                                 transition={{ duration: 0.4, delay: index * 0.1 }}
                                 className={`inline-block px-3 py-1 ${colors.badge} rounded-full text-sm font-medium border self-start sm:self-auto`}
                               >
@@ -558,6 +566,7 @@ const ExperienceSection = () => {
               <motion.div 
                 initial={{ scaleY: 0 }}
                 whileInView={{ scaleY: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 3, ease: "easeInOut" }}
                 className="w-full h-full bg-gradient-to-b from-blue-400 via-purple-400 to-teal-400 rounded-full origin-top"
               />
@@ -567,6 +576,7 @@ const ExperienceSection = () => {
                 <motion.path
                   initial={{ pathLength: 0 }}
                   whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
                   transition={{ duration: 4, ease: "easeInOut" }}
                   d="M 2 800 Q 1 600 2 400 Q 3 200 2 0"
                   stroke="url(#timelineGradient)"
@@ -655,6 +665,7 @@ const ExperienceSection = () => {
                   key={`timeline-point-${index}`}
                   initial={{ scale: 0, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
+                  viewport={{ once: true }}
                   transition={{ 
                     duration: 0.8, 
                     delay: index * 0.3 + 1,
@@ -705,6 +716,7 @@ const ExperienceSection = () => {
                     key={experience.id}
                     initial={{ opacity: 0, y: 50, scale: 0.9 }}
                     whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true }}
                     transition={{ 
                       duration: 1, 
                       delay: index * 0.2,
@@ -743,6 +755,7 @@ const ExperienceSection = () => {
                             <motion.div
                               initial={{ opacity: 0, y: 20 }}
                               whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
                               transition={{ duration: 0.6, delay: index * 0.2 + 0.4 }}
                               className={`inline-block px-4 py-2 ${colors.badge} rounded-full text-sm font-medium mb-4`}
                             >
@@ -753,6 +766,7 @@ const ExperienceSection = () => {
                             <motion.h3
                               initial={{ opacity: 0, y: 20 }}
                               whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
                               transition={{ duration: 0.6, delay: index * 0.2 + 0.5 }}
                               className={`text-2xl font-bold ${colors.text} mb-2`}
                             >
@@ -761,6 +775,7 @@ const ExperienceSection = () => {
                             <motion.div
                               initial={{ opacity: 0, y: 20 }}
                               whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
                               transition={{ duration: 0.6, delay: index * 0.2 + 0.6 }}
                               className={`text-xl ${colors.text.replace('800', '600')} font-semibold`}
                             >
@@ -770,6 +785,7 @@ const ExperienceSection = () => {
                               <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: index * 0.2 + 0.7 }}
                                 className="flex items-center gap-2 text-sm text-gray-600 mt-1"
                               >
