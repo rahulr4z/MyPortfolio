@@ -221,12 +221,8 @@ const StatsSection = () => {
   };
 
   const handleViewCertificate = (certificate) => {
-    console.log('handleViewCertificate called with:', certificate);
-    console.log('Setting selectedCertificate to:', certificate);
-    console.log('Setting isCertificateModalOpen to true');
     setSelectedCertificate(certificate);
     setIsCertificateModalOpen(true);
-    console.log('Modal should now be open');
   };
 
   const statsConfig = sectionConfig?.stats || {
@@ -464,11 +460,7 @@ const StatsSection = () => {
                           {cert.certificate_link && (
                             <div className="mt-2">
                               <button 
-                                onClick={() => {
-                                  console.log('Certificate button clicked for:', cert.name);
-                                  console.log('Certificate data:', cert);
-                                  handleViewCertificate(cert);
-                                }}
+                                onClick={() => handleViewCertificate(cert)}
                                 className="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-100 rounded-full px-2 py-1 hover:bg-blue-200 transition-colors cursor-pointer"
                               >
                                 <span>🔗</span>
