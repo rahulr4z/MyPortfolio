@@ -37,11 +37,34 @@ const CertificateModal = ({ isOpen, onClose, certificate }) => {
     }
   };
 
+  // Check if the certificate URL is from a site that doesn't allow iframe embedding
+  const isProblematicSite = (url) => {
+    if (!url) return false;
+    const domain = new URL(url.startsWith('http') ? url : `https://${url}`).hostname.toLowerCase();
+    const problematicDomains = [
+      'linkedin.com',
+      'www.linkedin.com',
+      'coursera.org',
+      'www.coursera.org',
+      'udemy.com',
+      'www.udemy.com',
+      'edx.org',
+      'www.edx.org',
+      'github.com',
+      'www.github.com',
+      'stackoverflow.com',
+      'www.stackoverflow.com'
+    ];
+    return problematicDomains.some(domain.includes);
+  };
+
   if (!isOpen) return null;
 
   const certificateUrl = certificate?.certificate_link ? 
     (certificate.certificate_link.startsWith('http') ? certificate.certificate_link : `https://${certificate.certificate_link}`) : 
     null;
+
+  const isProblematic = isProblematicSite(certificateUrl);
 
   return (
     <AnimatePresence>
@@ -106,6 +129,34 @@ const CertificateModal = ({ isOpen, onClose, certificate }) => {
                       <span className="font-semibold">Certificate ID:</span> {certificate.certificate_id}
                     </div>
                   )}
+                </div>
+              </div>
+            ) : isProblematic ? (
+              // Known problematic site - show direct link option
+              <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-100">
+                <div className="text-center p-8 max-w-md">
+                  <div className="text-6xl mb-4">🔒</div>
+                  <h3 className="text-2xl font-bold text-gray-800 mb-2">External Certificate</h3>
+                  <p className="text-gray-600 mb-6">
+                    This certificate is hosted on an external platform that doesn't allow embedding. 
+                    Click the button below to view it directly on their website.
+                  </p>
+                  <div className="space-y-4">
+                    <motion.button
+                      onClick={handleOpenInNewTab}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      View Certificate
+                    </motion.button>
+                    {certificate?.certificate_id && (
+                      <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg">
+                        <span className="font-semibold">Certificate ID:</span> {certificate.certificate_id}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : iframeError ? (
