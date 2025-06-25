@@ -2,216 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getStats, getAwards, getEducation, getCertifications, getSkills } from '../services/api';
 import { useSectionConfig } from '../contexts/SectionConfigContext';
-import { X, ExternalLink, FileText } from 'lucide-react';
-
-// Certificate Modal Component with Enhanced Design
-const CertificateModal = ({ isOpen, onClose, certificate }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [iframeError, setIframeError] = useState(false);
-  const [iframeLoaded, setIframeLoaded] = useState(false);
-
-  useEffect(() => {
-    if (isOpen && certificate?.certificate_link) {
-      setIsLoading(true);
-      setIframeError(false);
-      setIframeLoaded(false);
-    }
-  }, [isOpen, certificate]);
-
-  const handleIframeLoad = () => {
-    setIframeLoaded(true);
-    setIframeError(false);
-    setIsLoading(false);
-  };
-
-  const handleIframeError = () => {
-    setIframeError(true);
-    setIframeLoaded(false);
-    setIsLoading(false);
-  };
-
-  const handleOpenInNewTab = () => {
-    if (certificate?.certificate_link) {
-      const fullUrl = certificate.certificate_link.startsWith('http') ? certificate.certificate_link : `https://${certificate.certificate_link}`;
-      window.open(fullUrl, '_blank');
-    }
-  };
-
-  // Check if the certificate URL is from a site that doesn't allow iframe embedding
-  const isProblematicSite = (url) => {
-    if (!url) return false;
-    const domain = new URL(url.startsWith('http') ? url : `https://${url}`).hostname.toLowerCase();
-    const problematicDomains = [
-      'linkedin.com',
-      'www.linkedin.com',
-      'coursera.org',
-      'www.coursera.org',
-      'udemy.com',
-      'www.udemy.com',
-      'edx.org',
-      'www.edx.org',
-      'github.com',
-      'www.github.com',
-      'stackoverflow.com',
-      'www.stackoverflow.com'
-    ];
-    return problematicDomains.some(domain.includes);
-  };
-
-  if (!isOpen) return null;
-
-  const certificateUrl = certificate?.certificate_link ? 
-    (certificate.certificate_link.startsWith('http') ? certificate.certificate_link : `https://${certificate.certificate_link}`) : 
-    null;
-
-  const isProblematic = isProblematicSite(certificateUrl);
-
-  return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        onClick={onClose}
-      >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className="bg-white rounded-3xl shadow-2xl w-full max-w-6xl h-[90vh] flex flex-col overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white">
-            <div className="flex items-center gap-3">
-              <div className="text-3xl">{certificate?.icon || "📜"}</div>
-              <div>
-                <h2 className="text-xl font-bold">{certificate?.name || "Certificate"}</h2>
-                <p className="text-green-100 text-sm">{certificate?.issuer} - {certificate?.year}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <motion.button
-                onClick={handleOpenInNewTab}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-                title="Open in new tab"
-              >
-                <ExternalLink className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                onClick={onClose}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </motion.button>
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="flex-1 relative overflow-hidden">
-            {!certificateUrl ? (
-              // No URL available
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-gray-50 to-gray-100">
-                <div className="text-center p-8">
-                  <div className="text-6xl mb-4">📜</div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">No Certificate URL</h3>
-                  <p className="text-gray-600 mb-4">
-                    This certificate doesn't have a verification URL configured yet.
-                  </p>
-                  {certificate?.certificate_id && (
-                    <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg">
-                      <span className="font-semibold">Certificate ID:</span> {certificate.certificate_id}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : isProblematic ? (
-              // Known problematic site - show direct link option
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-100">
-                <div className="text-center p-8 max-w-md">
-                  <div className="text-6xl mb-4">🔒</div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">External Certificate</h3>
-                  <p className="text-gray-600 mb-6">
-                    This certificate is hosted on an external platform that doesn't allow embedding. 
-                    Click the button below to view it directly on their website.
-                  </p>
-                  <div className="space-y-4">
-                    <motion.button
-                      onClick={handleOpenInNewTab}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      View Certificate
-                    </motion.button>
-                    {certificate?.certificate_id && (
-                      <div className="bg-purple-100 text-purple-800 px-4 py-2 rounded-lg">
-                        <span className="font-semibold">Certificate ID:</span> {certificate.certificate_id}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : iframeError ? (
-              // Iframe error
-              <div className="flex items-center justify-center h-full bg-gradient-to-br from-red-50 to-red-100">
-                <div className="text-center p-8">
-                  <div className="text-6xl mb-4">⚠️</div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-2">Unable to Load Certificate</h3>
-                  <p className="text-gray-600 mb-4">
-                    The certificate verification page couldn't be loaded. This might be due to CORS restrictions or the site being unavailable.
-                  </p>
-                  <motion.button
-                    onClick={handleOpenInNewTab}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-300"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Open in New Tab
-                  </motion.button>
-                </div>
-              </div>
-            ) : (
-              // Full-screen webview iframe
-              <div className="relative h-full">
-                {isLoading && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center z-10">
-                    <div className="text-center">
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                        className="w-12 h-12 border-4 border-green-300 border-t-emerald-600 rounded-full mx-auto mb-4"
-                      />
-                      <p className="text-emerald-600 font-medium">Loading certificate... 📜</p>
-                    </div>
-                  </div>
-                )}
-                
-                <iframe
-                  src={certificateUrl}
-                  className="w-full h-full border-0"
-                  title={`${certificate?.name || 'Certificate'} Verification`}
-                  onLoad={handleIframeLoad}
-                  onError={handleIframeError}
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
-                  loading="lazy"
-                />
-              </div>
-            )}
-          </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
-  );
-};
 
 const StatsSection = () => {
   const [stats, setStats] = useState([]);
@@ -227,8 +17,6 @@ const StatsSection = () => {
     certifications: false,
     skills: false
   });
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
-  const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
   const { sectionConfig } = useSectionConfig();
 
@@ -272,8 +60,10 @@ const StatsSection = () => {
   };
 
   const handleViewCertificate = (certificate) => {
-    setSelectedCertificate(certificate);
-    setIsCertificateModalOpen(true);
+    if (certificate?.certificate_link) {
+      const fullUrl = certificate.certificate_link.startsWith('http') ? certificate.certificate_link : `https://${certificate.certificate_link}`;
+      window.open(fullUrl, '_blank');
+    }
   };
 
   const statsConfig = sectionConfig?.stats || {
@@ -573,13 +363,6 @@ const StatsSection = () => {
           </div>
         </div>
       </div>
-
-      {/* Certificate Modal */}
-      <CertificateModal
-        isOpen={isCertificateModalOpen}
-        onClose={() => setIsCertificateModalOpen(false)}
-        certificate={selectedCertificate}
-      />
     </section>
   );
 };
