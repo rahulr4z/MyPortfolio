@@ -131,14 +131,24 @@ const TestimonialsSection = () => {
   // Prevent background scroll when modal is open
   useEffect(() => {
     if (isModalOpen) {
+      // Store current scroll position
+      const scrollY = window.scrollY;
+      
+      // Apply styles to prevent scroll
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
+      
+      return () => {
+        // Restore scroll position and styles
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        window.scrollTo(0, scrollY);
+      };
     }
-
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isModalOpen]);
 
   if (loading) {
@@ -349,11 +359,11 @@ const TestimonialsSection = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full h-[85vh] md:h-auto md:max-h-[90vh] flex flex-col"
+              className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border-2 ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).border} max-w-4xl w-full h-[85vh] md:h-auto md:max-h-[90vh] flex flex-col`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-b border-gray-200 p-4 md:p-6 flex-shrink-0">
+              <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 p-4 md:p-6 flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-lg md:text-xl font-semibold text-emerald-700">{selectedTestimonial.name}</h3>
@@ -382,7 +392,7 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Navigation - Fixed at Bottom */}
-              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white">
+              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white/80 backdrop-blur-sm">
                 <button
                   onClick={prevTestimonial}
                   className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-colors text-sm md:text-base border border-emerald-200"
