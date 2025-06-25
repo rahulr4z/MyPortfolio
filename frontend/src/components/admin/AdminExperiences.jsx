@@ -8,7 +8,7 @@ const emptyForm = {
   duration: '',
   description: '',
   technologies: '',
-  achievements: '',
+  achievements: [],
   order_index: 0,
 };
 
@@ -47,6 +47,26 @@ export default function AdminExperiences() {
     setForm(f => ({ ...f, [name]: value }));
   }
 
+  function addAchievement() {
+    setForm(f => ({ ...f, achievements: [...f.achievements, ''] }));
+  }
+
+  function removeAchievement(index) {
+    setForm(f => ({ 
+      ...f, 
+      achievements: f.achievements.filter((_, i) => i !== index) 
+    }));
+  }
+
+  function updateAchievement(index, value) {
+    setForm(f => ({
+      ...f,
+      achievements: f.achievements.map((achievement, i) => 
+        i === index ? value : achievement
+      )
+    }));
+  }
+
   function startAdd() {
     setForm(emptyForm);
     setEditingId(null);
@@ -54,7 +74,10 @@ export default function AdminExperiences() {
   }
 
   function startEdit(item) {
-    setForm({ ...item });
+    setForm({ 
+      ...item,
+      achievements: item.achievements ? item.achievements.split(',').map(a => a.trim()).filter(a => a) : []
+    });
     setEditingId(item.id);
     setShowForm(true);
   }
@@ -62,10 +85,15 @@ export default function AdminExperiences() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
+      const formData = {
+        ...form,
+        achievements: form.achievements.join(', ')
+      };
+      
       if (editingId) {
-        await updateExperience(editingId, form);
+        await updateExperience(editingId, formData);
       } else {
-        await createExperience(form);
+        await createExperience(formData);
       }
       setShowForm(false);
       fetchExperiences();
@@ -118,6 +146,19 @@ export default function AdminExperiences() {
               <div className="text-sm text-purple-500">{exp.company}</div>
               <div className="text-xs text-cyan-600 bg-cyan-100 rounded-full px-3 py-1 mt-1 mb-2">{exp.duration}</div>
               <div className="text-gray-700 text-base">{exp.description}</div>
+              {exp.achievements && (
+                <div className="mt-2">
+                  <div className="text-sm font-medium text-gray-600 mb-1">Achievements:</div>
+                  <ul className="text-xs text-gray-600 space-y-1">
+                    {exp.achievements.split(',').map((achievement, index) => (
+                      <li key={index} className="flex items-start gap-1">
+                        <span className="text-pink-500">•</span>
+                        <span>{achievement.trim()}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -237,14 +278,34 @@ export default function AdminExperiences() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Achievements
                 </label>
-                <textarea
-                  name="achievements"
-                  value={form.achievements}
-                  onChange={handleInput}
-                  rows={3}
-                  className="w-full px-4 py-3 border-2 border-pink-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:bg-white transition-all duration-200 resize-none"
-                  placeholder="Enter achievements, separated by commas"
-                />
+                <div className="space-y-2">
+                  {form.achievements.map((achievement, index) => (
+                    <div key={index} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={achievement}
+                        onChange={(e) => updateAchievement(index, e.target.value)}
+                        className="flex-1 px-4 py-3 border-2 border-pink-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-pink-400 focus:bg-white transition-all duration-200"
+                        placeholder={`Achievement ${index + 1}`}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeAchievement(index)}
+                        className="px-3 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addAchievement}
+                    className="w-full px-4 py-3 border-2 border-dashed border-pink-300 rounded-xl text-pink-600 hover:border-pink-400 hover:bg-pink-50 transition-all duration-200 flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Achievement
+                  </button>
+                </div>
               </div>
 
               {/* Order Index Field */}
