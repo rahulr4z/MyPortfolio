@@ -103,12 +103,6 @@ const LoginForm = ({ onLogin }) => {
               )}
             </button>
           </div>
-
-          <div className="text-center text-sm text-gray-600">
-            <p>Default credentials:</p>
-            <p>Username: admin</p>
-            <p>Password: admin123</p>
-          </div>
         </form>
       </div>
     </div>

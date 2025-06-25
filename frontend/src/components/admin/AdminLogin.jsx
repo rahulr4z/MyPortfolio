@@ -104,13 +104,6 @@ export default function AdminLogin() {
               )}
             </button>
           </form>
-
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray-500">
-              Default credentials: admin / admin123
-            </p>
-          </div>
         </div>
       </div>
     </div>
