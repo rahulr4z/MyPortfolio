@@ -336,11 +336,11 @@ const TestimonialsSection = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+              className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full h-[85vh] md:h-auto md:max-h-[90vh] flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
-              <div className={`bg-gradient-to-r ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).bg} text-white p-6`}>
+              <div className={`bg-gradient-to-r ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).bg} text-white p-6 flex-shrink-0`}>
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-2xl font-bold">{selectedTestimonial.name}</h3>
@@ -358,37 +358,37 @@ const TestimonialsSection = () => {
                 </div>
               </div>
 
-              {/* Modal Content */}
-              <div className="p-8">
-                <div className="mb-6">
-                  <Quote className={`w-12 h-12 ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).quote} opacity-60 mb-4`} />
-                  <p className="text-gray-700 text-lg leading-relaxed">
+              {/* Modal Content - Scrollable */}
+              <div className="flex-1 overflow-y-auto p-4 md:p-6">
+                <div className="mb-4 md:mb-6">
+                  <Quote className={`w-8 h-8 md:w-12 md:h-12 ${getColorTheme(testimonials.findIndex(t => t.id === selectedTestimonial.id)).quote} opacity-60 mb-3 md:mb-4`} />
+                  <p className="text-gray-700 text-base md:text-lg leading-relaxed">
                     {selectedTestimonial.message}
                   </p>
                 </div>
+              </div>
 
-                {/* Navigation */}
-                <div className="flex items-center justify-between pt-6 border-t border-gray-200">
-                  <button
-                    onClick={prevTestimonial}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Previous
-                  </button>
-                  
-                  <span className="text-gray-500 text-sm">
-                    {testimonials.findIndex(t => t.id === selectedTestimonial.id) + 1} of {testimonials.length}
-                  </span>
-                  
-                  <button
-                    onClick={nextTestimonial}
-                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
+              {/* Navigation - Fixed at Bottom */}
+              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white">
+                <button
+                  onClick={prevTestimonial}
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm md:text-base"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">Previous</span>
+                </button>
+                
+                <span className="text-gray-500 text-xs md:text-sm">
+                  {testimonials.findIndex(t => t.id === selectedTestimonial.id) + 1} of {testimonials.length}
+                </span>
+                
+                <button
+                  onClick={nextTestimonial}
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm md:text-base"
+                >
+                  <span className="hidden sm:inline">Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
               </div>
             </motion.div>
           </motion.div>
