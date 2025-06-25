@@ -249,7 +249,9 @@ export default function AdminStats() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl">{stat.icon}</span>
-                      <span className="text-lg font-bold text-slate-800">{stat.value}</span>
+                      <span className="text-lg font-bold text-slate-800">
+                        {stat.value}{stat.suffix}
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <button
