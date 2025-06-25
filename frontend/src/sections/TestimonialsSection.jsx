@@ -356,17 +356,17 @@ const TestimonialsSection = () => {
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-b border-gray-200 p-4 md:p-6 flex-shrink-0">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-lg md:text-xl font-semibold text-gray-800">{selectedTestimonial.name}</h3>
-                    <p className="text-gray-600 text-sm md:text-base">{selectedTestimonial.position}</p>
+                    <h3 className="text-lg md:text-xl font-semibold text-emerald-700">{selectedTestimonial.name}</h3>
+                    <p className="text-teal-600 text-sm md:text-base">{selectedTestimonial.position}</p>
                     {selectedTestimonial.company && (
-                      <p className="text-gray-500 text-xs md:text-sm">{selectedTestimonial.company}</p>
+                      <p className="text-emerald-600 text-xs md:text-sm font-medium">{selectedTestimonial.company}</p>
                     )}
                   </div>
                   <button
                     onClick={closeModal}
-                    className="p-2 hover:bg-gray-200 rounded-xl transition-colors"
+                    className="p-2 hover:bg-emerald-100 rounded-xl transition-colors"
                   >
-                    <X className="w-5 h-5 text-gray-600" />
+                    <X className="w-5 h-5 text-emerald-600" />
                   </button>
                 </div>
               </div>
@@ -382,10 +382,10 @@ const TestimonialsSection = () => {
               </div>
 
               {/* Navigation - Fixed at Bottom */}
-              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-gray-50">
+              <div className="flex items-center justify-between p-4 md:p-6 border-t border-gray-200 flex-shrink-0 bg-white">
                 <button
                   onClick={prevTestimonial}
-                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition-colors text-sm md:text-base border border-gray-200"
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-colors text-sm md:text-base border border-emerald-200"
                 >
                   <ChevronLeft className="w-4 h-4" />
                   <span className="hidden sm:inline">Previous</span>
@@ -397,7 +397,7 @@ const TestimonialsSection = () => {
                 
                 <button
                   onClick={nextTestimonial}
-                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition-colors text-sm md:text-base border border-gray-200"
+                  className="flex items-center gap-1 md:gap-2 px-3 md:px-4 py-2 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-colors text-sm md:text-base border border-emerald-200"
                 >
                   <span className="hidden sm:inline">Next</span>
                   <ChevronRight className="w-4 h-4" />
