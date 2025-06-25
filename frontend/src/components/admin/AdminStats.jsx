@@ -7,13 +7,14 @@ const initialForm = {
   label: '',
   icon: '',
   type: 'main',
+  suffix: '',
 };
 
 const fieldMeta = {
   value: {
     label: 'Number/Value',
     placeholder: '5+',
-    helper: 'The statistic value (e.g., 5+, 100%, 24/7)',
+    helper: 'The statistic value (e.g., 5+, 100, 24/7)',
     required: true,
   },
   label: {
@@ -27,6 +28,12 @@ const fieldMeta = {
     placeholder: '⭐',
     helper: 'Choose an appropriate emoji for this stat',
     required: true,
+  },
+  suffix: {
+    label: 'Suffix',
+    placeholder: '%',
+    helper: 'Optional suffix (e.g., %, +, /7)',
+    required: false,
   },
   type: {
     label: 'Type',
@@ -87,6 +94,7 @@ export default function AdminStats() {
       label: item.label || '',
       icon: item.icon || '',
       type: item.type || 'main',
+      suffix: item.suffix || '',
     } : initialForm);
     setEditingId(item ? item.id : null);
     setFormError(null);
@@ -361,6 +369,22 @@ export default function AdminStats() {
                   }`}
                 />
                 {errors.icon && <p className="text-red-500 text-sm mt-1">{errors.icon}</p>}
+              </div>
+
+              {/* Suffix */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  {fieldMeta.suffix.label}
+                </label>
+                <input
+                  type="text"
+                  name="suffix"
+                  value={form.suffix}
+                  onChange={handleInput}
+                  placeholder={fieldMeta.suffix.placeholder}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 transition-colors"
+                />
+                <p className="text-gray-500 text-sm mt-1">{fieldMeta.suffix.helper}</p>
               </div>
 
               {/* Form Actions */}
