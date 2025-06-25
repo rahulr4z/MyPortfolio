@@ -107,19 +107,36 @@ const NewAboutSection = () => {
       <div className="container mx-auto px-8 relative z-10">
         {/* Simple Header */}
         <div className="text-center mb-16">
-          <motion.h2
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            className="relative inline-block mb-6 group"
+          >
+            <motion.span 
+              whileHover={{ scale: 1.05, boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)' }}
+              className="inline-block px-8 py-4 bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 text-white text-lg font-bold rounded-full shadow-xl border-2 border-blue-300 cursor-pointer"
+            >
+              <span className="mr-2">💭</span>
+              {aboutConfig.title}
+              <span className="ml-2">💭</span>
+            </motion.span>
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             className="text-4xl md:text-5xl font-bold text-gray-800 mb-4"
           >
-            {aboutConfig.title}
+            {aboutConfig.mainTitle || "Get to Know Me"}
           </motion.h2>
+          
           {aboutConfig.description && (
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               className="text-lg text-gray-600 max-w-2xl mx-auto"
             >
               {aboutConfig.description}
