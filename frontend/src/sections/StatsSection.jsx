@@ -201,7 +201,7 @@ const StatsSection = () => {
                 <motion.div
                   className="text-3xl font-bold text-gray-800 mb-2"
                 >
-                  {stat.value}{stat.suffix}
+                  {stat.value}{stat.label === "People Served" ? "" : stat.suffix}
                 </motion.div>
                 <p className="text-gray-600 font-medium text-sm">{stat.label}</p>
               </div>
