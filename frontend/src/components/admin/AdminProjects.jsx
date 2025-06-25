@@ -15,6 +15,7 @@ const AdminProjects = () => {
     github_url: '',
     live_url: '',
     technologies: '',
+    category: 'web',
     order_index: 0,
     is_active: true
   });
@@ -104,6 +105,7 @@ const AdminProjects = () => {
       github_url: '',
       live_url: '',
       technologies: '',
+      category: 'web',
       order_index: 0,
       is_active: true
     });
@@ -167,6 +169,16 @@ const AdminProjects = () => {
                     {!project.is_active && (
                       <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-lg">Inactive</span>
                     )}
+                    {project.category && (
+                      <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs rounded-lg font-medium">
+                        {project.category === 'web' ? '🌐 Web' :
+                         project.category === 'mobile' ? '📱 Mobile' :
+                         project.category === 'ai' ? '🤖 AI' :
+                         project.category === 'data' ? '📊 Data' :
+                         project.category === 'design' ? '🎨 Design' :
+                         '✨ Other'}
+                      </span>
+                    )}
                   </div>
                   <p className="text-gray-600 mb-3 line-clamp-2">{project.description}</p>
                   {project.technologies && (
@@ -206,6 +218,7 @@ const AdminProjects = () => {
                       github_url: project.github_url || '',
                       live_url: project.live_url || '',
                       technologies: project.technologies || '',
+                      category: project.category || 'web',
                       order_index: project.order_index || 0,
                       is_active: project.is_active !== false
                     });
@@ -309,6 +322,27 @@ const AdminProjects = () => {
                   className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white transition-all duration-200"
                   placeholder="Enter technologies (e.g., React, Node.js, Python)"
                 />
+              </div>
+
+              {/* Category Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Project Category <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="category"
+                  value={form.category}
+                  onChange={handleInput}
+                  required
+                  className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl bg-gray-50 text-gray-600 focus:outline-none focus:border-indigo-400 focus:bg-white transition-all duration-200"
+                >
+                  <option value="web">🌐 Web Development</option>
+                  <option value="mobile">📱 Mobile Development</option>
+                  <option value="ai">🤖 AI & Machine Learning</option>
+                  <option value="data">📊 Data Science</option>
+                  <option value="design">🎨 Design & UX</option>
+                  <option value="other">✨ Other</option>
+                </select>
               </div>
 
               {/* Image URL Field */}
