@@ -213,7 +213,7 @@ const StatsSection = () => {
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Awards Section */}
           <div className="bg-white rounded-2xl shadow-lg border-2 border-yellow-500 overflow-hidden">
-            <button onClick={() => toggleSection('awards')} className="w-full p-6 text-left flex justify-between items-center hover:bg-yellow-50 transition-colors">
+            <button onClick={() => toggleSection('awards')} className="w-full p-6 text-left flex justify-between items-center hover:bg-yellow-50 transition-colors focus:outline-none">
               <h3 className="text-2xl font-bold text-yellow-800">🏆 Awards & Recognition</h3>
               <motion.div animate={{ rotate: expandedSections.awards ? 180 : 0 }}>
                 <svg className="w-6 h-6 text-yellow-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -245,7 +245,7 @@ const StatsSection = () => {
 
           {/* Education Section */}
           <div className="bg-white rounded-2xl shadow-lg border-2 border-blue-500 overflow-hidden">
-             <button onClick={() => toggleSection('education')} className="w-full p-6 text-left flex justify-between items-center hover:bg-blue-50 transition-colors">
+             <button onClick={() => toggleSection('education')} className="w-full p-6 text-left flex justify-between items-center hover:bg-blue-50 transition-colors focus:outline-none">
               <h3 className="text-2xl font-bold text-blue-800">🎓 Education</h3>
               <motion.div animate={{ rotate: expandedSections.education ? 180 : 0 }}>
                 <svg className="w-6 h-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -277,7 +277,7 @@ const StatsSection = () => {
 
           {/* Certifications Section */}
            <div className="bg-white rounded-2xl shadow-lg border-2 border-green-500 overflow-hidden">
-             <button onClick={() => toggleSection('certifications')} className="w-full p-6 text-left flex justify-between items-center hover:bg-green-50 transition-colors">
+             <button onClick={() => toggleSection('certifications')} className="w-full p-6 text-left flex justify-between items-center hover:bg-green-50 transition-colors focus:outline-none">
               <h3 className="text-2xl font-bold text-green-800">📜 Certifications</h3>
               <motion.div animate={{ rotate: expandedSections.certifications ? 180 : 0 }}>
                 <svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
@@ -328,7 +328,7 @@ const StatsSection = () => {
 
           {/* Skills Section */}
           <div className="bg-white rounded-2xl shadow-lg border-2 border-purple-500 overflow-hidden">
-            <button onClick={() => toggleSection('skills')} className="w-full p-6 text-left flex justify-between items-center hover:bg-purple-50 transition-colors">
+            <button onClick={() => toggleSection('skills')} className="w-full p-6 text-left flex justify-between items-center hover:bg-purple-50 transition-colors focus:outline-none">
                 <h3 className="text-2xl font-bold text-purple-800">🛠️ Skills</h3>
                 <motion.div animate={{ rotate: expandedSections.skills ? 180 : 0 }}>
                   <svg className="w-6 h-6 text-purple-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>

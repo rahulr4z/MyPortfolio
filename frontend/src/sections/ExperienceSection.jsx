@@ -395,7 +395,7 @@ const ExperienceSection = () => {
                         {/* Accordion Header */}
                         <motion.button
                           onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
-                          className={`w-full p-6 text-left flex justify-between items-center ${colors.hover} transition-colors rounded-t-2xl`}
+                          className={`w-full p-6 text-left flex justify-between items-center ${colors.hover} transition-colors rounded-t-2xl focus:outline-none`}
                           whileHover={{ scale: 1.01 }}
                           whileTap={{ scale: 0.99 }}
                         >
@@ -746,7 +746,7 @@ const ExperienceSection = () => {
                         {/* Accordion Header */}
                         <motion.button
                           onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
-                          className={`w-full p-8 text-left flex justify-between items-center ${colors.hover} transition-colors rounded-t-3xl`}
+                          className={`w-full p-8 text-left flex justify-between items-center ${colors.hover} transition-colors rounded-t-3xl focus:outline-none`}
                           whileHover={{ scale: 1.01 }}
                           whileTap={{ scale: 0.99 }}
                         >
