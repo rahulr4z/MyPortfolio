@@ -395,9 +395,17 @@ const ExperienceSection = () => {
                           <div className="flex-1">
                             {/* Company and Position */}
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                              <h3 className={`text-xl font-bold ${colors.text}`}>
-                                {experience.company}
-                              </h3>
+                              <div className="flex flex-col gap-1">
+                                <h3 className={`text-xl font-bold ${colors.text}`}>
+                                  {experience.company}
+                                </h3>
+                                {experience.location && (
+                                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                                    <span>📍</span>
+                                    <span>{experience.location}</span>
+                                  </div>
+                                )}
+                              </div>
                               <motion.span
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
@@ -758,6 +766,17 @@ const ExperienceSection = () => {
                             >
                               {experience.company}
                             </motion.div>
+                            {experience.location && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.6, delay: index * 0.2 + 0.7 }}
+                                className="flex items-center gap-2 text-sm text-gray-600 mt-1"
+                              >
+                                <span>📍</span>
+                                <span>{experience.location}</span>
+                              </motion.div>
+                            )}
                           </div>
                           
                           {/* Chevron Icon */}

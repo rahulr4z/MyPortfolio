@@ -7,6 +7,8 @@ const emptyForm = {
   issuer: '',
   year: '',
   icon: '📜',
+  certificate_link: '',
+  certificate_id: '',
   order_index: 0,
 };
 
@@ -109,6 +111,20 @@ export default function AdminCertifications() {
               <div className="font-bold text-lg text-green-700">{item.name}</div>
               <div className="text-sm text-green-600">{item.issuer}</div>
               <div className="text-xs text-emerald-600 bg-emerald-100 rounded-full px-3 py-1 mt-1 mb-2 self-start">{item.year}</div>
+              {item.certificate_link && (
+                <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-100 rounded-full px-3 py-1 self-start">
+                  <span>🔗</span>
+                  <a href={item.certificate_link} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                    View Certificate
+                  </a>
+                </div>
+              )}
+              {item.certificate_id && !item.certificate_link && (
+                <div className="flex items-center gap-2 text-xs text-purple-600 bg-purple-100 rounded-full px-3 py-1 self-start">
+                  <span>🆔</span>
+                  <span>ID: {item.certificate_id}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -130,6 +146,8 @@ export default function AdminCertifications() {
                 <input name="issuer" value={form.issuer} onChange={handleInput} placeholder="Issuer" required className="w-full p-2 border rounded"/>
                 <input name="year" value={form.year} onChange={handleInput} placeholder="Year" required className="w-full p-2 border rounded"/>
                 <input name="icon" value={form.icon} onChange={handleInput} placeholder="Icon (emoji)" className="w-full p-2 border rounded"/>
+                <input name="certificate_link" value={form.certificate_link} onChange={handleInput} placeholder="Certificate Link" className="w-full p-2 border rounded"/>
+                <input name="certificate_id" value={form.certificate_id} onChange={handleInput} placeholder="Certificate ID" className="w-full p-2 border rounded"/>
               </div>
                <div className="flex justify-end gap-4 mt-6">
                 <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 rounded bg-gray-200 text-gray-800">Cancel</button>

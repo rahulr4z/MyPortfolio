@@ -60,16 +60,18 @@ class ExperienceCreate(BaseModel):
     description: str
     technologies: Optional[str] = None
     achievements: Optional[str] = None
+    location: Optional[str] = None
     is_active: bool = True
     order_index: int = 0
 
 class ExperienceUpdate(BaseModel):
     company: Optional[str] = None
     position: Optional[str] = None
-    duration: str
+    duration: Optional[str] = None
     description: Optional[str] = None
     technologies: Optional[str] = None
     achievements: Optional[str] = None
+    location: Optional[str] = None
     is_active: Optional[bool] = None
     order_index: Optional[int] = None
 
@@ -81,6 +83,7 @@ class ExperienceResponse(BaseModel):
     description: str
     technologies: Optional[str]
     achievements: Optional[str]
+    location: Optional[str]
     is_active: bool
     order_index: int
     created_at: datetime
@@ -334,6 +337,8 @@ class CertificationCreate(BaseModel):
     issuer: str
     year: str
     icon: Optional[str] = "📜"
+    certificate_link: Optional[str] = None
+    certificate_id: Optional[str] = None
     is_active: bool = True
     order_index: int = 0
 
@@ -342,6 +347,8 @@ class CertificationUpdate(BaseModel):
     issuer: Optional[str] = None
     year: Optional[str] = None
     icon: Optional[str] = None
+    certificate_link: Optional[str] = None
+    certificate_id: Optional[str] = None
     is_active: Optional[bool] = None
     order_index: Optional[int] = None
 
@@ -351,6 +358,8 @@ class CertificationResponse(BaseModel):
     issuer: str
     year: str
     icon: str
+    certificate_link: Optional[str]
+    certificate_id: Optional[str]
     is_active: bool
     order_index: int
     created_at: datetime

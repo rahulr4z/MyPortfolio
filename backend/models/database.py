@@ -50,6 +50,7 @@ class Experience(Base):
     description = Column(Text, nullable=False)
     technologies = Column(String(500))  # Comma-separated list
     achievements = Column(Text)  # Comma-separated list
+    location = Column(String(255))  # Job location
     is_active = Column(Boolean, default=True)
     order_index = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -166,6 +167,8 @@ class Certification(Base):
     issuer = Column(String(255), nullable=False)
     year = Column(String(50), nullable=False)
     icon = Column(String(50), default="📜")
+    certificate_link = Column(String(500))  # Certificate verification URL
+    certificate_id = Column(String(255))  # Certificate ID/Number
     is_active = Column(Boolean, default=True)
     order_index = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)

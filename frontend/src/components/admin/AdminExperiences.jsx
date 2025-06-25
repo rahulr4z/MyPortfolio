@@ -6,6 +6,7 @@ const emptyForm = {
   position: '',
   company: '',
   duration: '',
+  location: '',
   description: '',
   technologies: '',
   achievements: [],
@@ -148,7 +149,16 @@ export default function AdminExperiences() {
               </div>
               <div className="font-bold text-lg text-purple-700">{exp.position}</div>
               <div className="text-sm text-purple-500">{exp.company}</div>
-              <div className="text-xs text-cyan-600 bg-cyan-100 rounded-full px-3 py-1 mt-1 mb-2">{exp.duration}</div>
+              <div className="flex items-center gap-2 text-xs text-cyan-600 bg-cyan-100 rounded-full px-3 py-1 mt-1 mb-2">
+                <Calendar className="w-3 h-3" />
+                {exp.duration}
+              </div>
+              {exp.location && (
+                <div className="flex items-center gap-2 text-xs text-blue-600 bg-blue-100 rounded-full px-3 py-1 mb-2">
+                  <MapPin className="w-3 h-3" />
+                  {exp.location}
+                </div>
+              )}
               <div className="text-gray-700 text-base">{exp.description}</div>
               {exp.achievements && (
                 <div className="mt-2">
@@ -279,6 +289,23 @@ export default function AdminExperiences() {
                   className="w-full px-4 py-3 border-2 border-green-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-green-400 focus:bg-white transition-all duration-200"
                   placeholder="e.g., 2022 - Present"
                 />
+              </div>
+
+              {/* Location Field */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Location
+                </label>
+                <div className="relative">
+                  <input
+                    name="location"
+                    value={form.location}
+                    onChange={handleInput}
+                    className="w-full px-4 py-3 border-2 border-purple-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-purple-400 focus:bg-white transition-all duration-200 pl-10"
+                    placeholder="e.g., San Francisco, CA or Remote"
+                  />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
               </div>
 
               {/* Description Field */}

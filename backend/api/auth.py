@@ -19,14 +19,16 @@ SECRET_KEY = settings.secret_key
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
 
-# Mock user for development (in production, this should be in database)
-MOCK_USER = {
-    "username": "admin",
-    "hashed_password": pwd_context.hash("admin123"),  # Change this in production
-    "full_name": "Admin User",
-    "email": "admin@example.com",
-    "disabled": False
-}
+# Admin user configuration from environment variables
+def get_admin_user():
+    """Get admin user configuration from environment variables."""
+    return {
+        "username": settings.admin_username,
+        "hashed_password": pwd_context.hash(settings.admin_password) if settings.admin_password else None,
+        "full_name": "Admin User",
+        "email": "admin@example.com",
+        "disabled": False
+    }
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
@@ -38,13 +40,18 @@ def get_password_hash(password: str) -> str:
 
 def authenticate_user(username: str, password: str) -> Optional[dict]:
     """Authenticate user with username and password."""
-    if username != MOCK_USER["username"]:
+    admin_user = get_admin_user()
+    
+    if username != admin_user["username"]:
         return None
     
-    if not verify_password(password, MOCK_USER["hashed_password"]):
+    if not admin_user["hashed_password"]:
         return None
     
-    return MOCK_USER
+    if not verify_password(password, admin_user["hashed_password"]):
+        return None
+    
+    return admin_user
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
     """Create JWT access token."""
@@ -75,10 +82,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
     except JWTError:
         raise credentials_exception
     
-    if username != MOCK_USER["username"]:
+    admin_user = get_admin_user()
+    if username != admin_user["username"]:
         raise credentials_exception
     
-    return MOCK_USER
+    return admin_user
 
 async def get_current_active_user(current_user: dict = Depends(get_current_user)) -> dict:
     """Get current active user."""
