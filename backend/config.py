@@ -7,15 +7,15 @@ class Settings(BaseSettings):
     """Application settings with environment variable support."""
     
     # Database Configuration
-    database_url: str = "sqlite:///./portfolio.db"
+    database_url: str = "sqlite:////data/portfolio.db"
     
     # Security Configuration
-    secret_key: str = "9VuzMtGbR2moBPz1O4jPibVFKwd_elQB9d2a9Fk4hBw"
+    secret_key: str = Field(default="", description="Secret key for JWT tokens")
     access_token_expire_minutes: int = 30
     
     # Admin Configuration
-    admin_username: str = "admin"
-    admin_password: str = "admin"
+    admin_username: str = Field(default="admin", description="Admin username")
+    admin_password: str = Field(default="", description="Admin password")
     
     # Environment Configuration
     environment: str = "development"

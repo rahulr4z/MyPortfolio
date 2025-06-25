@@ -48,6 +48,7 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+portfolio.db
 
 # Uploads
 uploads/
@@ -85,8 +86,45 @@ venv.bak/
 *.crt
 *.p12
 *.pfx
+*credentials*
+*secret*
+*password*
+production_credentials.txt
 
 # Backup files
 *.bak
 *.backup
-*.old 
+*.old
+
+# Test files
+test_*.py
+*_test.py
+debug_*.py
+simple_test.py
+
+# Migration and setup files
+migrate_*.py
+fix_*.py
+add_*.py
+remove_*.py
+cleanup_*.py
+sync_*.py
+verify_*.py
+setup_*.py
+init_*.py
+seed_*.py
+
+# Development guides and documentation
+*_GUIDE.md
+*_GUIDE.txt
+*_SUMMARY.md
+*_FIXES.md
+*_OVERVIEW.txt
+*_DOCS.txt
+DEPLOYMENT_*.txt
+API_*.txt
+FEATURES_*.txt
+
+# Temporary files
+*.tmp
+*.temp 

@@ -89,8 +89,8 @@ def seed_database_endpoint():
         import sqlite3
         from datetime import datetime
         
-        # Connect to the database
-        db_path = "portfolio.db"
+        # Connect to the database using the configured path
+        db_path = "/data/portfolio.db"
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         

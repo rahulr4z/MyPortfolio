@@ -235,19 +235,19 @@ const AdminAbout = () => {
       const newItems = arrayMove(aboutItems, oldIndex, newIndex);
 
       const updatedOrder = newItems.map((item, index) => ({
-        id: item.id,
-        order_index: index,
-      }));
+      id: item.id,
+      order_index: index,
+    }));
 
-      // Optimistic update
+    // Optimistic update
       optimisticUpdate(() => newItems);
 
-      try {
-        await orderMutation.execute(updatedOrder);
-      } catch (err) {
-        console.error("Failed to update order", err);
-        // Revert on error
-        refresh();
+    try {
+      await orderMutation.execute(updatedOrder);
+    } catch (err) {
+      console.error("Failed to update order", err);
+      // Revert on error
+      refresh();
       }
     }
   };
@@ -344,7 +344,7 @@ const AdminAbout = () => {
           strategy={verticalListSortingStrategy}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {aboutItems.map((item, index) => (
+              {aboutItems.map((item, index) => (
               <SortableItem
                 key={item.id}
                 item={item}
@@ -354,8 +354,8 @@ const AdminAbout = () => {
                 getCardIcon={getCardIcon}
                 getCardColor={getCardColor}
               />
-            ))}
-          </div>
+              ))}
+            </div>
         </SortableContext>
       </DndContext>
 
