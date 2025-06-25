@@ -49,14 +49,14 @@ const ExperienceSection = () => {
 
   if (loading) {
     return (
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden flex items-center justify-center min-h-screen">
+      <section className="py-20 bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50 relative overflow-hidden flex items-center justify-center min-h-screen">
         <div className="container mx-auto px-8 text-center relative z-10">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-blue-300 border-t-purple-600 rounded-full mx-auto mb-6"
+            className="w-16 h-16 border-4 border-blue-300 border-t-teal-600 rounded-full mx-auto mb-6"
           />
-          <p className="text-purple-600 text-lg font-medium">Loading amazing experiences... 🚀</p>
+          <p className="text-teal-600 text-lg font-medium">Loading amazing experiences... 🚀</p>
         </div>
       </section>
     );
@@ -64,7 +64,7 @@ const ExperienceSection = () => {
 
   if (error) {
     return (
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50 relative overflow-hidden">
         <div className="container mx-auto px-8 text-center">
           <div className="text-red-500 text-xl mb-4">⚠️</div>
           <p className="text-gray-600">{error}</p>
@@ -75,7 +75,7 @@ const ExperienceSection = () => {
 
   if (!experiences || experiences.length === 0) {
     return (
-      <section className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50 relative overflow-hidden">
         <div className="container mx-auto px-8 text-center">
           <p className="text-gray-600">No experience data available</p>
         </div>
@@ -84,7 +84,7 @@ const ExperienceSection = () => {
   }
 
   return (
-    <section id="experience" className="py-20 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative overflow-hidden">
+    <section id="experience" className="py-20 bg-gradient-to-br from-blue-50 via-teal-50 to-cyan-50 relative overflow-hidden">
       {/* Journey Background Elements */}
       <div className="absolute inset-0">
         {/* Floating Journey Elements */}
@@ -115,7 +115,7 @@ const ExperienceSection = () => {
             ease: "easeInOut",
             delay: 2
           }}
-          className="absolute top-40 right-24 w-6 h-6 text-purple-400 text-xl"
+          className="absolute top-40 right-24 w-6 h-6 text-teal-400 text-xl"
         >
           ⭐
         </motion.div>
@@ -131,7 +131,7 @@ const ExperienceSection = () => {
             ease: "easeInOut",
             delay: 4
           }}
-          className="absolute bottom-32 left-1/3 w-7 h-7 text-pink-400 text-lg"
+          className="absolute bottom-32 left-1/3 w-7 h-7 text-cyan-400 text-lg"
         >
           🎯
         </motion.div>
@@ -161,7 +161,7 @@ const ExperienceSection = () => {
             repeat: Infinity,
             delay: 1.5
           }}
-          className="absolute bottom-1/3 right-1/4 w-3 h-3 text-purple-400 text-sm"
+          className="absolute bottom-1/3 right-1/4 w-3 h-3 text-teal-400 text-sm"
         >
           ✨
         </motion.div>
@@ -176,7 +176,7 @@ const ExperienceSection = () => {
             transition={{ duration: 0.6 }}
             className="relative inline-block mb-6 group"
           >
-            <span className="inline-block px-8 py-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 text-white text-lg font-bold rounded-full shadow-xl border-2 border-blue-300 backdrop-blur-sm relative overflow-hidden group-hover:scale-105 transition-all duration-300">
+            <span className="inline-block px-8 py-4 bg-gradient-to-r from-blue-400 via-teal-400 to-cyan-400 text-white text-lg font-bold rounded-full shadow-xl border-2 border-blue-300 backdrop-blur-sm relative overflow-hidden group-hover:scale-105 transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
               <span className="mr-3">🗺️</span>
               {experienceConfig.title}
@@ -209,7 +209,7 @@ const ExperienceSection = () => {
             <div className="grid grid-cols-1 gap-8">
               {/* Company List */}
               <div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-blue-200">
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-blue-200">
                   <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">Companies</h3>
                   <div className="space-y-4">
                     {experiences.map((experience, index) => (
@@ -219,14 +219,21 @@ const ExperienceSection = () => {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         onClick={() => setSelectedIndex(index)}
-                        className={`w-full text-left p-4 rounded-xl transition-all duration-300 ${
+                        className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 border-2 relative overflow-hidden ${
                           selectedIndex === index
-                            ? 'bg-gradient-to-r from-blue-400 to-purple-400 text-white shadow-lg transform scale-105'
-                            : 'bg-gray-50 hover:bg-blue-50 text-gray-700 hover:shadow-md'
+                            ? 'bg-gradient-to-r from-blue-400 to-teal-400 text-white shadow-lg transform scale-105'
+                            : 'bg-white/80 text-gray-700 hover:bg-blue-50/80 border-blue-200/50 hover:border-blue-300 hover:shadow-md'
                         }`}
                       >
-                        <div className="font-semibold">{experience.company}</div>
+                        <div className="text-xl text-blue-600 font-semibold mb-2">
+                          {experience.company}
+                        </div>
                         <div className="text-sm opacity-80">{experience.period}</div>
+                        <div className="mt-2">
+                          <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200">
+                            {experience.period}
+                          </span>
+                        </div>
                       </motion.button>
                     ))}
                   </div>
@@ -293,7 +300,7 @@ const ExperienceSection = () => {
                                 transition={{ duration: 0.3, delay: achievementIndex * 0.1 }}
                                 className="flex items-start gap-3 text-gray-700"
                               >
-                                <span className="text-purple-500 text-lg mt-0.5">✨</span>
+                                <span className="text-blue-500 text-lg mt-0.5">✨</span>
                                 <span>{achievement}</span>
                               </motion.li>
                             ))}
@@ -320,7 +327,7 @@ const ExperienceSection = () => {
                   initial={{ pathLength: 0 }}
                   whileInView={{ pathLength: 1 }}
                   transition={{ duration: 3, ease: "easeInOut" }}
-                  className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 via-purple-400 to-pink-400 rounded-full"
+                  className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-400 via-teal-400 to-cyan-400 rounded-full"
                 />
                 
                 {/* Winding Path with Curves */}
@@ -358,7 +365,7 @@ const ExperienceSection = () => {
                       scale: { duration: 0.5, delay: index * 0.3 },
                       y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
                     }}
-                    className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border-4 border-white shadow-lg z-10"
+                    className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full border-4 border-white shadow-lg z-10"
                     style={{ 
                       bottom: `${50 + (index * 120)}px`,
                       left: `calc(50% + ${Math.sin(index * 0.8) * 60}px)`
@@ -494,7 +501,7 @@ const ExperienceSection = () => {
                         scale: [1, 1.15, 1],
                         y: [0, -8, 0, 8, 0]
                       }}
-                      className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full border-4 border-white shadow-xl z-10 flex items-center justify-center"
+                      className="absolute left-1/2 transform -translate-x-1/2 w-16 h-16 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full border-4 border-white shadow-xl z-10 flex items-center justify-center"
                     >
                       {/* Journey Stop Icon */}
                       <motion.div
@@ -523,7 +530,7 @@ const ExperienceSection = () => {
                           repeat: Infinity,
                           delay: index * 0.3
                         }}
-                        className="absolute inset-0 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"
+                        className="absolute inset-0 bg-gradient-to-r from-blue-400 to-teal-400 rounded-full"
                       />
                     </motion.div>
                     
@@ -541,11 +548,11 @@ const ExperienceSection = () => {
                           initial={{ scaleX: 0 }}
                           whileInView={{ scaleX: 1 }}
                           transition={{ duration: 1, delay: index * 0.3 + 0.6 }}
-                          className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 origin-left"
+                          className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-400 via-teal-400 to-cyan-400 origin-left"
                         />
                         
                         {/* Card Background Pattern */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/50 to-pink-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-teal-50/50 to-cyan-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
                         <div className="relative z-10">
                           {/* Period Badge */}
@@ -553,10 +560,9 @@ const ExperienceSection = () => {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: index * 0.3 + 0.7 }}
-                            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 rounded-full text-sm font-medium mb-4"
-                          >
-                            {experience.period}
-                          </motion.div>
+                            className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-700 rounded-full text-sm font-medium mb-4">
+                              {experience.title}
+                            </motion.div>
                           
                           {/* Title and Company */}
                           <motion.h3
@@ -603,8 +609,7 @@ const ExperienceSection = () => {
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     transition={{ duration: 0.4, delay: index * 0.3 + 1.2 + techIndex * 0.1 }}
                                     whileHover={{ scale: 1.08 }}
-                                    className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200"
-                                  >
+                                    className="px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200">
                                     {tech}
                                   </motion.span>
                                 ))}
@@ -632,10 +637,7 @@ const ExperienceSection = () => {
                                     <motion.span 
                                       animate={{ rotate: [0, 15, -15, 0] }}
                                       transition={{ duration: 2.5, repeat: Infinity, delay: achievementIndex * 0.3 }}
-                                      className="text-blue-500 text-lg mt-0.5"
-                                    >
-                                      ✨
-                                    </motion.span>
+                                      className="text-blue-500 text-lg mt-0.5">✨</motion.span>
                                     <span>{achievement}</span>
                                   </motion.li>
                                 ))}
