@@ -18,6 +18,14 @@ const config = {
     refreshInterval: 5 * 60 * 1000, // 5 minutes
   },
 
+  // Domain Configuration
+  domain: {
+    // Custom domain settings
+    customDomain: import.meta.env.VITE_CUSTOM_DOMAIN || null,
+    // API subdomain (if using subdomain for API)
+    apiSubdomain: import.meta.env.VITE_API_SUBDOMAIN || 'api',
+  },
+
   // UI Configuration
   ui: {
     theme: {

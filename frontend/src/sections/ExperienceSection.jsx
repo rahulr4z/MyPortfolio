@@ -203,113 +203,184 @@ const ExperienceSection = () => {
           </motion.p>
         </div>
 
-        {/* Mobile Layout (Original Sidebar Design) */}
+        {/* Mobile Layout (Accordion Design) */}
         <div className="lg:hidden">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 gap-8">
-              {/* Company List */}
-              <div>
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-blue-200">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">Companies</h3>
-                  <div className="space-y-4">
-                    {experiences.map((experience, index) => (
-                      <motion.button
-                        key={experience.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
-                        onClick={() => setSelectedIndex(index)}
-                        className={`px-6 py-3 rounded-2xl font-semibold transition-all duration-300 border-2 relative overflow-hidden ${
-                          selectedIndex === index
-                            ? 'bg-gradient-to-r from-blue-400 to-teal-400 text-white shadow-lg transform scale-105'
-                            : 'bg-white/80 text-gray-700 hover:bg-blue-50/80 border-blue-200/50 hover:border-blue-300 hover:shadow-md'
-                        }`}
-                      >
-                        <div className="text-xl text-blue-600 font-semibold mb-2">
-                          {experience.company}
-                        </div>
-                        <div className="mt-2">
-                          <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200">
-                            {experience.period}
-                          </span>
-                        </div>
-                      </motion.button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Experience Details */}
-              <div>
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-4">
+              {experiences.map((experience, index) => (
                 <motion.div
-                  key={selectedIndex}
+                  key={experience.id}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-purple-200"
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border border-blue-200/50 overflow-hidden group"
                 >
-                  {experiences[selectedIndex] && (
-                    <>
-                      <div className="mb-6">
-                        <h3 className="text-3xl font-bold text-gray-800 mb-2">
-                          {experiences[selectedIndex].title}
-                        </h3>
-                        <div className="text-xl text-purple-600 font-semibold mb-2">
-                          {experiences[selectedIndex].company}
+                  {/* Accordion Header */}
+                  <motion.button
+                    onClick={() => setSelectedIndex(selectedIndex === index ? -1 : index)}
+                    className="w-full px-6 py-5 text-left relative overflow-hidden"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {/* Header Background Gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-50/80 via-teal-50/80 to-cyan-50/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    <div className="relative z-10 flex items-center justify-between">
+                      <div className="flex-1">
+                        {/* Company and Period Row */}
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-xl font-bold text-gray-800">
+                            {experience.company}
+                          </h3>
+                          <motion.span
+                            animate={{ 
+                              rotate: selectedIndex === index ? 180 : 0,
+                              scale: selectedIndex === index ? 1.1 : 1
+                            }}
+                            transition={{ duration: 0.3 }}
+                            className="text-blue-500 text-2xl"
+                          >
+                            {selectedIndex === index ? '🔽' : '▶️'}
+                          </motion.span>
                         </div>
-                        <div className="text-gray-600 mb-4">{experiences[selectedIndex].period}</div>
+                        
+                        {/* Position and Period */}
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <div className="text-lg text-blue-600 font-semibold">
+                            {experience.title}
+                          </div>
+                          <motion.span
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.4, delay: index * 0.1 }}
+                            className="inline-block px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-700 rounded-full text-sm font-medium border border-blue-200 self-start sm:self-auto"
+                          >
+                            {experience.period}
+                          </motion.span>
+                        </div>
                       </div>
+                    </div>
+                    
+                    {/* Animated Border */}
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      transition={{ duration: 0.8, delay: index * 0.1 }}
+                      className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-teal-400 to-cyan-400 origin-left"
+                    />
+                  </motion.button>
 
-                      <div className="mb-6">
-                        <p className="text-gray-700 leading-relaxed text-lg">
-                          {experiences[selectedIndex].description}
+                  {/* Accordion Content */}
+                  <motion.div
+                    initial={false}
+                    animate={{ 
+                      height: selectedIndex === index ? 'auto' : 0,
+                      opacity: selectedIndex === index ? 1 : 0
+                    }}
+                    transition={{ 
+                      height: { duration: 0.4, ease: "easeInOut" },
+                      opacity: { duration: 0.3, ease: "easeInOut" }
+                    }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6 pt-2">
+                      {/* Description */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: selectedIndex === index ? 1 : 0, y: selectedIndex === index ? 0 : 10 }}
+                        transition={{ duration: 0.4, delay: 0.1 }}
+                        className="mb-6"
+                      >
+                        <p className="text-gray-700 leading-relaxed text-base">
+                          {experience.description}
                         </p>
-                      </div>
+                      </motion.div>
 
                       {/* Technologies */}
-                      {experiences[selectedIndex].technologies && experiences[selectedIndex].technologies.length > 0 && (
-                        <div className="mb-6">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-3">Technologies & Skills</h4>
+                      {experience.technologies && experience.technologies.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: selectedIndex === index ? 1 : 0, y: selectedIndex === index ? 0 : 10 }}
+                          transition={{ duration: 0.4, delay: 0.2 }}
+                          className="mb-6"
+                        >
+                          <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <span className="text-blue-500">🛠️</span>
+                            Technologies & Skills
+                          </h4>
                           <div className="flex flex-wrap gap-2">
-                            {experiences[selectedIndex].technologies.map((tech, techIndex) => (
+                            {experience.technologies.map((tech, techIndex) => (
                               <motion.span
                                 key={techIndex}
                                 initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.3, delay: techIndex * 0.1 }}
-                                className="px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 text-purple-800 rounded-full text-sm font-medium border border-purple-200"
+                                animate={{ 
+                                  opacity: selectedIndex === index ? 1 : 0, 
+                                  scale: selectedIndex === index ? 1 : 0.8 
+                                }}
+                                transition={{ 
+                                  duration: 0.3, 
+                                  delay: selectedIndex === index ? 0.3 + techIndex * 0.05 : 0 
+                                }}
+                                whileHover={{ scale: 1.05 }}
+                                className="px-3 py-1 bg-gradient-to-r from-blue-100 to-teal-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200"
                               >
                                 {tech}
                               </motion.span>
                             ))}
                           </div>
-                        </div>
+                        </motion.div>
                       )}
 
                       {/* Achievements */}
-                      {experiences[selectedIndex].achievements && experiences[selectedIndex].achievements.length > 0 && (
-                        <div>
-                          <h4 className="text-xl font-semibold text-gray-800 mb-3">Key Achievements</h4>
+                      {experience.achievements && experience.achievements.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: selectedIndex === index ? 1 : 0, y: selectedIndex === index ? 0 : 10 }}
+                          transition={{ duration: 0.4, delay: 0.3 }}
+                        >
+                          <h4 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                            <span className="text-blue-500">🏆</span>
+                            Key Achievements
+                          </h4>
                           <ul className="space-y-2">
-                            {experiences[selectedIndex].achievements.map((achievement, achievementIndex) => (
+                            {experience.achievements.map((achievement, achievementIndex) => (
                               <motion.li
                                 key={achievementIndex}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 0.3, delay: achievementIndex * 0.1 }}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ 
+                                  opacity: selectedIndex === index ? 1 : 0, 
+                                  x: selectedIndex === index ? 0 : -10 
+                                }}
+                                transition={{ 
+                                  duration: 0.4, 
+                                  delay: selectedIndex === index ? 0.4 + achievementIndex * 0.1 : 0 
+                                }}
                                 className="flex items-start gap-3 text-gray-700"
                               >
-                                <span className="text-blue-500 text-lg mt-0.5">✨</span>
-                                <span>{achievement}</span>
+                                <motion.span 
+                                  animate={{ 
+                                    rotate: selectedIndex === index ? [0, 15, -15, 0] : 0,
+                                    scale: selectedIndex === index ? [1, 1.2, 1] : 1
+                                  }}
+                                  transition={{ 
+                                    duration: 2, 
+                                    repeat: selectedIndex === index ? Infinity : 0,
+                                    delay: achievementIndex * 0.2
+                                  }}
+                                  className="text-blue-500 text-lg mt-0.5 flex-shrink-0"
+                                >
+                                  ✨
+                                </motion.span>
+                                <span className="text-sm leading-relaxed">{achievement}</span>
                               </motion.li>
                             ))}
                           </ul>
-                        </div>
+                        </motion.div>
                       )}
-                    </>
-                  )}
+                    </div>
+                  </motion.div>
                 </motion.div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
