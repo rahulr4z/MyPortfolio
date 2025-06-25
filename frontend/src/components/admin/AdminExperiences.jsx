@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Save, X, Briefcase, Calendar, MapPin, Loader2, CheckCircle2 } from 'lucide-react';
 import { getAdminExperiences, createExperience, updateExperience, deleteExperience } from '../../services/api';
 
+// Predefined company options for dropdown
+const companyOptions = [
+  'Boss Wallah',
+  'ffreedom App (Acquired by Boss Wallah)',
+  'Halodoc (Gojek\'s Heathtech)',
+  'Other (Custom)'
+];
+
 const emptyForm = {
   position: '',
   company: '',
@@ -19,6 +27,8 @@ export default function AdminExperiences() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showCustomCompany, setShowCustomCompany] = useState(false);
+  const [customCompany, setCustomCompany] = useState('');
 
   useEffect(() => {
     fetchExperiences();
@@ -44,7 +54,25 @@ export default function AdminExperiences() {
 
   function handleInput(e) {
     const { name, value } = e.target;
-    setForm(f => ({ ...f, [name]: value }));
+    
+    if (name === 'company') {
+      if (value === 'Other (Custom)') {
+        setShowCustomCompany(true);
+        setForm(f => ({ ...f, company: customCompany }));
+      } else {
+        setShowCustomCompany(false);
+        setCustomCompany('');
+        setForm(f => ({ ...f, company: value }));
+      }
+    } else {
+      setForm(f => ({ ...f, [name]: value }));
+    }
+  }
+
+  function handleCustomCompanyChange(e) {
+    const value = e.target.value;
+    setCustomCompany(value);
+    setForm(f => ({ ...f, company: value }));
   }
 
   function addAchievement() {
@@ -71,15 +99,26 @@ export default function AdminExperiences() {
     setForm(emptyForm);
     setEditingId(null);
     setShowForm(true);
+    setShowCustomCompany(false);
+    setCustomCompany('');
   }
 
   function startEdit(item) {
+    const isCustomCompany = !companyOptions.includes(item.company);
     setForm({ 
       ...item,
       achievements: item.achievements ? item.achievements.split('|').map(a => a.trim()).filter(a => a) : []
     });
     setEditingId(item.id);
     setShowForm(true);
+    
+    if (isCustomCompany) {
+      setShowCustomCompany(true);
+      setCustomCompany(item.company);
+    } else {
+      setShowCustomCompany(false);
+      setCustomCompany('');
+    }
   }
 
   async function handleSubmit(e) {
@@ -218,14 +257,42 @@ export default function AdminExperiences() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Company <span className="text-red-500">*</span>
                 </label>
-                <input
-                  name="company"
-                  value={form.company}
-                  onChange={handleInput}
-                  required
-                  className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white transition-all duration-200"
-                  placeholder="Enter company name"
-                />
+                {!showCustomCompany ? (
+                  <select
+                    name="company"
+                    value={form.company}
+                    onChange={handleInput}
+                    required
+                    className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white transition-all duration-200"
+                  >
+                    <option value="">Select a company</option>
+                    {companyOptions.map((option, index) => (
+                      <option key={index} value={option}>{option}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="space-y-2">
+                    <input
+                      name="customCompany"
+                      value={customCompany}
+                      onChange={handleCustomCompanyChange}
+                      required
+                      className="w-full px-4 py-3 border-2 border-blue-200 rounded-xl bg-gray-50 text-gray-600 placeholder-gray-400 focus:outline-none focus:border-blue-400 focus:bg-white transition-all duration-200"
+                      placeholder="Enter custom company name"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowCustomCompany(false);
+                        setCustomCompany('');
+                        setForm(f => ({ ...f, company: '' }));
+                      }}
+                      className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      ← Back to company list
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Duration Field */}
