@@ -146,16 +146,16 @@ const NewAboutSection = () => {
 
         {/* Fun Illustration-Based Content */}
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             
             {/* Who I Am - Brain Illustration */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-center group"
+              className="text-center md:text-left group"
             >
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 shadow-xl border-2 border-blue-200 hover:shadow-2xl transition-all duration-300 group-hover:scale-105 hover:bg-blue-50/80">
+              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl p-8 shadow-xl border-2 border-blue-200 hover:shadow-2xl transition-all duration-300 group-hover:scale-105 hover:bg-blue-50/80 md:flex md:items-center md:gap-8">
                 {/* Brain Illustration */}
                 <motion.div
                   animate={{ 
@@ -167,65 +167,68 @@ const NewAboutSection = () => {
                     repeat: Infinity, 
                     ease: "easeInOut" 
                   }}
-                  className="text-8xl mb-6"
+                  className="text-8xl mb-6 md:mb-0 md:flex-shrink-0"
                 >
                   🧠
                 </motion.div>
                 
-                {/* Floating Thought Bubbles */}
-                <div className="relative mb-6">
-                  <motion.div
-                    animate={{ 
-                      y: [0, -10, 0],
-                      opacity: [0.7, 1, 0.7]
-                    }}
-                    transition={{ 
-                      duration: 3, 
-                      repeat: Infinity, 
-                      ease: "easeInOut",
-                      delay: 0
-                    }}
-                    className="absolute -top-4 -left-4 text-2xl"
-                  >
-                    💡
-                  </motion.div>
-                  <motion.div
-                    animate={{ 
-                      y: [0, -8, 0],
-                      opacity: [0.7, 1, 0.7]
-                    }}
-                    transition={{ 
-                      duration: 3, 
-                      repeat: Infinity, 
-                      ease: "easeInOut",
-                      delay: 1
-                    }}
-                    className="absolute -top-2 -right-4 text-xl"
-                  >
-                    🎨
-                  </motion.div>
-                  <motion.div
-                    animate={{ 
-                      y: [0, -12, 0],
-                      opacity: [0.7, 1, 0.7]
-                    }}
-                    transition={{ 
-                      duration: 3, 
-                      repeat: Infinity, 
-                      ease: "easeInOut",
-                      delay: 2
-                    }}
-                    className="absolute top-2 right-8 text-lg"
-                  >
-                    💬
-                  </motion.div>
+                {/* Content */}
+                <div className="md:flex-1">
+                  {/* Floating Thought Bubbles */}
+                  <div className="relative mb-6">
+                    <motion.div
+                      animate={{ 
+                        y: [0, -10, 0],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        delay: 0
+                      }}
+                      className="absolute -top-4 -left-4 text-2xl"
+                    >
+                      💡
+                    </motion.div>
+                    <motion.div
+                      animate={{ 
+                        y: [0, -8, 0],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        delay: 1
+                      }}
+                      className="absolute -top-2 -right-4 text-xl"
+                    >
+                      🎨
+                    </motion.div>
+                    <motion.div
+                      animate={{ 
+                        y: [0, -12, 0],
+                        opacity: [0.7, 1, 0.7]
+                      }}
+                      transition={{ 
+                        duration: 3, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        delay: 2
+                      }}
+                      className="absolute top-2 right-8 text-lg"
+                    >
+                      💬
+                    </motion.div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">{aboutData[0]?.title || 'Who I Am'}</h3>
+                  {aboutData[0]?.subtitle && (
+                    <p className="text-lg text-gray-600 mb-3 font-medium">{aboutData[0].subtitle}</p>
+                  )}
+                  <p className="text-gray-700 leading-relaxed">{aboutData[0]?.description || 'Product manager with designer\'s heart, diplomat\'s tongue & engineer\'s brain'}</p>
                 </div>
-                
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">{aboutData[0]?.title || 'Who I Am'}</h3>
-                {aboutData[0]?.subtitle && (
-                  <p className="text-lg text-gray-600 mb-3 font-medium">{aboutData[0].subtitle}</p>
-                )}
-                <p className="text-gray-700 leading-relaxed">{aboutData[0]?.description || 'Product manager with designer\'s heart, diplomat\'s tongue & engineer\'s brain'}</p>
               </div>
             </motion.div>
 
@@ -234,9 +237,9 @@ const NewAboutSection = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-center group"
+              className="text-center md:text-left group"
             >
-              <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-3xl p-8 shadow-xl border-2 border-cyan-200 hover:shadow-2xl transition-all duration-300 group-hover:scale-105 hover:bg-cyan-50/80">
+              <div className="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-3xl p-8 shadow-xl border-2 border-cyan-200 hover:shadow-2xl transition-all duration-300 group-hover:scale-105 hover:bg-cyan-50/80 md:flex md:items-center md:gap-8">
                 {/* Rocket Illustration */}
                 <motion.div
                   animate={{ 
@@ -248,50 +251,53 @@ const NewAboutSection = () => {
                     repeat: Infinity, 
                     ease: "easeInOut" 
                   }}
-                  className="text-8xl mb-6"
+                  className="text-8xl mb-6 md:mb-0 md:flex-shrink-0"
                 >
                   🚀
                 </motion.div>
                 
-                {/* Rocket Trail */}
-                <div className="relative mb-6">
-                  <motion.div
-                    animate={{ 
-                      scale: [1, 1.2, 1],
-                      opacity: [0.3, 0.8, 0.3]
-                    }}
-                    transition={{ 
-                      duration: 2, 
-                      repeat: Infinity, 
-                      ease: "easeInOut",
-                      delay: 0
-                    }}
-                    className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-4xl"
-                  >
-                    ✨
-                  </motion.div>
-                  <motion.div
-                    animate={{ 
-                      scale: [1, 1.1, 1],
-                      opacity: [0.2, 0.6, 0.2]
-                    }}
-                    transition={{ 
-                      duration: 2, 
-                      repeat: Infinity, 
-                      ease: "easeInOut",
-                      delay: 0.5
-                    }}
-                    className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-3xl"
-                  >
-                    ⭐
-                  </motion.div>
+                {/* Content */}
+                <div className="md:flex-1">
+                  {/* Rocket Trail */}
+                  <div className="relative mb-6">
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.2, 1],
+                        opacity: [0.3, 0.8, 0.3]
+                      }}
+                      transition={{ 
+                        duration: 2, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        delay: 0
+                      }}
+                      className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-4xl"
+                    >
+                      ✨
+                    </motion.div>
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.1, 1],
+                        opacity: [0.2, 0.6, 0.2]
+                      }}
+                      transition={{ 
+                        duration: 2, 
+                        repeat: Infinity, 
+                        ease: "easeInOut",
+                        delay: 0.5
+                      }}
+                      className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 text-3xl"
+                    >
+                      ⭐
+                    </motion.div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">{aboutData[1]?.title || 'What I Do'}</h3>
+                  {aboutData[1]?.subtitle && (
+                    <p className="text-lg text-gray-600 mb-3 font-medium">{aboutData[1].subtitle}</p>
+                  )}
+                  <p className="text-gray-700 leading-relaxed">{aboutData[1]?.description || 'Craft digital experiences that users love & businesses value'}</p>
                 </div>
-                
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">{aboutData[1]?.title || 'What I Do'}</h3>
-                {aboutData[1]?.subtitle && (
-                  <p className="text-lg text-gray-600 mb-3 font-medium">{aboutData[1].subtitle}</p>
-                )}
-                <p className="text-gray-700 leading-relaxed">{aboutData[1]?.description || 'Craft digital experiences that users love & businesses value'}</p>
               </div>
             </motion.div>
 
@@ -300,9 +306,9 @@ const NewAboutSection = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-center group"
+              className="text-center md:text-left group"
             >
-              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 shadow-xl border-2 border-indigo-200 hover:shadow-2xl transition-all duration-300 group-hover:scale-105 hover:bg-indigo-50/80">
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-3xl p-8 shadow-xl border-2 border-indigo-200 hover:shadow-2xl transition-all duration-300 group-hover:scale-105 hover:bg-indigo-50/80 md:flex md:items-center md:gap-8">
                 {/* Lightbulb Illustration */}
                 <motion.div
                   animate={{ 
@@ -314,64 +320,67 @@ const NewAboutSection = () => {
                     repeat: Infinity, 
                     ease: "easeInOut" 
                   }}
-                  className="text-8xl mb-6"
+                  className="text-8xl mb-6 md:mb-0 md:flex-shrink-0"
                 >
                   💡
                 </motion.div>
                 
-                {/* Sparkles Around Lightbulb */}
-                <div className="relative mb-6">
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, 360],
-                      scale: [1, 1.3, 1]
-                    }}
-                    transition={{ 
-                      duration: 6, 
-                      repeat: Infinity, 
-                      ease: "linear" 
-                    }}
-                    className="absolute -top-2 -left-2 text-xl"
-                  >
-                    ✨
-                  </motion.div>
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, -360],
-                      scale: [1, 1.2, 1]
-                    }}
-                    transition={{ 
-                      duration: 8, 
-                      repeat: Infinity, 
-                      ease: "linear",
-                      delay: 1
-                    }}
-                    className="absolute -top-1 -right-2 text-lg"
-                  >
-                    🌟
-                  </motion.div>
-                  <motion.div
-                    animate={{ 
-                      rotate: [0, 360],
-                      scale: [1, 1.4, 1]
-                    }}
-                    transition={{ 
-                      duration: 7, 
-                      repeat: Infinity, 
-                      ease: "linear",
-                      delay: 2
-                    }}
-                    className="absolute top-2 right-4 text-sm"
-                  >
-                    ⭐
-                  </motion.div>
+                {/* Content */}
+                <div className="md:flex-1">
+                  {/* Sparkles Around Lightbulb */}
+                  <div className="relative mb-6">
+                    <motion.div
+                      animate={{ 
+                        rotate: [0, 360],
+                        scale: [1, 1.3, 1]
+                      }}
+                      transition={{ 
+                        duration: 6, 
+                        repeat: Infinity, 
+                        ease: "linear" 
+                      }}
+                      className="absolute -top-2 -left-2 text-xl"
+                    >
+                      ✨
+                    </motion.div>
+                    <motion.div
+                      animate={{ 
+                        rotate: [0, -360],
+                        scale: [1, 1.2, 1]
+                      }}
+                      transition={{ 
+                        duration: 8, 
+                        repeat: Infinity, 
+                        ease: "linear",
+                        delay: 1
+                      }}
+                      className="absolute -top-1 -right-2 text-lg"
+                    >
+                      🌟
+                    </motion.div>
+                    <motion.div
+                      animate={{ 
+                        rotate: [0, 360],
+                        scale: [1, 1.4, 1]
+                      }}
+                      transition={{ 
+                        duration: 7, 
+                        repeat: Infinity, 
+                        ease: "linear",
+                        delay: 2
+                      }}
+                      className="absolute top-2 right-4 text-sm"
+                    >
+                      ⭐
+                    </motion.div>
+                  </div>
+                  
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">{aboutData[2]?.title || 'What Interests Me'}</h3>
+                  {aboutData[2]?.subtitle && (
+                    <p className="text-lg text-gray-600 mb-3 font-medium">{aboutData[2].subtitle}</p>
+                  )}
+                  <p className="text-gray-700 leading-relaxed">{aboutData[2]?.description || 'Emerging tech, AI possibilities & real-world impact solutions'}</p>
                 </div>
-                
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">{aboutData[2]?.title || 'What Interests Me'}</h3>
-                {aboutData[2]?.subtitle && (
-                  <p className="text-lg text-gray-600 mb-3 font-medium">{aboutData[2].subtitle}</p>
-                )}
-                <p className="text-gray-700 leading-relaxed">{aboutData[2]?.description || 'Emerging tech, AI possibilities & real-world impact solutions'}</p>
               </div>
             </motion.div>
           </div>
