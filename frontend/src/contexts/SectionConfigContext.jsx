@@ -92,7 +92,7 @@ export const SectionConfigProvider = ({ children }) => {
   console.log('SectionConfigProvider rendering...');
   
   const [sectionConfig, setSectionConfig] = useState(defaultConfig);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to show content immediately
   const [error, setError] = useState(null);
 
   const fetchSectionConfig = async () => {
@@ -130,7 +130,7 @@ export const SectionConfigProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    // Initial fetch
+    // Initial fetch - start immediately but don't block the UI
     fetchSectionConfig();
 
     // Listen for localStorage changes (cross-tab communication)
@@ -229,20 +229,7 @@ export const SectionConfigProvider = ({ children }) => {
 
   return (
     <SectionConfigContext.Provider value={value}>
-      {loading ? (
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          height: '100vh',
-          fontSize: '18px',
-          color: '#666'
-        }}>
-          Loading portfolio configuration...
-        </div>
-      ) : (
-        children
-      )}
+      {children}
     </SectionConfigContext.Provider>
   );
 };
