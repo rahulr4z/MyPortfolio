@@ -20,6 +20,7 @@ import AdminCertifications from './components/admin/AdminCertifications';
 import AdminSkills from './components/admin/AdminSkills';
 import AdminSectionConfig from './components/admin/AdminSectionConfig';
 import AdminProjects from './components/admin/AdminProjects';
+import AdminEnquiries from './components/admin/AdminEnquiries';
 
 // Main Site Components
 import HeroSection from './sections/HeroSection';
@@ -95,6 +96,7 @@ function App() {
             <Route path="/admin/skills" element={<AdminSectionPage title="Skills" component={AdminSkills} />} />
             <Route path="/admin/config" element={<AdminSectionPage title="Section Titles" component={AdminSectionConfig} />} />
             <Route path="/admin/projects" element={<AdminSectionPage title="Projects" component={AdminProjects} />} />
+            <Route path="/admin/enquiries" element={<AdminSectionPage title="Contact Enquiries" component={AdminEnquiries} />} />
 
           </Routes>
         </div>

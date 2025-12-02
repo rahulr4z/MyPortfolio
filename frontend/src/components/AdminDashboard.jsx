@@ -14,7 +14,8 @@ import {
   FileText,
   Wrench,
   Settings,
-  FolderKanban
+  FolderKanban,
+  Mail
 } from 'lucide-react';
 import { logout } from '../services/api';
 
@@ -25,6 +26,7 @@ const SECTIONS = [
   { id: 'stats', label: 'Statistics', icon: TrendingUp, path: '/admin/stats', color: 'from-orange-200 to-amber-200' },
   { id: 'testimonials', label: 'Testimonials', icon: Star, path: '/admin/testimonials', color: 'from-purple-200 to-violet-200' },
   { id: 'contact', label: 'Contact Info', icon: Palette, path: '/admin/contact', color: 'from-teal-200 to-cyan-200' },
+  { id: 'enquiries', label: 'Contact Enquiries', icon: Mail, path: '/admin/enquiries', color: 'from-emerald-200 to-teal-200' },
   { id: 'awards', label: 'Awards', icon: Award, path: '/admin/awards', color: 'from-red-200 to-pink-200' },
   { id: 'education', label: 'Education', icon: BookOpen, path: '/admin/education', color: 'from-sky-200 to-blue-200' },
   { id: 'certifications', label: 'Certifications', icon: FileText, path: '/admin/certifications', color: 'from-emerald-200 to-green-200' },

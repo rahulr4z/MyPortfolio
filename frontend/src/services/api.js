@@ -188,8 +188,21 @@ const apiFetch = async (url, options = {}, retries = config.api.retries) => {
         return null; // No content
       }
       
-      const data = await response.json();
-      return data;
+      // Try to parse JSON, but handle empty responses
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const text = await response.text();
+        if (text) {
+          try {
+            const data = JSON.parse(text);
+            return data;
+          } catch (parseError) {
+            console.warn('Failed to parse JSON response:', parseError);
+            return { message: text };
+          }
+        }
+      }
+      return null;
       
     } catch (error) {
       if (error.name === 'AbortError') {
@@ -398,6 +411,35 @@ export const getAdminContacts = async () => {
     if (error.message.includes('Authentication failed')) {
       throw new Error('Please log in to access admin features.');
     }
+    throw error;
+  }
+};
+
+export const deleteContactEnquiry = async (contactId) => {
+  try {
+    // Ensure contactId is a number/string
+    const id = typeof contactId === 'number' ? contactId : parseInt(contactId, 10);
+    console.log('Delete API call - contactId:', contactId, 'parsed as:', id);
+    
+    if (isNaN(id)) {
+      throw new Error(`Invalid contact ID: ${contactId}`);
+    }
+    
+    const url = `/api/admin/contacts/${id}`;
+    console.log('Delete URL:', url);
+    
+    const response = await apiFetch(url, {
+      method: 'DELETE',
+    });
+    console.log('Delete response:', response);
+    return response || true;
+  } catch (error) {
+    console.error('Error deleting contact enquiry:', error);
+    console.error('Error details:', {
+      message: error.message,
+      contactId: contactId,
+      type: typeof contactId
+    });
     throw error;
   }
 };

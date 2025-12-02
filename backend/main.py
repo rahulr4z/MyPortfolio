@@ -442,11 +442,46 @@ def delete_project(project_id: int, db: Session = Depends(get_db), current_user 
     return {"message": "Project deleted"}
 
 # Admin endpoints for viewing all data
+# IMPORTANT: DELETE route must come BEFORE GET route to avoid route conflicts
+@app.delete("/api/admin/contacts/{contact_id}")
+def delete_contact_enquiry(contact_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    """Delete a contact enquiry (admin only)."""
+    try:
+        # Debug logging
+        print(f"Attempting to delete contact with ID: {contact_id} (type: {type(contact_id)})")
+        
+        # Query the contact
+        contact = db.query(Contact).filter(Contact.id == contact_id).first()
+        
+        # Debug: Check what contacts exist
+        all_contacts = db.query(Contact).all()
+        print(f"Total contacts in DB: {len(all_contacts)}")
+        if all_contacts:
+            print(f"Existing contact IDs: {[c.id for c in all_contacts]}")
+        
+        if not contact:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Contact enquiry with ID {contact_id} not found. Available IDs: {[c.id for c in all_contacts] if all_contacts else 'none'}"
+            )
+        
+        db.delete(contact)
+        db.commit()
+        print(f"Successfully deleted contact {contact_id}")
+        return {"message": "Contact enquiry deleted", "success": True}
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        print(f"Error deleting contact: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete contact enquiry: {str(e)}")
+
 @app.get("/api/admin/contacts")
 def admin_get_contacts(db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
     """Get all contacts (admin only)."""
     contacts = db.query(Contact).order_by(Contact.created_at.desc()).all()
     return contacts
+
 
 @app.get("/api/admin/about")
 def admin_get_about(db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
