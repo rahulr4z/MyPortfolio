@@ -1011,61 +1011,149 @@ async def create_section_config(config_data: SectionConfigModel, db: Session = D
 def fetch_blog_metadata(url: str) -> dict:
     """Fetch metadata (title, thumbnail, description) from a blog URL."""
     try:
+        # Ensure URL has protocol
+        if not url.startswith(('http://', 'https://')):
+            url = 'https://' + url
+        
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
         }
-        response = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
+        
+        print(f"Fetching metadata from: {url}")
+        response = requests.get(url, headers=headers, timeout=15, allow_redirects=True, verify=True)
         response.raise_for_status()
         
-        soup = BeautifulSoup(response.content, 'html.parser')
+        # Try to detect encoding
+        if response.encoding is None or response.encoding == 'ISO-8859-1':
+            response.encoding = response.apparent_encoding or 'utf-8'
+        
+        soup = BeautifulSoup(response.content, 'html.parser', from_encoding=response.encoding)
         
         # Extract metadata
         title = None
         thumbnail = None
         description = None
         
-        # Try Open Graph tags first
-        og_title = soup.find('meta', property='og:title')
+        # Try Open Graph tags first (most reliable)
+        og_title = soup.find('meta', property='og:title') or soup.find('meta', attrs={'name': 'og:title'})
         if og_title:
-            title = og_title.get('content')
+            title = og_title.get('content', '').strip()
+            print(f"Found OG title: {title}")
         
-        og_image = soup.find('meta', property='og:image')
+        og_image = soup.find('meta', property='og:image') or soup.find('meta', attrs={'name': 'og:image'})
         if og_image:
-            thumbnail = og_image.get('content')
-            # Make absolute URL if relative
-            if thumbnail and not thumbnail.startswith('http'):
-                thumbnail = urljoin(url, thumbnail)
+            thumbnail = og_image.get('content', '').strip()
+            if thumbnail:
+                # Make absolute URL if relative
+                if not thumbnail.startswith(('http://', 'https://', '//')):
+                    thumbnail = urljoin(url, thumbnail)
+                elif thumbnail.startswith('//'):
+                    thumbnail = 'https:' + thumbnail
+                print(f"Found OG image: {thumbnail}")
         
-        og_description = soup.find('meta', property='og:description')
+        og_description = soup.find('meta', property='og:description') or soup.find('meta', attrs={'name': 'og:description'})
         if og_description:
-            description = og_description.get('content')
+            description = og_description.get('content', '').strip()
+            print(f"Found OG description: {description[:100]}...")
         
         # Fallback to standard meta tags
         if not title:
             title_tag = soup.find('title')
             if title_tag:
                 title = title_tag.get_text().strip()
+                print(f"Found title tag: {title}")
+        
+        # Try Twitter Card tags as fallback
+        if not title:
+            twitter_title = soup.find('meta', attrs={'name': 'twitter:title'})
+            if twitter_title:
+                title = twitter_title.get('content', '').strip()
+                print(f"Found Twitter title: {title}")
         
         if not description:
             meta_desc = soup.find('meta', attrs={'name': 'description'})
             if meta_desc:
-                description = meta_desc.get('content')
+                description = meta_desc.get('content', '').strip()
+                print(f"Found meta description: {description[:100]}...")
+        
+        if not description:
+            twitter_desc = soup.find('meta', attrs={'name': 'twitter:description'})
+            if twitter_desc:
+                description = twitter_desc.get('content', '').strip()
         
         if not thumbnail:
-            # Try to find first large image
-            img = soup.find('img', src=True)
-            if img:
-                thumbnail = img.get('src')
-                if thumbnail and not thumbnail.startswith('http'):
+            # Try Twitter Card image
+            twitter_image = soup.find('meta', attrs={'name': 'twitter:image'})
+            if twitter_image:
+                thumbnail = twitter_image.get('content', '').strip()
+                if thumbnail and not thumbnail.startswith(('http://', 'https://', '//')):
                     thumbnail = urljoin(url, thumbnail)
+                elif thumbnail and thumbnail.startswith('//'):
+                    thumbnail = 'https:' + thumbnail
         
-        return {
+        if not thumbnail:
+            # Try to find first large image with common attributes
+            for img in soup.find_all('img', src=True):
+                src = img.get('src', '').strip()
+                if not src:
+                    continue
+                
+                # Skip data URIs and very small images
+                if src.startswith('data:') or 'icon' in src.lower() or 'logo' in src.lower():
+                    continue
+                
+                # Prefer images with width/height attributes (likely main images)
+                width = img.get('width', '')
+                height = img.get('height', '')
+                if width and height:
+                    try:
+                        w, h = int(width), int(height)
+                        if w > 200 and h > 200:  # Prefer larger images
+                            thumbnail = src
+                            if not thumbnail.startswith(('http://', 'https://', '//')):
+                                thumbnail = urljoin(url, thumbnail)
+                            elif thumbnail.startswith('//'):
+                                thumbnail = 'https:' + thumbnail
+                            print(f"Found image from img tag: {thumbnail}")
+                            break
+                    except:
+                        pass
+            
+            # If still no thumbnail, just get first decent image
+            if not thumbnail:
+                img = soup.find('img', src=True)
+                if img:
+                    thumbnail = img.get('src', '').strip()
+                    if thumbnail and not thumbnail.startswith(('http://', 'https://', '//', 'data:')):
+                        thumbnail = urljoin(url, thumbnail)
+                    elif thumbnail and thumbnail.startswith('//'):
+                        thumbnail = 'https:' + thumbnail
+                    print(f"Found fallback image: {thumbnail}")
+        
+        result = {
             'title': title or 'Untitled',
-            'thumbnail': thumbnail,
-            'description': description
+            'thumbnail': thumbnail or None,
+            'description': description or None
+        }
+        
+        print(f"Metadata extraction result: title={result['title']}, thumbnail={result['thumbnail'] is not None}, description={result['description'] is not None}")
+        return result
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Request error fetching metadata for {url}: {str(e)}")
+        return {
+            'title': 'Untitled',
+            'thumbnail': None,
+            'description': None
         }
     except Exception as e:
-        print(f"Error fetching metadata for {url}: {str(e)}")
+        print(f"Error fetching metadata for {url}: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return {
             'title': 'Untitled',
             'thumbnail': None,
@@ -1093,7 +1181,9 @@ def create_blog(blog: BlogCreate, db: Session = Depends(get_db), current_user = 
         raise HTTPException(status_code=400, detail="Blog with this URL already exists")
     
     # Fetch metadata
+    print(f"Creating blog with URL: {blog.url}")
     metadata = fetch_blog_metadata(blog.url)
+    print(f"Fetched metadata: {metadata}")
     
     db_blog = Blog(
         url=blog.url,
@@ -1106,6 +1196,7 @@ def create_blog(blog: BlogCreate, db: Session = Depends(get_db), current_user = 
     db.add(db_blog)
     db.commit()
     db.refresh(db_blog)
+    print(f"Created blog with ID: {db_blog.id}, title: {db_blog.title}, thumbnail: {db_blog.thumbnail}")
     return db_blog
 
 @app.put("/api/blogs/{blog_id}", response_model=BlogResponse)
@@ -1160,6 +1251,18 @@ def refresh_blog_metadata(blog_id: int, db: Session = Depends(get_db), current_u
     db.commit()
     db.refresh(db_blog)
     return db_blog
+
+@app.post("/api/blogs/test-metadata")
+def test_blog_metadata(request: dict, current_user = Depends(get_current_active_user)):
+    """Test endpoint to fetch metadata from a URL (admin only)."""
+    url = request.get('url', '')
+    if not url:
+        raise HTTPException(status_code=400, detail="URL is required")
+    metadata = fetch_blog_metadata(url)
+    return {
+        "url": url,
+        "metadata": metadata
+    }
 
 @app.delete("/api/blogs/{blog_id}")
 def delete_blog(blog_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
