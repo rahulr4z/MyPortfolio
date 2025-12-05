@@ -21,7 +21,6 @@ import AdminSkills from './components/admin/AdminSkills';
 import AdminSectionConfig from './components/admin/AdminSectionConfig';
 import AdminProjects from './components/admin/AdminProjects';
 import AdminEnquiries from './components/admin/AdminEnquiries';
-import AdminBlogs from './components/admin/AdminBlogs';
 
 // Main Site Components
 import HeroSection from './sections/HeroSection';
@@ -32,7 +31,6 @@ import TestimonialsSection from './sections/TestimonialsSection';
 import ContactSection from './sections/ContactSection';
 import ThankYouSection from './sections/ThankYouSection';
 import ProjectsSection from './sections/ProjectsSection';
-import BlogsSection from './sections/BlogsSection';
 
 // Wrapper component for individual admin sections to provide a consistent layout
 const AdminSectionPage = ({ title, component }) => {
@@ -56,7 +54,6 @@ const MainSite = () => {
       <NewAboutSection />
       <ExperienceSection />
       <ProjectsSection />
-      <BlogsSection />
       <StatsSection />
       <TestimonialsSection />
       <ContactSection />
@@ -100,7 +97,6 @@ function App() {
             <Route path="/admin/config" element={<AdminSectionPage title="Section Titles" component={AdminSectionConfig} />} />
             <Route path="/admin/projects" element={<AdminSectionPage title="Projects" component={AdminProjects} />} />
             <Route path="/admin/enquiries" element={<AdminSectionPage title="Contact Enquiries" component={AdminEnquiries} />} />
-            <Route path="/admin/blogs" element={<AdminSectionPage title="Blogs" component={AdminBlogs} />} />
 
           </Routes>
         </div>
