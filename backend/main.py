@@ -1038,14 +1038,88 @@ def fetch_blog_metadata(url: str) -> dict:
         thumbnail = None
         description = None
         
-        # Try Open Graph tags first (most reliable)
+        # Check if it's a Medium URL - Medium uses JSON-LD structured data
+        is_medium = 'medium.com' in url.lower()
+        
+        # For Medium, also try to extract from script tags that might contain metadata
+        if is_medium:
+            # Look for script tags with JSON data (Medium sometimes embeds data here)
+            scripts = soup.find_all('script')
+            for script in scripts:
+                if script.string and ('__APOLLO_STATE__' in script.string or 'article' in script.string.lower()):
+                    try:
+                        # Try to extract title from script content
+                        script_text = script.string
+                        # Look for title patterns
+                        import re
+                        title_match = re.search(r'"title":\s*"([^"]+)"', script_text)
+                        if title_match and not title:
+                            title = title_match.group(1).strip()
+                            print(f"Found title in script: {title}")
+                    except:
+                        pass
+        
+        # Try JSON-LD structured data first (Medium uses this)
+        if is_medium:
+            json_ld_scripts = soup.find_all('script', type='application/ld+json')
+            for script in json_ld_scripts:
+                try:
+                    import json
+                    data = json.loads(script.string)
+                    if isinstance(data, dict):
+                        # Check for article schema
+                        if data.get('@type') == 'Article' or data.get('@type') == 'BlogPosting':
+                            if not title and data.get('headline'):
+                                title = data.get('headline', '').strip()
+                                print(f"Found JSON-LD title: {title}")
+                            if not description and data.get('description'):
+                                description = data.get('description', '').strip()
+                                print(f"Found JSON-LD description: {description[:100]}...")
+                            if not thumbnail and data.get('image'):
+                                img = data.get('image')
+                                if isinstance(img, dict):
+                                    thumbnail = img.get('url', '')
+                                elif isinstance(img, list) and len(img) > 0:
+                                    thumbnail = img[0].get('url', '') if isinstance(img[0], dict) else img[0]
+                                else:
+                                    thumbnail = str(img)
+                                if thumbnail:
+                                    if not thumbnail.startswith(('http://', 'https://', '//')):
+                                        thumbnail = urljoin(url, thumbnail)
+                                    elif thumbnail.startswith('//'):
+                                        thumbnail = 'https:' + thumbnail
+                                    print(f"Found JSON-LD image: {thumbnail}")
+                    elif isinstance(data, list):
+                        for item in data:
+                            if isinstance(item, dict) and (item.get('@type') == 'Article' or item.get('@type') == 'BlogPosting'):
+                                if not title and item.get('headline'):
+                                    title = item.get('headline', '').strip()
+                                if not description and item.get('description'):
+                                    description = item.get('description', '').strip()
+                                if not thumbnail and item.get('image'):
+                                    img = item.get('image')
+                                    if isinstance(img, dict):
+                                        thumbnail = img.get('url', '')
+                                    elif isinstance(img, list) and len(img) > 0:
+                                        thumbnail = img[0].get('url', '') if isinstance(img[0], dict) else img[0]
+                                    else:
+                                        thumbnail = str(img)
+                                    if thumbnail and not thumbnail.startswith(('http://', 'https://', '//')):
+                                        thumbnail = urljoin(url, thumbnail)
+                                    elif thumbnail and thumbnail.startswith('//'):
+                                        thumbnail = 'https:' + thumbnail
+                except Exception as e:
+                    print(f"Error parsing JSON-LD: {str(e)}")
+                    continue
+        
+        # Try Open Graph tags (most reliable for most sites)
         og_title = soup.find('meta', property='og:title') or soup.find('meta', attrs={'name': 'og:title'})
-        if og_title:
+        if og_title and not title:
             title = og_title.get('content', '').strip()
             print(f"Found OG title: {title}")
         
         og_image = soup.find('meta', property='og:image') or soup.find('meta', attrs={'name': 'og:image'})
-        if og_image:
+        if og_image and not thumbnail:
             thumbnail = og_image.get('content', '').strip()
             if thumbnail:
                 # Make absolute URL if relative
@@ -1056,15 +1130,37 @@ def fetch_blog_metadata(url: str) -> dict:
                 print(f"Found OG image: {thumbnail}")
         
         og_description = soup.find('meta', property='og:description') or soup.find('meta', attrs={'name': 'og:description'})
-        if og_description:
+        if og_description and not description:
             description = og_description.get('content', '').strip()
             print(f"Found OG description: {description[:100]}...")
+        
+        # Try Medium-specific meta tags
+        if is_medium:
+            # Medium sometimes uses these
+            medium_title = soup.find('meta', attrs={'name': 'title'}) or soup.find('meta', attrs={'property': 'title'})
+            if medium_title and not title:
+                title = medium_title.get('content', '').strip()
+                print(f"Found Medium title: {title}")
+            
+            # Try to find title in h1 tags (Medium article titles)
+            if not title:
+                h1_tags = soup.find_all('h1')
+                for h1 in h1_tags:
+                    h1_text = h1.get_text().strip()
+                    # Skip generic Medium titles
+                    if h1_text and len(h1_text) > 10 and 'Medium' not in h1_text:
+                        title = h1_text
+                        print(f"Found h1 title: {title}")
+                        break
         
         # Fallback to standard meta tags
         if not title:
             title_tag = soup.find('title')
             if title_tag:
                 title = title_tag.get_text().strip()
+                # Clean up Medium titles (remove " | Medium" suffix)
+                if 'medium.com' in url.lower() and '|' in title:
+                    title = title.split('|')[0].strip()
                 print(f"Found title tag: {title}")
         
         # Try Twitter Card tags as fallback
@@ -1094,6 +1190,22 @@ def fetch_blog_metadata(url: str) -> dict:
                     thumbnail = urljoin(url, thumbnail)
                 elif thumbnail and thumbnail.startswith('//'):
                     thumbnail = 'https:' + thumbnail
+                print(f"Found Twitter image: {thumbnail}")
+        
+        # Medium-specific image handling
+        if is_medium and not thumbnail:
+            # Medium often uses figure tags with img inside
+            figure = soup.find('figure')
+            if figure:
+                img = figure.find('img', src=True)
+                if img:
+                    thumbnail = img.get('src', '').strip()
+                    if thumbnail:
+                        if not thumbnail.startswith(('http://', 'https://', '//')):
+                            thumbnail = urljoin(url, thumbnail)
+                        elif thumbnail.startswith('//'):
+                            thumbnail = 'https:' + thumbnail
+                        print(f"Found Medium figure image: {thumbnail}")
         
         if not thumbnail:
             # Try to find first large image with common attributes
