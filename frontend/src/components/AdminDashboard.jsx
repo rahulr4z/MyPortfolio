@@ -15,7 +15,8 @@ import {
   Wrench,
   Settings,
   FolderKanban,
-  Mail
+  Mail,
+  Globe
 } from 'lucide-react';
 import { logout } from '../services/api';
 
@@ -32,6 +33,7 @@ const SECTIONS = [
   { id: 'certifications', label: 'Certifications', icon: FileText, path: '/admin/certifications', color: 'from-emerald-200 to-green-200' },
   { id: 'skills', label: 'Skills', icon: Wrench, path: '/admin/skills', color: 'from-cyan-200 to-teal-200' },
   { id: 'projects', label: 'Projects', icon: FolderKanban, path: '/admin/projects', color: 'from-indigo-200 to-purple-200' },
+  { id: 'blogs', label: 'Blogs', icon: Globe, path: '/admin/blogs', color: 'from-violet-200 to-purple-200' },
   { id: 'config', label: 'Section Titles', icon: Settings, path: '/admin/config', color: 'from-gray-200 to-slate-300' },
 ];
 

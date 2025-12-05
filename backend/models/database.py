@@ -201,6 +201,19 @@ class SectionTitle(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+class Blog(Base):
+    """Blog model."""
+    __tablename__ = "blogs"
+    id = Column(Integer, primary_key=True, index=True)
+    url = Column(String(500), nullable=False, unique=True)
+    title = Column(String(255))  # Fetched from metadata
+    thumbnail = Column(String(500))  # Fetched from metadata
+    description = Column(Text)  # Fetched from metadata
+    order_index = Column(Integer, default=0)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 class SectionConfig(Base):
     """Section configuration model (legacy)."""
     __tablename__ = "section_config"

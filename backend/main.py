@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-from models.database import get_db, Contact, About, Experience, Stat, Testimonial, Project, ContactInfo, Hero, Award, Education, Certification, Skill, SectionConfig, SectionTitle
+from models.database import get_db, Contact, About, Experience, Stat, Testimonial, Project, ContactInfo, Hero, Award, Education, Certification, Skill, SectionConfig, SectionTitle, Blog
 from models.models import (
     ContactForm, ContactResponse,
     AboutCreate, AboutUpdate, AboutResponse,
@@ -19,7 +19,8 @@ from models.models import (
     CertificationCreate, CertificationUpdate, CertificationResponse,
     SkillCreate, SkillUpdate, SkillResponse,
     SectionConfig as SectionConfigModel, SectionConfigResponse,
-    SectionTitleCreate, SectionTitleUpdate, SectionTitleResponse
+    SectionTitleCreate, SectionTitleUpdate, SectionTitleResponse,
+    BlogCreate, BlogUpdate, BlogResponse
 )
 from api.auth import authenticate_user, create_access_token, get_current_active_user, ACCESS_TOKEN_EXPIRE_MINUTES
 from api.upload import upload_image, upload_multiple_images, delete_image, get_image_info
@@ -29,6 +30,9 @@ from config import settings
 import json
 import os
 from pathlib import Path
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse, urljoin
 
 # Create FastAPI app
 app = FastAPI(
@@ -1002,6 +1006,171 @@ async def create_section_config(config_data: SectionConfigModel, db: Session = D
         }))
         
         return db_config
+
+# Blog endpoints
+def fetch_blog_metadata(url: str) -> dict:
+    """Fetch metadata (title, thumbnail, description) from a blog URL."""
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Extract metadata
+        title = None
+        thumbnail = None
+        description = None
+        
+        # Try Open Graph tags first
+        og_title = soup.find('meta', property='og:title')
+        if og_title:
+            title = og_title.get('content')
+        
+        og_image = soup.find('meta', property='og:image')
+        if og_image:
+            thumbnail = og_image.get('content')
+            # Make absolute URL if relative
+            if thumbnail and not thumbnail.startswith('http'):
+                thumbnail = urljoin(url, thumbnail)
+        
+        og_description = soup.find('meta', property='og:description')
+        if og_description:
+            description = og_description.get('content')
+        
+        # Fallback to standard meta tags
+        if not title:
+            title_tag = soup.find('title')
+            if title_tag:
+                title = title_tag.get_text().strip()
+        
+        if not description:
+            meta_desc = soup.find('meta', attrs={'name': 'description'})
+            if meta_desc:
+                description = meta_desc.get('content')
+        
+        if not thumbnail:
+            # Try to find first large image
+            img = soup.find('img', src=True)
+            if img:
+                thumbnail = img.get('src')
+                if thumbnail and not thumbnail.startswith('http'):
+                    thumbnail = urljoin(url, thumbnail)
+        
+        return {
+            'title': title or 'Untitled',
+            'thumbnail': thumbnail,
+            'description': description
+        }
+    except Exception as e:
+        print(f"Error fetching metadata for {url}: {str(e)}")
+        return {
+            'title': 'Untitled',
+            'thumbnail': None,
+            'description': None
+        }
+
+@app.get("/api/blogs", response_model=List[BlogResponse])
+def get_blogs(db: Session = Depends(get_db)):
+    """Get active blogs."""
+    blogs = db.query(Blog).filter(Blog.is_active == True).order_by(Blog.order_index.asc()).all()
+    return blogs
+
+@app.get("/api/admin/blogs", response_model=List[BlogResponse])
+def admin_get_blogs(db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    """Get all blogs (admin only)."""
+    blogs = db.query(Blog).order_by(Blog.order_index.asc()).all()
+    return blogs
+
+@app.post("/api/blogs", response_model=BlogResponse)
+def create_blog(blog: BlogCreate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    """Create a new blog entry."""
+    # Check if URL already exists
+    existing = db.query(Blog).filter(Blog.url == blog.url).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Blog with this URL already exists")
+    
+    # Fetch metadata
+    metadata = fetch_blog_metadata(blog.url)
+    
+    db_blog = Blog(
+        url=blog.url,
+        title=metadata['title'],
+        thumbnail=metadata['thumbnail'],
+        description=metadata['description'],
+        order_index=blog.order_index,
+        is_active=blog.is_active
+    )
+    db.add(db_blog)
+    db.commit()
+    db.refresh(db_blog)
+    return db_blog
+
+@app.put("/api/blogs/{blog_id}", response_model=BlogResponse)
+def update_blog(blog_id: int, blog: BlogUpdate, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    """Update blog."""
+    db_blog = db.query(Blog).filter(Blog.id == blog_id).first()
+    if not db_blog:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    
+    # If URL is being updated, fetch new metadata
+    if blog.url and blog.url != db_blog.url:
+        # Check if new URL already exists
+        existing = db.query(Blog).filter(Blog.url == blog.url, Blog.id != blog_id).first()
+        if existing:
+            raise HTTPException(status_code=400, detail="Blog with this URL already exists")
+        
+        metadata = fetch_blog_metadata(blog.url)
+        db_blog.url = blog.url
+        db_blog.title = metadata['title']
+        db_blog.thumbnail = metadata['thumbnail']
+        db_blog.description = metadata['description']
+    
+    if blog.order_index is not None:
+        db_blog.order_index = blog.order_index
+    if blog.is_active is not None:
+        db_blog.is_active = blog.is_active
+    if blog.title is not None:
+        db_blog.title = blog.title
+    if blog.thumbnail is not None:
+        db_blog.thumbnail = blog.thumbnail
+    if blog.description is not None:
+        db_blog.description = blog.description
+    
+    db_blog.updated_at = datetime.utcnow()
+    db.commit()
+    db.refresh(db_blog)
+    return db_blog
+
+@app.post("/api/blogs/{blog_id}/refresh-metadata", response_model=BlogResponse)
+def refresh_blog_metadata(blog_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    """Refresh metadata for a blog entry."""
+    db_blog = db.query(Blog).filter(Blog.id == blog_id).first()
+    if not db_blog:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    
+    metadata = fetch_blog_metadata(db_blog.url)
+    db_blog.title = metadata['title']
+    db_blog.thumbnail = metadata['thumbnail']
+    db_blog.description = metadata['description']
+    db_blog.updated_at = datetime.utcnow()
+    
+    db.commit()
+    db.refresh(db_blog)
+    return db_blog
+
+@app.delete("/api/blogs/{blog_id}")
+def delete_blog(blog_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_active_user)):
+    """Delete blog."""
+    db_blog = db.query(Blog).filter(Blog.id == blog_id).first()
+    if not db_blog:
+        raise HTTPException(status_code=404, detail="Blog not found")
+    
+    db.delete(db_blog)
+    db.commit()
+    return {"message": "Blog deleted"}
 
 if __name__ == "__main__":
     import uvicorn

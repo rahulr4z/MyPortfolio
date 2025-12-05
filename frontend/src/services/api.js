@@ -386,6 +386,82 @@ export const getProjects = async (category = null) => {
   }
 };
 
+/**
+ * Blog operations
+ */
+export const getBlogs = async () => {
+  try {
+    const response = await apiFetch('/api/blogs');
+    return response;
+  } catch (error) {
+    console.error('Error fetching blogs:', error);
+    throw error;
+  }
+};
+
+export const getAdminBlogs = async () => {
+  try {
+    const response = await apiFetch('/api/admin/blogs');
+    return response;
+  } catch (error) {
+    console.error('Error fetching admin blogs:', error);
+    if (error.message.includes('Authentication failed')) {
+      throw new Error('Please log in to access admin features.');
+    }
+    throw error;
+  }
+};
+
+export const createBlog = async (blogData) => {
+  try {
+    const response = await apiFetch('/api/blogs', {
+      method: 'POST',
+      body: JSON.stringify(blogData),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error creating blog:', error);
+    throw error;
+  }
+};
+
+export const updateBlog = async (id, blogData) => {
+  try {
+    const response = await apiFetch(`/api/blogs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(blogData),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error updating blog:', error);
+    throw error;
+  }
+};
+
+export const deleteBlog = async (id) => {
+  try {
+    await apiFetch(`/api/blogs/${id}`, {
+      method: 'DELETE',
+    });
+    return true;
+  } catch (error) {
+    console.error('Error deleting blog:', error);
+    throw error;
+  }
+};
+
+export const refreshBlogMetadata = async (id) => {
+  try {
+    const response = await apiFetch(`/api/blogs/${id}/refresh-metadata`, {
+      method: 'POST',
+    });
+    return response;
+  } catch (error) {
+    console.error('Error refreshing blog metadata:', error);
+    throw error;
+  }
+};
+
 export const updateProject = async (id, projectData) => {
   try {
     const response = await apiFetch(`/api/projects/${id}`, {

@@ -441,3 +441,31 @@ class SectionConfigResponse(BaseModel):
 class AdminContactResponse(ContactResponse):
     pass
 
+# Blog Models
+class BlogCreate(BaseModel):
+    url: str
+    order_index: int = 0
+    is_active: bool = True
+
+class BlogUpdate(BaseModel):
+    url: Optional[str] = None
+    order_index: Optional[int] = None
+    is_active: Optional[bool] = None
+    title: Optional[str] = None
+    thumbnail: Optional[str] = None
+    description: Optional[str] = None
+
+class BlogResponse(BaseModel):
+    id: int
+    url: str
+    title: Optional[str]
+    thumbnail: Optional[str]
+    description: Optional[str]
+    order_index: int
+    is_active: bool
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
